@@ -2,12 +2,29 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-ENV_PATH = PROJECT_ROOT / ".env"
 
-if ENV_PATH.exists():
-    load_dotenv(ENV_PATH, override=False)
+def _find_env_file():
+    """
+    Cherche le fichier .env en remontant depuis le répertoire de travail courant.
+    Cela permet de trouver le .env du projet utilisateur, pas celui de la bibliothèque.
+    """
+    current_dir = Path.cwd()
+    
+    # Chercher .env dans le répertoire courant et ses parents
+    for path in [current_dir] + list(current_dir.parents):
+        env_file = path / ".env"
+        if env_file.exists():
+            return env_file
+    
+    return None
+
+
+# Charger le .env si trouvé, sinon charger depuis le répertoire courant
+env_file = _find_env_file()
+if env_file:
+    load_dotenv(env_file, override=False)
 else:
+    # Essayer de charger depuis le répertoire courant
     load_dotenv(override=False)
 
 

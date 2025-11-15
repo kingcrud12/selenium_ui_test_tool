@@ -12,7 +12,7 @@ from selenium_ui_test_tool.get_env_var.get_env_var import get_env_var
 from selenium_ui_test_tool.wait_element.wait_elements import wait_for_element
 from selenium_ui_test_tool.config_actions.config_actions import configure_actions
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 __all__ = [
     "BaseTest",
     "create_driver",
