@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e .
+        pip install pytest
+    
+    - name: Check imports
+      run: |
+        python -c "from selenium_ui_test_tool import BaseTest, create_driver, get_url, wait_for_element, configure_actions, get_env_var; print('✅ All imports successful')"
+    
+    - name: Lint with flake8
+      run: |
+        pip install flake8
+        flake8 selenium_ui_test_tool --count --select=E9,F63,F7,F82 --show-source --statistics
+        flake8 selenium_ui_test_tool --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
