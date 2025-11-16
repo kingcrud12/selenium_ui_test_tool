@@ -89,6 +89,7 @@ from selenium_ui_test_tool import (
     get_url,
     wait_for_element,
     configure_actions,
+    click_element,
     get_env_var
 )
 from selenium.webdriver.common.by import By
@@ -104,6 +105,11 @@ element = wait_for_element(driver, By.ID, "my-element", timeout=10)
 
 # Configurer et exécuter une action
 success = configure_actions(driver, By.CSS_SELECTOR, ".my-button")
+
+# Cliquer sur un élément avec messages personnalisés
+click_element(driver, By.ID, "submit-button", 
+              success_message="Bouton cliqué avec succès",
+              error_message="Impossible de cliquer sur le bouton")
 
 # Récupérer une variable d'environnement
 username = get_env_var("LOGIN_USERNAME", required=True)
@@ -188,6 +194,34 @@ Configure et exécute une action sur un élément (scroll + click).
 
 **Retourne :** `True` si l'action a réussi, `False` sinon
 
+### `click_element(driver: WebDriver, by: By, selector: str, wait_before_click: int = 0, success_message: str | None = None, error_message: str | None = None, verify_before_click: bool = True) -> bool`
+
+Clique sur un élément avec des fonctionnalités avancées (attente, messages personnalisés, vérification).
+
+**Paramètres :**
+
+- `driver` : Instance de WebDriver
+- `by` : Stratégie de localisation (ex: `By.ID`, `By.CSS_SELECTOR`)
+- `selector` : Sélecteur de l'élément
+- `wait_before_click` : Temps d'attente en secondes avant de cliquer (défaut: 0)
+- `success_message` : Message à afficher en cas de succès (optionnel)
+- `error_message` : Message à afficher en cas d'erreur (optionnel)
+- `verify_before_click` : Si `True`, vérifie que l'élément existe avant de cliquer (défaut: `True`)
+
+**Retourne :** `True` si le clic a réussi, `False` sinon
+
+**Exemple :**
+```python
+# Cliquer avec un message de succès
+click_element(driver, By.ID, "submit-btn", 
+              success_message="Formulaire soumis avec succès")
+
+# Cliquer après une attente
+click_element(driver, By.CSS_SELECTOR, ".button", 
+              wait_before_click=2,
+              error_message="Impossible de cliquer sur le bouton")
+```
+
 ### `get_env_var(name: str, required: bool = True) -> str | None`
 
 Récupère une variable d'environnement.
@@ -206,7 +240,7 @@ Récupère une variable d'environnement.
 ### Exemple complet : Test de connexion
 
 ```python
-from selenium_ui_test_tool import BaseTest, get_env_var, wait_for_element, configure_actions
+from selenium_ui_test_tool import BaseTest, get_env_var, wait_for_element, click_element
 from selenium.webdriver.common.by import By
 
 def test_login(driver):
@@ -226,8 +260,10 @@ def test_login(driver):
         return False
     password_field.send_keys(password)
     
-    # Cliquer sur le bouton de connexion
-    if not configure_actions(driver, By.ID, "login-button"):
+    # Cliquer sur le bouton de connexion avec message personnalisé
+    if not click_element(driver, By.ID, "login-button", 
+                         success_message="Connexion réussie",
+                         error_message="Échec de la connexion"):
         return False
     
     # Vérifier que la connexion a réussi
@@ -338,6 +374,9 @@ selenium_ui_test_tool/
 │   ├── base_test/
 │   │   ├── __init__.py
 │   │   └── base_test.py
+│   ├── click_element/
+│   │   ├── __init__.py
+│   │   └── click_element.py
 │   ├── config_actions/
 │   │   ├── __init__.py
 │   │   └── config_actions.py

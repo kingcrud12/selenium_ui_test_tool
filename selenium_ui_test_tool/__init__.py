@@ -11,8 +11,9 @@ from selenium_ui_test_tool.get_url.get_url import get_url
 from selenium_ui_test_tool.get_env_var.get_env_var import get_env_var
 from selenium_ui_test_tool.wait_element.wait_elements import wait_for_element
 from selenium_ui_test_tool.config_actions.config_actions import configure_actions
+from selenium_ui_test_tool.click_element.click_element import click_element
 
-__version__ = "1.0.1"
+__version__ = "1.0.2"
 __all__ = [
     "BaseTest",
     "create_driver",
@@ -20,5 +21,6 @@ __all__ = [
     "get_env_var",
     "wait_for_element",
     "configure_actions",
+    "click_element",
 ]
 

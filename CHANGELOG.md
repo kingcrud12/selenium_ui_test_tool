@@ -5,7 +5,18 @@ Tous les changements notables de ce projet seront documentés dans ce fichier.
 Le format est basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/),
 et ce projet adhère à [Semantic Versioning](https://semver.org/lang/fr/).
 
+## [1.0.2] - 2024-01-XX
+
+### Modifié
+- Mise à jour de la documentation et amélioration de la stabilité du package
+
 ## [1.0.1] - 2024-01-XX
+
+### Ajouté
+- Nouvelle fonction `click_element()` pour cliquer sur des éléments avec des fonctionnalités avancées :
+  - Attente personnalisable avant le clic (`wait_before_click`)
+  - Messages de succès et d'erreur personnalisables
+  - Vérification optionnelle de l'existence de l'élément avant le clic
 
 ### Corrigé
 - Correction de la fonction `get_env_var()` pour qu'elle cherche le fichier `.env` dans le projet de l'utilisateur plutôt que dans le package installé. La fonction cherche maintenant le `.env` depuis le répertoire de travail courant et remonte les répertoires parents jusqu'à le trouver.

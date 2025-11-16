@@ -26,6 +26,7 @@ Ce projet est maintenant une bibliothèque Python installable pour faciliter les
   - `base_test/` - Classe BaseTest pour exécuter des tests
   - `driver_builder/` - Construction et configuration du WebDriver
   - `wait_element/` - Utilitaires d'attente d'éléments
+  - `click_element/` - Utilitaire de clic avancé avec messages personnalisés
   - `config_actions/` - Configuration et exécution d'actions
   - `get_env_var/` - Gestion des variables d'environnement
   - `get_url/` - Navigation vers des URLs
@@ -75,6 +76,7 @@ Tous les éléments suivants sont disponibles via `from selenium_ui_test_tool im
 - `create_driver` - Créer un driver Chrome
 - `get_url` - Naviguer vers une URL
 - `wait_for_element` - Attendre un élément
+- `click_element` - Cliquer sur un élément avec fonctionnalités avancées
 - `configure_actions` - Configurer et exécuter des actions
 - `get_env_var` - Récupérer une variable d'environnement
 
