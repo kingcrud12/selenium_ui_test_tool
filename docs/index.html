@@ -279,474 +279,550 @@
             <section id="concept-base-test">
                 <h2>🎯 Concept de BaseTest</h2>
                 <p>
-                    <strong>BaseTest</strong> est la classe centrale qui orchestre l'exécution complète d'un test. 
-                    Elle gère automatiquement le cycle de vie du WebDriver (création, navigation, fermeture) 
-                    et fournit une structure standardisée pour vos tests.
+                    <strong>BaseTest</strong> est la classe centrale qui crée un test complet. Elle prend en paramètre 
+                    une fonction appelée <strong>déclencheur</strong> qui orchestre votre scénario de test.
                 </p>
+
+                <h3>Hiérarchie des concepts</h3>
+                <div class="info">
+                    <strong>📊 Structure en 4 niveaux :</strong>
+                    <ol>
+                        <li><strong>BaseTest</strong> : Classe qui gère le cycle de vie complet (setup → exécution → teardown)</li>
+                        <li><strong>Déclencheur</strong> : Fonction qui orchestre séquentiellement les fonctions d'actions</li>
+                        <li><strong>Fonctions d'actions</strong> : Fonctions qui effectuent une action spécifique sur la page</li>
+                        <li><strong>Utilitaires</strong> : Fonctions de la bibliothèque utilisées dans les fonctions d'actions</li>
+                    </ol>
+                </div>
 
                 <h3>Structure d'un BaseTest</h3>
                 <div class="code-block">
                     <code>from selenium_ui_test_tool import BaseTest
+from utils.order_utils.buying_helper import buying_helper
 
-test = BaseTest(
-    test_function=ma_fonction_de_test,  # Fonction qui contient la logique du test
-    success_message="✅ Test réussi",
-    failure_message="❌ Test échoué",
-    url="https://example.com",           # URL à tester
-    exit_on_failure=True                 # Arrêter le programme si échec
-)
+def test_buying_unit_ticket():
+    test = BaseTest(
+        test_function=buying_helper,  # ← Le déclencheur qui orchestre les actions
+        url="https://develop.eshop.bordeaux.airweb.dev/",
+        success_message="✅ Commande créée avec succès",
+        failure_message="⚠️ Erreur lors du parcours de commande"
+    )
+    test.run()
 
-test.run()  # Exécute le test complet</code>
+if __name__ == "__main__":
+    test_buying_unit_ticket()</code>
                 </div>
 
-                <h3>Cycle de vie d'un BaseTest</h3>
-                <ol>
-                    <li><strong>Setup</strong> : Création du driver et navigation vers l'URL</li>
-                    <li><strong>Execution</strong> : Appel de votre fonction de test</li>
-                    <li><strong>Teardown</strong> : Fermeture du driver</li>
-                </ol>
-
-                <div class="example-box">
-                    <h4>Exemple minimal</h4>
-                    <pre><code>from selenium_ui_test_tool import BaseTest
-
-def mon_test(driver):
-    """Fonction de test - doit retourner True/False"""
-    title = driver.title
-    return "Example" in title
-
-# Créer et exécuter
-test = BaseTest(
-    test_function=mon_test,
-    success_message="✅ Page chargée avec succès",
-    failure_message="❌ Page non chargée",
-    url="https://www.example.com"
-)
-
-test.run()</code></pre>
-                </div>
+                <h3>Rôle de BaseTest</h3>
+                <ul>
+                    <li><strong>Setup</strong> : Crée le WebDriver et navigue vers l'URL</li>
+                    <li><strong>Execution</strong> : Appelle votre fonction déclencheur avec le driver</li>
+                    <li><strong>Teardown</strong> : Ferme le WebDriver proprement</li>
+                    <li><strong>Gestion des résultats</strong> : Affiche les messages de succès/échec</li>
+                </ul>
 
                 <div class="highlight">
-                    <strong>⚠️ Important :</strong> Votre fonction de test doit accepter un paramètre 
-                    <code>driver</code> (WebDriver) et retourner un booléen (<code>True</code> = succès, 
-                    <code>False</code> = échec).
+                    <strong>⚠️ Important :</strong> Le paramètre <code>test_function</code> doit être une fonction 
+                    qui accepte un paramètre <code>driver</code> (WebDriver). Cette fonction est votre <strong>déclencheur</strong>.
                 </div>
             </section>
 
             <section id="concept-declencheur">
                 <h2>🎬 Concept de Déclencheur (Orchestrateur)</h2>
                 <p>
-                    Le <strong>déclencheur</strong> est une fonction qui orchestre l'exécution séquentielle 
-                    de plusieurs fonctions d'actions. Il coordonne le flux de votre scénario de test en 
-                    appelant les actions dans l'ordre approprié.
+                    Le <strong>déclencheur</strong> est la fonction passée à <code>BaseTest</code> via le paramètre 
+                    <code>test_function</code>. Son rôle est d'<strong>orchestrer de façon séquentielle</strong> 
+                    l'exécution des fonctions d'actions pour réaliser un scénario de test complet.
                 </p>
 
                 <h3>Rôle du déclencheur</h3>
                 <ul>
-                    <li>Orchestrer la séquence d'actions</li>
-                    <li>Gérer la logique conditionnelle</li>
-                    <li>Valider les résultats intermédiaires</li>
-                    <li>Gérer les erreurs et les retours</li>
+                    <li><strong>Orchestrer</strong> : Appeler les fonctions d'actions dans le bon ordre</li>
+                    <li><strong>Séquentiel</strong> : Exécuter les actions une par une, dans l'ordre du scénario</li>
+                    <li><strong>Coordonner</strong> : Gérer le flux logique du parcours utilisateur</li>
+                    <li><strong>Simplifier</strong> : Centraliser la logique de séquencement</li>
                 </ul>
 
                 <div class="example-box">
-                    <h4>Exemple de déclencheur</h4>
-                    <pre><code>from selenium_ui_test_tool import wait_for_element, click_element
-from selenium.webdriver.common.by import By
+                    <h4>Exemple réel : buying_helper (déclencheur de TC004)</h4>
+                    <pre><code>import time
+from utils.order_utils.click_on_accept_cgu import click_on_cgu_checkbox
+from utils.order_utils.click_on_order_button import click_on_order_button
+from utils.order_utils.click_on_ticket import click_on_ticket
+from utils.order_utils.click_on_ticket_support import click_on_ticket_support
+from utils.order_utils.click_on_unit_ticket import click_on_unit_ticket_section
+from utils.order_utils.click_on_validate_cart import click_on_validate_cart
+from utils.order_utils.is_card_display import is_card_display
+from utils.order_utils.validate_billing_adress import click_on_validate_adress_billing
+from utils.shared_utils.logger import logger
 
-def declencheur_connexion(driver):
+def buying_helper(driver):
     """
-    Déclencheur qui orchestre le processus de connexion
+    Déclencheur qui orchestre le parcours d'achat d'un billet unitaire
     """
-    # 1. Remplir le champ username
-    username_field = wait_for_element(driver, By.ID, "username")
-    if not username_field:
-        print("❌ Champ username non trouvé")
-        return False
-    username_field.send_keys("mon_username")
+    logger(driver)
+    time.sleep(2)
     
-    # 2. Remplir le champ password
-    password_field = wait_for_element(driver, By.ID, "password")
-    if not password_field:
-        print("❌ Champ password non trouvé")
-        return False
-    password_field.send_keys("mon_password")
+    # Séquence d'actions orchestrée séquentiellement
+    click_on_unit_ticket_section(driver)    # Action 1
+    click_on_ticket(driver)                  # Action 2
+    click_on_ticket_support(driver)         # Action 3
+    click_on_order_button(driver)           # Action 4
+    click_on_cgu_checkbox(driver)           # Action 5
+    click_on_validate_cart(driver)          # Action 6
+    time.sleep(2)
+    click_on_validate_adress_billing(driver) # Action 7
+    is_card_display(driver)                 # Action 8
     
-    # 3. Cliquer sur le bouton de connexion
-    if not click_element(driver, By.ID, "login-btn", 
-                         success_message="Connexion réussie"):
-        return False
-    
-    # 4. Vérifier que la connexion a réussi
-    welcome = wait_for_element(driver, By.CLASS_NAME, "welcome", timeout=5)
-    return welcome is not None</code></pre>
+    input("cliquez sur entrée")</code></pre>
                 </div>
 
-                <h3>Bonnes pratiques pour les déclencheurs</h3>
+                <h3>Caractéristiques du déclencheur</h3>
                 <ul>
-                    <li>Une fonction déclencheur = un scénario de test complet</li>
-                    <li>Valider chaque étape avant de passer à la suivante</li>
-                    <li>Retourner <code>False</code> dès qu'une étape échoue</li>
-                    <li>Utiliser des messages explicites pour le débogage</li>
+                    <li><strong>Une fonction = un scénario complet</strong> : Le déclencheur représente un parcours utilisateur entier</li>
+                    <li><strong>Appels séquentiels</strong> : Les fonctions d'actions sont appelées dans l'ordre du scénario</li>
+                    <li><strong>Pas de logique métier complexe</strong> : Le déclencheur se contente d'orchestrer, la logique est dans les actions</li>
+                    <li><strong>Accepte le driver</strong> : Reçoit le WebDriver en paramètre depuis BaseTest</li>
                 </ul>
+
+                <div class="success">
+                    <strong>✅ Avantage :</strong> Le déclencheur offre une vue d'ensemble claire du scénario de test 
+                    en montrant la séquence complète des actions.
+                </div>
             </section>
 
             <section id="fonctions-actions">
                 <h2>⚙️ Concepts de Fonctions d'Actions</h2>
                 <p>
-                    Les <strong>fonctions d'actions</strong> sont des fonctions atomiques qui effectuent 
-                    une action spécifique sur la page web. Elles encapsulent la logique Selenium et 
-                    gèrent les erreurs courantes.
+                    Les <strong>fonctions d'actions</strong> sont des fonctions que vous créez pour effectuer 
+                    une action spécifique sur la page web. Elles utilisent l'<strong>utilitaire click_element</strong> 
+                    de la bibliothèque pour effectuer l'action.
                 </p>
 
-                <h3>Fonctions d'actions disponibles</h3>
+                <h3>Rôle des fonctions d'actions</h3>
+                <ul>
+                    <li><strong>Atomiques</strong> : Chaque fonction effectue une seule action précise</li>
+                    <li><strong>Réutilisables</strong> : Peuvent être utilisées dans plusieurs déclencheurs</li>
+                    <li><strong>Utilisent l'utilitaire</strong> : Appellent <code>click_element</code> pour effectuer l'action</li>
+                    <li><strong>Spécifiques au contexte</strong> : Adaptées à votre application</li>
+                </ul>
 
-                <h4>1. wait_for_element</h4>
-                <p>Attend qu'un élément soit présent dans le DOM.</p>
-                <div class="code-block">
-                    <code>element = wait_for_element(driver, By.ID, "mon-element", timeout=10)
-if element:
-    # L'élément est disponible
-    element.send_keys("texte")</code>
+                <div class="example-box">
+                    <h4>Exemple : Fonction d'action click_on_unit_ticket_section</h4>
+                    <pre><code>from selenium_ui_test_tool import click_element
+from selenium.webdriver.common.by import By
+
+def click_on_unit_ticket_section(driver):
+    """
+    Fonction d'action : Clique sur la section "Billet unitaire"
+    """
+    return click_element(
+        driver,
+        By.CSS_SELECTOR,
+        ".unit-ticket-section",
+        success_message="✅ Section billet unitaire cliquée",
+        error_message="❌ Impossible de cliquer sur la section billet unitaire"
+    )</code></pre>
                 </div>
 
-                <h4>2. click_element</h4>
-                <p>Clique sur un élément avec gestion avancée (attente, messages, vérification).</p>
+                <h3>Structure d'une fonction d'action</h3>
                 <div class="code-block">
-                    <code>success = click_element(
-    driver, 
-    By.ID, 
-    "submit-btn",
-    wait_before_click=2,              # Attendre 2 secondes avant de cliquer
-    success_message="Bouton cliqué",   # Message de succès
-    error_message="Échec du clic",    # Message d'erreur
-    verify_before_click=True          # Vérifier l'existence avant
-)</code>
+                    <code>def ma_fonction_action(driver):
+    """
+    Fonction d'action qui utilise l'utilitaire click_element
+    """
+    return click_element(
+        driver,
+        By.ID,              # Stratégie de localisation
+        "mon-selector",      # Sélecteur de l'élément
+        wait_before_click=0, # Attente optionnelle
+        success_message="✅ Action réussie",
+        error_message="❌ Action échouée"
+    )</code>
                 </div>
 
-                <h4>3. configure_actions</h4>
-                <p>Exécute une action simple (scroll + click) sans options avancées.</p>
-                <div class="code-block">
-                    <code>success = configure_actions(driver, By.CSS_SELECTOR, ".my-button")</code>
-                </div>
+                <h3>Exemples de fonctions d'actions (TC004)</h3>
+                <ul>
+                    <li><code>click_on_unit_ticket_section(driver)</code> - Clique sur la section billet unitaire</li>
+                    <li><code>click_on_ticket(driver)</code> - Clique sur un ticket</li>
+                    <li><code>click_on_ticket_support(driver)</code> - Clique sur le support du ticket</li>
+                    <li><code>click_on_order_button(driver)</code> - Clique sur le bouton commander</li>
+                    <li><code>click_on_cgu_checkbox(driver)</code> - Clique sur la checkbox CGU</li>
+                    <li><code>click_on_validate_cart(driver)</code> - Valide le panier</li>
+                </ul>
 
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Fonction</th>
-                            <th>Usage</th>
-                            <th>Retourne</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><code>wait_for_element</code></td>
-                            <td>Attendre un élément</td>
-                            <td>WebElement ou None</td>
-                        </tr>
-                        <tr>
-                            <td><code>click_element</code></td>
-                            <td>Cliquer avec options</td>
-                            <td>bool</td>
-                        </tr>
-                        <tr>
-                            <td><code>configure_actions</code></td>
-                            <td>Action simple (scroll+click)</td>
-                            <td>bool</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div class="success">
-                    <strong>✅ Avantage :</strong> Ces fonctions gèrent automatiquement les timeouts, 
-                    les erreurs et les cas où les éléments ne sont pas trouvés.
+                <div class="highlight">
+                    <strong>💡 Important :</strong> Les fonctions d'actions utilisent l'<strong>utilitaire click_element</strong> 
+                    de la bibliothèque, qui gère automatiquement l'attente, la vérification et le clic sur l'élément.
                 </div>
             </section>
 
             <section id="utilitaires">
                 <h2>🛠️ Utilitaires</h2>
                 <p>
-                    Les <strong>utilitaires</strong> sont des fonctions helper qui facilitent les tâches 
-                    courantes dans vos tests.
+                    Les <strong>utilitaires</strong> sont des fonctions fournies par la bibliothèque 
+                    <code>selenium_ui_test_tool</code>. Elles sont utilisées <strong>dans vos fonctions d'actions</strong> 
+                    pour effectuer les opérations sur la page web.
                 </p>
 
-                <h3>Utilitaires disponibles</h3>
+                <h3>Utilitaire principal : click_element</h3>
+                <p>
+                    <code>click_element</code> est l'utilitaire le plus utilisé dans les fonctions d'actions. 
+                    Il gère automatiquement l'attente, la vérification et le clic sur un élément.
+                </p>
 
-                <h4>1. create_driver</h4>
-                <p>Crée et configure un WebDriver Chrome automatiquement.</p>
-                <div class="code-block">
-                    <code>from selenium_ui_test_tool import create_driver
+                <div class="example-box">
+                    <h4>Implémentation de l'utilitaire click_element</h4>
+                    <pre><code>import time
+from selenium_ui_test_tool import configure_actions, wait_for_element
 
-driver = create_driver(headless=False)  # headless=True pour mode invisible</code>
+def click_element(driver, by, selector, wait_before_click=0, 
+                 success_message=None, error_message=None, 
+                 verify_before_click=True):
+    """
+    Utilitaire pour cliquer sur un élément avec gestion avancée
+    """
+    try:
+        # Attente optionnelle avant le clic
+        if wait_before_click > 0:
+            time.sleep(wait_before_click)
+
+        # Vérification de l'existence de l'élément
+        if verify_before_click:
+            element = wait_for_element(driver, by, selector)
+            if not element:
+                if error_message:
+                    print(f"⚠️ {error_message}")
+                else:
+                    print(f"⚠️ Élément non trouvé: {selector}")
+                return False
+
+        # Exécution de l'action (scroll + click)
+        configure_actions(driver, by, selector)
+        
+        # Message de succès
+        if success_message:
+            print(f"✅ {success_message}")
+        
+        return True
+        
+    except Exception as e:
+        if error_message:
+            print(f"⚠️ {error_message}: {e}")
+        else:
+            print(f"⚠️ Erreur lors du clic sur l'élément {selector}: {e}")
+        return False</code></pre>
                 </div>
 
-                <h4>2. get_url</h4>
-                <p>Navigue vers une URL.</p>
-                <div class="code-block">
-                    <code>from selenium_ui_test_tool import get_url
+                <h3>Autres utilitaires disponibles</h3>
 
-get_url(driver, "https://example.com")</code>
+                <h4>1. wait_for_element</h4>
+                <p>Attend qu'un élément soit présent dans le DOM.</p>
+                <div class="code-block">
+                    <code>from selenium_ui_test_tool import wait_for_element
+
+element = wait_for_element(driver, By.ID, "mon-element", timeout=10)</code>
                 </div>
 
-                <h4>3. get_env_var</h4>
+                <h4>2. configure_actions</h4>
+                <p>Exécute une action simple (scroll + click). Utilisé par <code>click_element</code>.</p>
+                <div class="code-block">
+                    <code>from selenium_ui_test_tool import configure_actions
+
+configure_actions(driver, By.CSS_SELECTOR, ".my-button")</code>
+                </div>
+
+                <h4>3. create_driver</h4>
+                <p>Crée et configure un WebDriver Chrome (utilisé par BaseTest).</p>
+
+                <h4>4. get_url</h4>
+                <p>Navigue vers une URL (utilisé par BaseTest).</p>
+
+                <h4>5. get_env_var</h4>
                 <p>Récupère une variable d'environnement depuis le fichier .env.</p>
-                <div class="code-block">
-                    <code>from selenium_ui_test_tool import get_env_var
-
-username = get_env_var("LOGIN_USERNAME", required=True)
-password = get_env_var("LOGIN_PASSWORD", required=True)</code>
-                </div>
 
                 <div class="info">
-                    <strong>💡 Astuce :</strong> Le fichier <code>.env</code> est automatiquement 
-                    recherché dans votre projet. Créez-le à la racine avec vos variables.
+                    <strong>💡 Hiérarchie :</strong> Les utilitaires sont utilisés <strong>dans</strong> les fonctions d'actions, 
+                    qui sont appelées <strong>par</strong> le déclencheur, qui est exécuté <strong>par</strong> BaseTest.
                 </div>
             </section>
 
             <section id="exemple-tc004">
-                <h2>📋 Exemple complet : TC004 - Test de connexion</h2>
+                <h2>📋 Exemple complet : TC004 - Test d'achat de billet unitaire</h2>
                 <p>
-                    Voici un exemple complet montrant comment structurer un test en utilisant tous les concepts.
+                    Voici l'exemple réel de TC004 montrant la structure complète avec BaseTest, déclencheur, 
+                    fonctions d'actions et utilitaires.
                 </p>
 
+                <h3>1. BaseTest (Point d'entrée)</h3>
                 <div class="example-box">
-                    <h4>Structure du test TC004</h4>
-                    <pre><code>from selenium_ui_test_tool import (
-    BaseTest,
-    get_env_var,
-    wait_for_element,
-    click_element
-)
-from selenium.webdriver.common.by import By
+                    <pre><code>from selenium_ui_test_tool import BaseTest
+from utils.order_utils.buying_helper import buying_helper
 
-# ============================================
-# FONCTIONS D'ACTIONS
-# ============================================
-
-def action_remplir_username(driver, username):
-    """Action : Remplir le champ username"""
-    field = wait_for_element(driver, By.ID, "username", timeout=5)
-    if not field:
-        print("❌ Champ username non trouvé")
-        return False
-    field.send_keys(username)
-    return True
-
-def action_remplir_password(driver, password):
-    """Action : Remplir le champ password"""
-    field = wait_for_element(driver, By.ID, "password", timeout=5)
-    if not field:
-        print("❌ Champ password non trouvé")
-        return False
-    field.send_keys(password)
-    return True
-
-def action_cliquer_connexion(driver):
-    """Action : Cliquer sur le bouton de connexion"""
-    return click_element(
-        driver,
-        By.ID,
-        "login-button",
-        success_message="✅ Bouton de connexion cliqué",
-        error_message="❌ Impossible de cliquer sur le bouton"
+def test_buying_unit_ticket():
+    test = BaseTest(
+        test_function=buying_helper,  # ← Le déclencheur
+        url="https://develop.eshop.bordeaux.airweb.dev/",
+        success_message="✅ Commande créée avec succès",
+        failure_message="⚠️ Erreur lors du parcours de commande"
     )
-
-def action_verifier_connexion(driver):
-    """Action : Vérifier que la connexion a réussi"""
-    welcome = wait_for_element(driver, By.CLASS_NAME, "welcome", timeout=5)
-    return welcome is not None
-
-# ============================================
-# DÉCLENCHEUR (ORCHESTRATEUR)
-# ============================================
-
-def declencheur_tc004(driver):
-    """
-    Déclencheur qui orchestre le scénario TC004
-    """
-    # 1. Récupérer les credentials
-    username = get_env_var("LOGIN_USERNAME")
-    password = get_env_var("LOGIN_PASSWORD")
-    
-    # 2. Remplir le formulaire
-    if not action_remplir_username(driver, username):
-        return False
-    
-    if not action_remplir_password(driver, password):
-        return False
-    
-    # 3. Cliquer sur connexion
-    if not action_cliquer_connexion(driver):
-        return False
-    
-    # 4. Vérifier le résultat
-    if not action_verifier_connexion(driver):
-        print("❌ La connexion a échoué")
-        return False
-    
-    print("✅ TC004 : Connexion réussie")
-    return True
-
-# ============================================
-# BASE TEST
-# ============================================
+    test.run()
 
 if __name__ == "__main__":
-    test = BaseTest(
-        test_function=declencheur_tc004,
-        success_message="✅ TC004 : Test de connexion réussi",
-        failure_message="❌ TC004 : Test de connexion échoué",
-        url="https://example.com/login",
-        exit_on_failure=True
-    )
-    
-    test.run()</code></pre>
+    test_buying_unit_ticket()</code></pre>
                 </div>
 
-                <h3>Analyse de l'exemple TC004</h3>
-                <ol>
-                    <li><strong>Fonctions d'actions</strong> : Chaque action est isolée et réutilisable</li>
-                    <li><strong>Déclencheur</strong> : Orchestre la séquence d'actions</li>
-                    <li><strong>BaseTest</strong> : Gère le cycle de vie complet du test</li>
-                    <li><strong>Utilitaires</strong> : Utilisation de <code>get_env_var</code> pour les credentials</li>
-                </ol>
+                <h3>2. Déclencheur (buying_helper)</h3>
+                <div class="example-box">
+                    <pre><code>import time
+from utils.order_utils.click_on_accept_cgu import click_on_cgu_checkbox
+from utils.order_utils.click_on_order_button import click_on_order_button
+from utils.order_utils.click_on_ticket import click_on_ticket
+from utils.order_utils.click_on_ticket_support import click_on_ticket_support
+from utils.order_utils.click_on_unit_ticket import click_on_unit_ticket_section
+from utils.order_utils.click_on_validate_cart import click_on_validate_cart
+from utils.order_utils.is_card_display import is_card_display
+from utils.order_utils.validate_billing_adress import click_on_validate_adress_billing
+from utils.shared_utils.logger import logger
+
+def buying_helper(driver):
+    """
+    Déclencheur qui orchestre séquentiellement le parcours d'achat
+    """
+    logger(driver)
+    time.sleep(2)
+    
+    # Orchestration séquentielle des fonctions d'actions
+    click_on_unit_ticket_section(driver)      # Action 1
+    click_on_ticket(driver)                   # Action 2
+    click_on_ticket_support(driver)           # Action 3
+    click_on_order_button(driver)             # Action 4
+    click_on_cgu_checkbox(driver)             # Action 5
+    click_on_validate_cart(driver)           # Action 6
+    time.sleep(2)
+    click_on_validate_adress_billing(driver)  # Action 7
+    is_card_display(driver)                   # Action 8
+    
+    input("cliquez sur entrée")</code></pre>
+                </div>
+
+                <h3>3. Fonction d'action (exemple : click_on_unit_ticket_section)</h3>
+                <div class="example-box">
+                    <pre><code>from selenium_ui_test_tool import click_element
+from selenium.webdriver.common.by import By
+
+def click_on_unit_ticket_section(driver):
+    """
+    Fonction d'action : Clique sur la section "Billet unitaire"
+    Utilise l'utilitaire click_element de la bibliothèque
+    """
+    return click_element(
+        driver,
+        By.CSS_SELECTOR,
+        ".unit-ticket-section",
+        success_message="✅ Section billet unitaire cliquée",
+        error_message="❌ Impossible de cliquer sur la section billet unitaire"
+    )</code></pre>
+                </div>
+
+                <h3>4. Utilitaire (click_element - dans la bibliothèque)</h3>
+                <div class="example-box">
+                    <pre><code># Cet utilitaire est fourni par selenium_ui_test_tool
+# Il est utilisé dans vos fonctions d'actions
+
+from selenium_ui_test_tool import click_element
+
+# Utilisation dans une fonction d'action :
+click_element(
+    driver,
+    By.ID,
+    "mon-selector",
+    wait_before_click=0,
+    success_message="✅ Action réussie",
+    error_message="❌ Action échouée",
+    verify_before_click=True
+)</code></pre>
+                </div>
+
+                <h3>Flux d'exécution complet</h3>
+                <div class="info">
+                    <strong>📊 Hiérarchie d'exécution :</strong>
+                    <ol>
+                        <li><strong>BaseTest.run()</strong> → Crée le driver, navigue vers l'URL</li>
+                        <li><strong>BaseTest</strong> appelle → <strong>buying_helper(driver)</strong> (déclencheur)</li>
+                        <li><strong>buying_helper</strong> appelle → <strong>click_on_unit_ticket_section(driver)</strong> (fonction d'action)</li>
+                        <li><strong>click_on_unit_ticket_section</strong> appelle → <strong>click_element(...)</strong> (utilitaire)</li>
+                        <li><strong>click_element</strong> utilise → <strong>configure_actions</strong> et <strong>wait_for_element</strong> (utilitaires de base)</li>
+                        <li>Le processus se répète pour chaque action dans le déclencheur</li>
+                        <li><strong>BaseTest</strong> ferme le driver</li>
+                    </ol>
+                </div>
+
+                <h3>Avantages de cette structure</h3>
+                <ul>
+                    <li><strong>Séparation des responsabilités</strong> : Chaque niveau a un rôle clair</li>
+                    <li><strong>Réutilisabilité</strong> : Les fonctions d'actions peuvent être réutilisées</li>
+                    <li><strong>Maintenabilité</strong> : Facile de modifier une action sans affecter les autres</li>
+                    <li><strong>Lisibilité</strong> : Le déclencheur montre clairement le scénario complet</li>
+                </ul>
             </section>
 
             <section id="architecture">
                 <h2>🏗️ Architecture du projet</h2>
                 <p>
-                    Une architecture bien structurée facilite la maintenance et la réutilisabilité de vos tests.
+                    Une architecture bien structurée facilite la maintenance et la réutilisabilité de vos tests. 
+                    Voici la structure recommandée basée sur l'exemple TC004.
                 </p>
 
-                <h3>Structure recommandée</h3>
+                <h3>Structure recommandée (basée sur TC004)</h3>
                 <div class="code-block">
                     <code>mon_projet/
-├── tests/                    # Package de tests
+├── tests/                          # Package de tests
 │   ├── __init__.py
-│   ├── test_login.py         # Tests de connexion
-│   ├── test_navigation.py    # Tests de navigation
-│   └── test_forms.py         # Tests de formulaires
+│   ├── test_buying.py              # Test TC004 - Achat billet unitaire
+│   │   └── test_buying_unit_ticket()
+│   ├── test_login.py               # Autres tests
+│   └── test_navigation.py
 │
-├── utils/                    # Utilitaires personnalisés
+├── utils/                          # Utilitaires et fonctions d'actions
 │   ├── __init__.py
-│   ├── actions.py            # Fonctions d'actions réutilisables
-│   ├── selectors.py          # Sélecteurs centralisés
-│   └── helpers.py            # Fonctions helper
+│   ├── order_utils/                # Utilitaires pour les commandes
+│   │   ├── __init__.py
+│   │   ├── buying_helper.py        # Déclencheur buying_helper
+│   │   ├── click_on_unit_ticket.py # Fonction d'action
+│   │   ├── click_on_ticket.py      # Fonction d'action
+│   │   ├── click_on_ticket_support.py
+│   │   ├── click_on_order_button.py
+│   │   ├── click_on_accept_cgu.py
+│   │   ├── click_on_validate_cart.py
+│   │   ├── validate_billing_adress.py
+│   │   └── is_card_display.py
+│   │
+│   └── shared_utils/               # Utilitaires partagés
+│       ├── __init__.py
+│       └── logger.py                # Fonction logger
 │
-├── config/                   # Configuration
-│   ├── .env                  # Variables d'environnement
-│   └── settings.py           # Paramètres
+├── config/                          # Configuration
+│   ├── .env                         # Variables d'environnement
+│   └── settings.py
 │
-└── main.py                   # Point d'entrée</code>
+└── main.py                          # Point d'entrée (optionnel)</code>
                 </div>
 
-                <h3>Package de tests</h3>
+                <h3>Package de tests (tests/)</h3>
                 <p>
-                    Organisez vos tests par fonctionnalité ou par scénario. Chaque fichier de test 
-                    contient les déclencheurs et actions spécifiques à un domaine.
+                    Le package <code>tests/</code> contient vos fichiers de test. Chaque fichier crée un 
+                    <code>BaseTest</code> avec un déclencheur spécifique.
                 </p>
 
                 <div class="example-box">
-                    <h4>Exemple : tests/test_login.py</h4>
+                    <h4>Exemple : tests/test_buying.py</h4>
                     <pre><code>from selenium_ui_test_tool import BaseTest
-from utils.actions import (
-    action_remplir_username,
-    action_remplir_password,
-    action_cliquer_connexion
-)
-from utils.helpers import declencheur_connexion
+from utils.order_utils.buying_helper import buying_helper
 
-def test_tc004_connexion():
-    """Test TC004 : Connexion utilisateur"""
+def test_buying_unit_ticket():
+    """Test TC004 : Achat d'un billet unitaire"""
     test = BaseTest(
-        test_function=declencheur_connexion,
-        success_message="✅ TC004 réussi",
-        failure_message="❌ TC004 échoué",
-        url="https://example.com/login"
+        test_function=buying_helper,  # Déclencheur
+        url="https://develop.eshop.bordeaux.airweb.dev/",
+        success_message="✅ Commande créée avec succès",
+        failure_message="⚠️ Erreur lors du parcours de commande"
     )
     test.run()
 
 if __name__ == "__main__":
-    test_tc004_connexion()</code></pre>
+    test_buying_unit_ticket()</code></pre>
                 </div>
 
-                <h3>Package utils</h3>
+                <h3>Package utils (utils/)</h3>
                 <p>
-                    Le package <code>utils</code> contient vos fonctions d'actions et déclencheurs 
-                    réutilisables. Cela permet de centraliser la logique et d'éviter la duplication.
+                    Le package <code>utils/</code> est organisé par domaine fonctionnel. Chaque sous-package 
+                    contient les déclencheurs et fonctions d'actions liés à un domaine spécifique.
                 </p>
 
+                <h4>Structure utils/order_utils/</h4>
+                <ul>
+                    <li><strong>buying_helper.py</strong> : Déclencheur qui orchestre le parcours d'achat</li>
+                    <li><strong>click_on_*.py</strong> : Fonctions d'actions spécifiques (une par fichier)</li>
+                    <li><strong>validate_*.py</strong> : Fonctions de validation</li>
+                    <li><strong>is_*.py</strong> : Fonctions de vérification</li>
+                </ul>
+
                 <div class="example-box">
-                    <h4>Exemple : utils/actions.py</h4>
-                    <pre><code>from selenium_ui_test_tool import wait_for_element, click_element
+                    <h4>Exemple : utils/order_utils/click_on_unit_ticket.py</h4>
+                    <pre><code>from selenium_ui_test_tool import click_element
 from selenium.webdriver.common.by import By
 
-def action_remplir_champ(driver, champ_id, valeur):
-    """Action générique pour remplir un champ"""
-    field = wait_for_element(driver, By.ID, champ_id, timeout=5)
-    if not field:
-        print(f"❌ Champ {champ_id} non trouvé")
-        return False
-    field.clear()
-    field.send_keys(valeur)
-    return True
-
-def action_cliquer_bouton(driver, bouton_id, message="Bouton cliqué"):
-    """Action générique pour cliquer sur un bouton"""
+def click_on_unit_ticket_section(driver):
+    """
+    Fonction d'action : Clique sur la section billet unitaire
+    Utilise l'utilitaire click_element
+    """
     return click_element(
         driver,
-        By.ID,
-        bouton_id,
-        success_message=f"✅ {message}",
-        error_message=f"❌ Impossible de cliquer sur {bouton_id}"
+        By.CSS_SELECTOR,
+        ".unit-ticket-section",
+        success_message="✅ Section billet unitaire cliquée",
+        error_message="❌ Impossible de cliquer sur la section"
     )</code></pre>
                 </div>
 
-                <h3>Centralisation des sélecteurs</h3>
+                <h3>Package shared_utils</h3>
                 <p>
-                    Créez un fichier <code>selectors.py</code> pour centraliser tous vos sélecteurs. 
-                    Cela facilite la maintenance quand les sélecteurs changent.
+                    Le package <code>shared_utils/</code> contient les utilitaires partagés entre plusieurs 
+                    domaines (logger, helpers génériques, etc.).
                 </p>
 
                 <div class="example-box">
-                    <h4>Exemple : utils/selectors.py</h4>
-                    <pre><code>class LoginSelectors:
-    USERNAME = "username"
-    PASSWORD = "password"
-    LOGIN_BUTTON = "login-button"
-    WELCOME_MESSAGE = "welcome"
-
-class NavigationSelectors:
-    MENU = "main-menu"
-    HOME_LINK = "home-link"</code></pre>
+                    <h4>Exemple : utils/shared_utils/logger.py</h4>
+                    <pre><code>def logger(driver):
+    """Utilitaire partagé pour logger des informations"""
+    print(f"URL actuelle : {driver.current_url}")
+    print(f"Titre de la page : {driver.title}")</code></pre>
                 </div>
 
                 <h3>Avantages de cette architecture</h3>
                 <ul>
-                    <li><strong>Réutilisabilité</strong> : Les actions peuvent être réutilisées dans plusieurs tests</li>
-                    <li><strong>Maintenabilité</strong> : Modification centralisée des sélecteurs et actions</li>
-                    <li><strong>Lisibilité</strong> : Structure claire et organisée</li>
-                    <li><strong>Testabilité</strong> : Chaque composant peut être testé indépendamment</li>
+                    <li><strong>Organisation par domaine</strong> : Chaque sous-package (order_utils, etc.) regroupe les fonctions liées</li>
+                    <li><strong>Réutilisabilité</strong> : Les fonctions d'actions peuvent être réutilisées dans plusieurs déclencheurs</li>
+                    <li><strong>Maintenabilité</strong> : Facile de trouver et modifier une fonction d'action spécifique</li>
+                    <li><strong>Lisibilité</strong> : Structure claire montrant la hiérarchie BaseTest → Déclencheur → Actions → Utilitaires</li>
+                    <li><strong>Séparation des responsabilités</strong> : Chaque niveau a un rôle bien défini</li>
                 </ul>
 
                 <div class="success">
-                    <strong>✅ Bonne pratique :</strong> Séparer les préoccupations : 
-                    tests → déclencheurs → actions → utilitaires
+                    <strong>✅ Bonne pratique :</strong> Organisez vos fonctions d'actions par domaine fonctionnel 
+                    (order_utils, login_utils, etc.) pour une meilleure maintenabilité.
+                </div>
+
+                <h3>Résumé de la hiérarchie</h3>
+                <div class="info">
+                    <strong>📊 Flux complet :</strong>
+                    <ol>
+                        <li><strong>tests/test_buying.py</strong> → Crée un BaseTest avec le déclencheur</li>
+                        <li><strong>utils/order_utils/buying_helper.py</strong> → Déclencheur qui orchestre les actions</li>
+                        <li><strong>utils/order_utils/click_on_*.py</strong> → Fonctions d'actions qui utilisent l'utilitaire</li>
+                        <li><strong>selenium_ui_test_tool.click_element</strong> → Utilitaire de la bibliothèque</li>
+                    </ol>
                 </div>
             </section>
 
             <section>
                 <h2>🎓 Résumé</h2>
                 <p>
-                    Pour créer des tests UI robustes avec <strong>selenium_ui_test_tool</strong> :
+                    Pour créer des tests UI robustes avec <strong>selenium_ui_test_tool</strong>, suivez cette hiérarchie :
                 </p>
                 <ol>
-                    <li>Utilisez <strong>BaseTest</strong> pour gérer le cycle de vie du test</li>
-                    <li>Créez des <strong>fonctions d'actions</strong> atomiques et réutilisables</li>
-                    <li>Orchestrez avec un <strong>déclencheur</strong> qui coordonne les actions</li>
-                    <li>Organisez votre code avec une <strong>architecture claire</strong> (tests/utils/config)</li>
-                    <li>Utilisez les <strong>utilitaires</strong> pour simplifier les tâches courantes</li>
+                    <li><strong>BaseTest</strong> : Créez un test avec <code>BaseTest</code> en passant votre déclencheur via <code>test_function</code></li>
+                    <li><strong>Déclencheur</strong> : Créez une fonction qui orchestre séquentiellement vos fonctions d'actions</li>
+                    <li><strong>Fonctions d'actions</strong> : Créez des fonctions atomiques qui utilisent l'utilitaire <code>click_element</code></li>
+                    <li><strong>Utilitaires</strong> : Utilisez <code>click_element</code> de la bibliothèque dans vos fonctions d'actions</li>
+                    <li><strong>Architecture</strong> : Organisez votre code avec <code>tests/</code> et <code>utils/</code> par domaine fonctionnel</li>
                 </ol>
+
+                <div class="highlight">
+                    <strong>📊 Hiérarchie complète :</strong><br>
+                    <code>BaseTest</code> → <code>Déclencheur</code> → <code>Fonctions d'actions</code> → <code>Utilitaires (click_element)</code>
+                </div>
 
                 <div class="info">
                     <strong>📚 Documentation complète :</strong> 
