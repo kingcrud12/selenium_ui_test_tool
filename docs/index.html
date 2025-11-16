@@ -45,13 +45,23 @@
 
         nav {
             background: white;
-            padding: 20px;
+            padding: 15px 20px;
             border-radius: 8px;
             margin-bottom: 30px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 20px;
-            z-index: 100;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 0;
+        }
+        
+        .nav-spacer {
+            height: 80px;
         }
 
         nav ul {
@@ -83,10 +93,24 @@
 
         h2 {
             color: #667eea;
-            margin-top: 40px;
+            margin-top: 0;
             margin-bottom: 20px;
+            padding-top: 20px;
             padding-bottom: 10px;
             border-bottom: 3px solid #667eea;
+            scroll-margin-top: 100px;
+        }
+        
+        h2:first-of-type {
+            padding-top: 0;
+        }
+        
+        section {
+            scroll-margin-top: 100px;
+        }
+        
+        section:first-of-type {
+            scroll-margin-top: 80px;
         }
 
         h3 {
@@ -227,8 +251,34 @@
                 font-size: 1.8em;
             }
 
+            nav {
+                padding: 10px 15px;
+            }
+            
             nav ul {
                 flex-direction: column;
+                gap: 8px;
+            }
+            
+            .nav-spacer {
+                height: 120px;
+            }
+            
+            h2 {
+                padding-top: 20px;
+                scroll-margin-top: 120px;
+            }
+            
+            h2:first-of-type {
+                padding-top: 0;
+            }
+            
+            section {
+                scroll-margin-top: 120px;
+            }
+            
+            section:first-of-type {
+                scroll-margin-top: 100px;
             }
 
             .content {
@@ -255,6 +305,8 @@
                 <li><a href="#architecture">Architecture</a></li>
             </ul>
         </nav>
+        
+        <div class="nav-spacer"></div>
 
         <div class="content">
             <section id="introduction">
@@ -826,7 +878,7 @@ def click_on_unit_ticket_section(driver):
 
                 <div class="info">
                     <strong>📚 Documentation complète :</strong> 
-                    Consultez le <a href="https://pypi.org/project/selenium-ui-test-tool/" target="_blank">README officiel</a> 
+                    Consultez le <a href="https://github.com/kingcrud12/selenium_ui_test_tool/blob/main/README.md" target="_blank">README officiel</a> 
                     pour plus de détails sur l'API.
                 </div>
             </section>
@@ -836,7 +888,7 @@ def click_on_unit_ticket_section(driver):
             <p>© 2024 Selenium UI Test Tool - Créé par Yann Dipita</p>
             <p>
                 <a href="https://pypi.org/project/selenium-ui-test-tool/" target="_blank">PyPI</a> | 
-                <a href="https://github.com" target="_blank">GitHub</a>
+                <a href="https://github.com/kingcrud12/selenium_ui_test_tool" target="_blank">GitHub</a>
             </p>
         </footer>
     </div>
