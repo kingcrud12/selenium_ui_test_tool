@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tutoriel - Selenium UI Test Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        nav {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 20px;
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        nav a {
+            color: #667eea;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        nav a:hover {
+            background: #f0f0f0;
+        }
+
+        .content {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #667eea;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        h3 {
+            color: #764ba2;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        h4 {
+            color: #555;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        pre {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        code {
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .code-block {
+            background: #282c34;
+            color: #abb2bf;
+            padding: 20px;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        .code-block code {
+            color: #abb2bf;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .info {
+            background: #d1ecf1;
+            padding: 15px;
+            border-left: 4px solid #0c5460;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .success {
+            background: #d4edda;
+            padding: 15px;
+            border-left: 4px solid #28a745;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .example-box {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        .badge-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .badge-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .badge-info {
+            background: #17a2b8;
+            color: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+            margin-top: 60px;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            nav ul {
+                flex-direction: column;
+            }
+
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🚀 Selenium UI Test Tool</h1>
+        <p>Guide complet d'automatisation de tests UI</p>
+    </header>
+
+    <div class="container">
+        <nav>
+            <ul>
+                <li><a href="#introduction">Introduction</a></li>
+                <li><a href="#concept-base-test">BaseTest</a></li>
+                <li><a href="#concept-declencheur">Déclencheur</a></li>
+                <li><a href="#fonctions-actions">Fonctions d'actions</a></li>
+                <li><a href="#utilitaires">Utilitaires</a></li>
+                <li><a href="#exemple-tc004">Exemple TC004</a></li>
+                <li><a href="#architecture">Architecture</a></li>
+            </ul>
+        </nav>
+
+        <div class="content">
+            <section id="introduction">
+                <h2>📚 Introduction</h2>
+                <p>
+                    <strong>selenium_ui_test_tool</strong> est une bibliothèque Python conçue pour simplifier 
+                    l'automatisation de tests UI avec Selenium WebDriver. Elle offre une approche structurée 
+                    et modulaire pour créer des tests robustes et maintenables.
+                </p>
+
+                <div class="info">
+                    <strong>💡 Objectif :</strong> Réduire la complexité des tests Selenium en fournissant 
+                    des abstractions simples et des utilitaires réutilisables.
+                </div>
+
+                <h3>Installation</h3>
+                <div class="code-block">
+                    <code>pip install selenium-ui-test-tool</code>
+                </div>
+            </section>
+
+            <section id="concept-base-test">
+                <h2>🎯 Concept de BaseTest</h2>
+                <p>
+                    <strong>BaseTest</strong> est la classe centrale qui orchestre l'exécution complète d'un test. 
+                    Elle gère automatiquement le cycle de vie du WebDriver (création, navigation, fermeture) 
+                    et fournit une structure standardisée pour vos tests.
+                </p>
+
+                <h3>Structure d'un BaseTest</h3>
+                <div class="code-block">
+                    <code>from selenium_ui_test_tool import BaseTest
+
+test = BaseTest(
+    test_function=ma_fonction_de_test,  # Fonction qui contient la logique du test
+    success_message="✅ Test réussi",
+    failure_message="❌ Test échoué",
+    url="https://example.com",           # URL à tester
+    exit_on_failure=True                 # Arrêter le programme si échec
+)
+
+test.run()  # Exécute le test complet</code>
+                </div>
+
+                <h3>Cycle de vie d'un BaseTest</h3>
+                <ol>
+                    <li><strong>Setup</strong> : Création du driver et navigation vers l'URL</li>
+                    <li><strong>Execution</strong> : Appel de votre fonction de test</li>
+                    <li><strong>Teardown</strong> : Fermeture du driver</li>
+                </ol>
+
+                <div class="example-box">
+                    <h4>Exemple minimal</h4>
+                    <pre><code>from selenium_ui_test_tool import BaseTest
+
+def mon_test(driver):
+    """Fonction de test - doit retourner True/False"""
+    title = driver.title
+    return "Example" in title
+
+# Créer et exécuter
+test = BaseTest(
+    test_function=mon_test,
+    success_message="✅ Page chargée avec succès",
+    failure_message="❌ Page non chargée",
+    url="https://www.example.com"
+)
+
+test.run()</code></pre>
+                </div>
+
+                <div class="highlight">
+                    <strong>⚠️ Important :</strong> Votre fonction de test doit accepter un paramètre 
+                    <code>driver</code> (WebDriver) et retourner un booléen (<code>True</code> = succès, 
+                    <code>False</code> = échec).
+                </div>
+            </section>
+
+            <section id="concept-declencheur">
+                <h2>🎬 Concept de Déclencheur (Orchestrateur)</h2>
+                <p>
+                    Le <strong>déclencheur</strong> est une fonction qui orchestre l'exécution séquentielle 
+                    de plusieurs fonctions d'actions. Il coordonne le flux de votre scénario de test en 
+                    appelant les actions dans l'ordre approprié.
+                </p>
+
+                <h3>Rôle du déclencheur</h3>
+                <ul>
+                    <li>Orchestrer la séquence d'actions</li>
+                    <li>Gérer la logique conditionnelle</li>
+                    <li>Valider les résultats intermédiaires</li>
+                    <li>Gérer les erreurs et les retours</li>
+                </ul>
+
+                <div class="example-box">
+                    <h4>Exemple de déclencheur</h4>
+                    <pre><code>from selenium_ui_test_tool import wait_for_element, click_element
+from selenium.webdriver.common.by import By
+
+def declencheur_connexion(driver):
+    """
+    Déclencheur qui orchestre le processus de connexion
+    """
+    # 1. Remplir le champ username
+    username_field = wait_for_element(driver, By.ID, "username")
+    if not username_field:
+        print("❌ Champ username non trouvé")
+        return False
+    username_field.send_keys("mon_username")
+    
+    # 2. Remplir le champ password
+    password_field = wait_for_element(driver, By.ID, "password")
+    if not password_field:
+        print("❌ Champ password non trouvé")
+        return False
+    password_field.send_keys("mon_password")
+    
+    # 3. Cliquer sur le bouton de connexion
+    if not click_element(driver, By.ID, "login-btn", 
+                         success_message="Connexion réussie"):
+        return False
+    
+    # 4. Vérifier que la connexion a réussi
+    welcome = wait_for_element(driver, By.CLASS_NAME, "welcome", timeout=5)
+    return welcome is not None</code></pre>
+                </div>
+
+                <h3>Bonnes pratiques pour les déclencheurs</h3>
+                <ul>
+                    <li>Une fonction déclencheur = un scénario de test complet</li>
+                    <li>Valider chaque étape avant de passer à la suivante</li>
+                    <li>Retourner <code>False</code> dès qu'une étape échoue</li>
+                    <li>Utiliser des messages explicites pour le débogage</li>
+                </ul>
+            </section>
+
+            <section id="fonctions-actions">
+                <h2>⚙️ Concepts de Fonctions d'Actions</h2>
+                <p>
+                    Les <strong>fonctions d'actions</strong> sont des fonctions atomiques qui effectuent 
+                    une action spécifique sur la page web. Elles encapsulent la logique Selenium et 
+                    gèrent les erreurs courantes.
+                </p>
+
+                <h3>Fonctions d'actions disponibles</h3>
+
+                <h4>1. wait_for_element</h4>
+                <p>Attend qu'un élément soit présent dans le DOM.</p>
+                <div class="code-block">
+                    <code>element = wait_for_element(driver, By.ID, "mon-element", timeout=10)
+if element:
+    # L'élément est disponible
+    element.send_keys("texte")</code>
+                </div>
+
+                <h4>2. click_element</h4>
+                <p>Clique sur un élément avec gestion avancée (attente, messages, vérification).</p>
+                <div class="code-block">
+                    <code>success = click_element(
+    driver, 
+    By.ID, 
+    "submit-btn",
+    wait_before_click=2,              # Attendre 2 secondes avant de cliquer
+    success_message="Bouton cliqué",   # Message de succès
+    error_message="Échec du clic",    # Message d'erreur
+    verify_before_click=True          # Vérifier l'existence avant
+)</code>
+                </div>
+
+                <h4>3. configure_actions</h4>
+                <p>Exécute une action simple (scroll + click) sans options avancées.</p>
+                <div class="code-block">
+                    <code>success = configure_actions(driver, By.CSS_SELECTOR, ".my-button")</code>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fonction</th>
+                            <th>Usage</th>
+                            <th>Retourne</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>wait_for_element</code></td>
+                            <td>Attendre un élément</td>
+                            <td>WebElement ou None</td>
+                        </tr>
+                        <tr>
+                            <td><code>click_element</code></td>
+                            <td>Cliquer avec options</td>
+                            <td>bool</td>
+                        </tr>
+                        <tr>
+                            <td><code>configure_actions</code></td>
+                            <td>Action simple (scroll+click)</td>
+                            <td>bool</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="success">
+                    <strong>✅ Avantage :</strong> Ces fonctions gèrent automatiquement les timeouts, 
+                    les erreurs et les cas où les éléments ne sont pas trouvés.
+                </div>
+            </section>
+
+            <section id="utilitaires">
+                <h2>🛠️ Utilitaires</h2>
+                <p>
+                    Les <strong>utilitaires</strong> sont des fonctions helper qui facilitent les tâches 
+                    courantes dans vos tests.
+                </p>
+
+                <h3>Utilitaires disponibles</h3>
+
+                <h4>1. create_driver</h4>
+                <p>Crée et configure un WebDriver Chrome automatiquement.</p>
+                <div class="code-block">
+                    <code>from selenium_ui_test_tool import create_driver
+
+driver = create_driver(headless=False)  # headless=True pour mode invisible</code>
+                </div>
+
+                <h4>2. get_url</h4>
+                <p>Navigue vers une URL.</p>
+                <div class="code-block">
+                    <code>from selenium_ui_test_tool import get_url
+
+get_url(driver, "https://example.com")</code>
+                </div>
+
+                <h4>3. get_env_var</h4>
+                <p>Récupère une variable d'environnement depuis le fichier .env.</p>
+                <div class="code-block">
+                    <code>from selenium_ui_test_tool import get_env_var
+
+username = get_env_var("LOGIN_USERNAME", required=True)
+password = get_env_var("LOGIN_PASSWORD", required=True)</code>
+                </div>
+
+                <div class="info">
+                    <strong>💡 Astuce :</strong> Le fichier <code>.env</code> est automatiquement 
+                    recherché dans votre projet. Créez-le à la racine avec vos variables.
+                </div>
+            </section>
+
+            <section id="exemple-tc004">
+                <h2>📋 Exemple complet : TC004 - Test de connexion</h2>
+                <p>
+                    Voici un exemple complet montrant comment structurer un test en utilisant tous les concepts.
+                </p>
+
+                <div class="example-box">
+                    <h4>Structure du test TC004</h4>
+                    <pre><code>from selenium_ui_test_tool import (
+    BaseTest,
+    get_env_var,
+    wait_for_element,
+    click_element
+)
+from selenium.webdriver.common.by import By
+
+# ============================================
+# FONCTIONS D'ACTIONS
+# ============================================
+
+def action_remplir_username(driver, username):
+    """Action : Remplir le champ username"""
+    field = wait_for_element(driver, By.ID, "username", timeout=5)
+    if not field:
+        print("❌ Champ username non trouvé")
+        return False
+    field.send_keys(username)
+    return True
+
+def action_remplir_password(driver, password):
+    """Action : Remplir le champ password"""
+    field = wait_for_element(driver, By.ID, "password", timeout=5)
+    if not field:
+        print("❌ Champ password non trouvé")
+        return False
+    field.send_keys(password)
+    return True
+
+def action_cliquer_connexion(driver):
+    """Action : Cliquer sur le bouton de connexion"""
+    return click_element(
+        driver,
+        By.ID,
+        "login-button",
+        success_message="✅ Bouton de connexion cliqué",
+        error_message="❌ Impossible de cliquer sur le bouton"
+    )
+
+def action_verifier_connexion(driver):
+    """Action : Vérifier que la connexion a réussi"""
+    welcome = wait_for_element(driver, By.CLASS_NAME, "welcome", timeout=5)
+    return welcome is not None
+
+# ============================================
+# DÉCLENCHEUR (ORCHESTRATEUR)
+# ============================================
+
+def declencheur_tc004(driver):
+    """
+    Déclencheur qui orchestre le scénario TC004
+    """
+    # 1. Récupérer les credentials
+    username = get_env_var("LOGIN_USERNAME")
+    password = get_env_var("LOGIN_PASSWORD")
+    
+    # 2. Remplir le formulaire
+    if not action_remplir_username(driver, username):
+        return False
+    
+    if not action_remplir_password(driver, password):
+        return False
+    
+    # 3. Cliquer sur connexion
+    if not action_cliquer_connexion(driver):
+        return False
+    
+    # 4. Vérifier le résultat
+    if not action_verifier_connexion(driver):
+        print("❌ La connexion a échoué")
+        return False
+    
+    print("✅ TC004 : Connexion réussie")
+    return True
+
+# ============================================
+# BASE TEST
+# ============================================
+
+if __name__ == "__main__":
+    test = BaseTest(
+        test_function=declencheur_tc004,
+        success_message="✅ TC004 : Test de connexion réussi",
+        failure_message="❌ TC004 : Test de connexion échoué",
+        url="https://example.com/login",
+        exit_on_failure=True
+    )
+    
+    test.run()</code></pre>
+                </div>
+
+                <h3>Analyse de l'exemple TC004</h3>
+                <ol>
+                    <li><strong>Fonctions d'actions</strong> : Chaque action est isolée et réutilisable</li>
+                    <li><strong>Déclencheur</strong> : Orchestre la séquence d'actions</li>
+                    <li><strong>BaseTest</strong> : Gère le cycle de vie complet du test</li>
+                    <li><strong>Utilitaires</strong> : Utilisation de <code>get_env_var</code> pour les credentials</li>
+                </ol>
+            </section>
+
+            <section id="architecture">
+                <h2>🏗️ Architecture du projet</h2>
+                <p>
+                    Une architecture bien structurée facilite la maintenance et la réutilisabilité de vos tests.
+                </p>
+
+                <h3>Structure recommandée</h3>
+                <div class="code-block">
+                    <code>mon_projet/
+├── tests/                    # Package de tests
+│   ├── __init__.py
+│   ├── test_login.py         # Tests de connexion
+│   ├── test_navigation.py    # Tests de navigation
+│   └── test_forms.py         # Tests de formulaires
+│
+├── utils/                    # Utilitaires personnalisés
+│   ├── __init__.py
+│   ├── actions.py            # Fonctions d'actions réutilisables
+│   ├── selectors.py          # Sélecteurs centralisés
+│   └── helpers.py            # Fonctions helper
+│
+├── config/                   # Configuration
+│   ├── .env                  # Variables d'environnement
+│   └── settings.py           # Paramètres
+│
+└── main.py                   # Point d'entrée</code>
+                </div>
+
+                <h3>Package de tests</h3>
+                <p>
+                    Organisez vos tests par fonctionnalité ou par scénario. Chaque fichier de test 
+                    contient les déclencheurs et actions spécifiques à un domaine.
+                </p>
+
+                <div class="example-box">
+                    <h4>Exemple : tests/test_login.py</h4>
+                    <pre><code>from selenium_ui_test_tool import BaseTest
+from utils.actions import (
+    action_remplir_username,
+    action_remplir_password,
+    action_cliquer_connexion
+)
+from utils.helpers import declencheur_connexion
+
+def test_tc004_connexion():
+    """Test TC004 : Connexion utilisateur"""
+    test = BaseTest(
+        test_function=declencheur_connexion,
+        success_message="✅ TC004 réussi",
+        failure_message="❌ TC004 échoué",
+        url="https://example.com/login"
+    )
+    test.run()
+
+if __name__ == "__main__":
+    test_tc004_connexion()</code></pre>
+                </div>
+
+                <h3>Package utils</h3>
+                <p>
+                    Le package <code>utils</code> contient vos fonctions d'actions et déclencheurs 
+                    réutilisables. Cela permet de centraliser la logique et d'éviter la duplication.
+                </p>
+
+                <div class="example-box">
+                    <h4>Exemple : utils/actions.py</h4>
+                    <pre><code>from selenium_ui_test_tool import wait_for_element, click_element
+from selenium.webdriver.common.by import By
+
+def action_remplir_champ(driver, champ_id, valeur):
+    """Action générique pour remplir un champ"""
+    field = wait_for_element(driver, By.ID, champ_id, timeout=5)
+    if not field:
+        print(f"❌ Champ {champ_id} non trouvé")
+        return False
+    field.clear()
+    field.send_keys(valeur)
+    return True
+
+def action_cliquer_bouton(driver, bouton_id, message="Bouton cliqué"):
+    """Action générique pour cliquer sur un bouton"""
+    return click_element(
+        driver,
+        By.ID,
+        bouton_id,
+        success_message=f"✅ {message}",
+        error_message=f"❌ Impossible de cliquer sur {bouton_id}"
+    )</code></pre>
+                </div>
+
+                <h3>Centralisation des sélecteurs</h3>
+                <p>
+                    Créez un fichier <code>selectors.py</code> pour centraliser tous vos sélecteurs. 
+                    Cela facilite la maintenance quand les sélecteurs changent.
+                </p>
+
+                <div class="example-box">
+                    <h4>Exemple : utils/selectors.py</h4>
+                    <pre><code>class LoginSelectors:
+    USERNAME = "username"
+    PASSWORD = "password"
+    LOGIN_BUTTON = "login-button"
+    WELCOME_MESSAGE = "welcome"
+
+class NavigationSelectors:
+    MENU = "main-menu"
+    HOME_LINK = "home-link"</code></pre>
+                </div>
+
+                <h3>Avantages de cette architecture</h3>
+                <ul>
+                    <li><strong>Réutilisabilité</strong> : Les actions peuvent être réutilisées dans plusieurs tests</li>
+                    <li><strong>Maintenabilité</strong> : Modification centralisée des sélecteurs et actions</li>
+                    <li><strong>Lisibilité</strong> : Structure claire et organisée</li>
+                    <li><strong>Testabilité</strong> : Chaque composant peut être testé indépendamment</li>
+                </ul>
+
+                <div class="success">
+                    <strong>✅ Bonne pratique :</strong> Séparer les préoccupations : 
+                    tests → déclencheurs → actions → utilitaires
+                </div>
+            </section>
+
+            <section>
+                <h2>🎓 Résumé</h2>
+                <p>
+                    Pour créer des tests UI robustes avec <strong>selenium_ui_test_tool</strong> :
+                </p>
+                <ol>
+                    <li>Utilisez <strong>BaseTest</strong> pour gérer le cycle de vie du test</li>
+                    <li>Créez des <strong>fonctions d'actions</strong> atomiques et réutilisables</li>
+                    <li>Orchestrez avec un <strong>déclencheur</strong> qui coordonne les actions</li>
+                    <li>Organisez votre code avec une <strong>architecture claire</strong> (tests/utils/config)</li>
+                    <li>Utilisez les <strong>utilitaires</strong> pour simplifier les tâches courantes</li>
+                </ol>
+
+                <div class="info">
+                    <strong>📚 Documentation complète :</strong> 
+                    Consultez le <a href="https://pypi.org/project/selenium-ui-test-tool/" target="_blank">README officiel</a> 
+                    pour plus de détails sur l'API.
+                </div>
+            </section>
+        </div>
+
+        <footer>
+            <p>© 2024 Selenium UI Test Tool - Créé par Yann Dipita</p>
+            <p>
+                <a href="https://pypi.org/project/selenium-ui-test-tool/" target="_blank">PyPI</a> | 
+                <a href="https://github.com" target="_blank">GitHub</a>
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Smooth scroll pour la navigation
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
