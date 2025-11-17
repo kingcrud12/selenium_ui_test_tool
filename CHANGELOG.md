@@ -5,6 +5,16 @@ Tous les changements notables de ce projet seront documentés dans ce fichier.
 Le format est basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/),
 et ce projet adhère à [Semantic Versioning](https://semver.org/lang/fr/).
 
+## [1.0.3] - 2024-01-XX
+
+### Ajouté
+- Nouvel utilitaire `click_on` pour créer des stores d'actions lisibles sans multiplier les fichiers
+- Export de `click_on` dans l'API publique
+
+### Modifié
+- Documentation (README, docs/) mise à jour avec des exemples de stores d'actions et de déclencheurs simplifiés
+- Page web du tutoriel enrichie pour présenter le store `click_on`
+
 ## [1.0.2] - 2024-01-XX
 
 ### Modifié

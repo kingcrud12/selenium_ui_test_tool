@@ -391,8 +391,8 @@ def buying_helper(driver):
                 <h2>⚙️ Concepts de Fonctions d'Actions</h2>
                 <p>
                     Les <strong>fonctions d'actions</strong> sont des fonctions que vous créez pour effectuer 
-                    une action spécifique sur la page web. Elles utilisent l'<strong>utilitaire click_element</strong> 
-                    de la bibliothèque pour effectuer l'action.
+                    une action spécifique sur la page web. Elles utilisent les utilitaires <strong>click_element</strong> 
+                    ou <strong>click_on</strong> fournis par la bibliothèque.
                 </p>
 
                 <h3>Rôle des fonctions d'actions</h3>
@@ -405,14 +405,14 @@ def buying_helper(driver):
 
                 <div class="example-box">
                     <h4>Exemple : Fonction d'action click_on_unit_ticket_section</h4>
-                    <pre><code>from selenium_ui_test_tool import click_element
+                    <pre><code>from selenium_ui_test_tool import click_on
 from selenium.webdriver.common.by import By
 
 def click_on_unit_ticket_section(driver):
     """
     Fonction d'action : Clique sur la section "Billet unitaire"
     """
-    return click_element(
+    return click_on(
         driver,
         By.CSS_SELECTOR,
         ".unit-ticket-section",
@@ -425,13 +425,12 @@ def click_on_unit_ticket_section(driver):
                 <div class="code-block">
                     <code>def ma_fonction_action(driver):
     """
-    Fonction d'action qui utilise l'utilitaire click_element
+    Fonction d'action qui utilise l'utilitaire click_on
     """
-    return click_element(
+    return click_on(
         driver,
         By.ID,              # Stratégie de localisation
         "mon-selector",      # Sélecteur de l'élément
-        wait_before_click=0, # Attente optionnelle
         success_message="✅ Action réussie",
         error_message="❌ Action échouée"
     )</code>
@@ -447,9 +446,30 @@ def click_on_unit_ticket_section(driver):
                     <li><code>click_on_validate_cart(driver)</code> - Valide le panier</li>
                 </ul>
 
+                <h3>Store d'actions avec <code>click_on</code></h3>
+                <div class="example-box">
+                    <pre><code>from selenium_ui_test_tool import click_on
+from selenium.webdriver.common.by import By
+
+TICKET_ACTIONS = [
+    (By.XPATH, "//span[contains(text(),'Annuel')]", "Section Annuel cliquée"),
+    (By.XPATH, "//span[contains(text(),'Le Pass Annuel')]", "Pass annuel sélectionné"),
+]
+
+def monthly_buying(driver):
+    for by, selector, success in TICKET_ACTIONS:
+        click_on(
+            driver,
+            by,
+            selector,
+            success_message=success,
+            error_message=f"Impossible de cliquer sur {selector}"
+        )</code></pre>
+                </div>
+
                 <div class="highlight">
-                    <strong>💡 Important :</strong> Les fonctions d'actions utilisent l'<strong>utilitaire click_element</strong> 
-                    de la bibliothèque, qui gère automatiquement l'attente, la vérification et le clic sur l'élément.
+                    <strong>💡 Important :</strong> <code>click_on</code> encapsule <code>click_element</code> pour accélérer 
+                    la création d'actions et permet de regrouper plusieurs clics dans un store réutilisable.
                 </div>
             </section>
 
@@ -461,7 +481,27 @@ def click_on_unit_ticket_section(driver):
                     pour effectuer les opérations sur la page web.
                 </p>
 
-                <h3>Utilitaire principal : click_element</h3>
+                <h3>Nouveau : utilitaire <code>click_on</code></h3>
+                <p>
+                    <code>click_on</code> enveloppe <code>click_element</code> avec des messages obligatoires. 
+                    Il est pensé pour créer des stores d'actions lisibles.
+                </p>
+
+                <div class="example-box">
+                    <pre><code>from selenium_ui_test_tool import click_on
+from selenium.webdriver.common.by import By
+
+def click_on_custom(driver):
+    return click_on(
+        driver,
+        By.CSS_SELECTOR,
+        ".my-selector",
+        success_message="✅ Élément cliqué",
+        error_message="❌ Élément introuvable"
+    )</code></pre>
+                </div>
+
+                <h3>Utilitaire avancé : click_element</h3>
                 <p>
                     <code>click_element</code> est l'utilitaire le plus utilisé dans les fonctions d'actions. 
                     Il gère automatiquement l'attente, la vérification et le clic sur un élément.
@@ -640,6 +680,27 @@ click_element(
 )</code></pre>
                 </div>
 
+                <h3>5. Store d'actions (click_on)</h3>
+                <div class="example-box">
+                    <pre><code>from selenium_ui_test_tool import click_on
+from selenium.webdriver.common.by import By
+
+ACTIONS_MONTHLY = [
+    (By.XPATH, "//span[contains(text(),'Annuel')]", "Section Annuel ouverte"),
+    (By.XPATH, "//span[contains(text(),'Le Pass Annuel')]", "Pass annuel sélectionné"),
+]
+
+def monthly_buying(driver):
+    for by, selector, message in ACTIONS_MONTHLY:
+        click_on(
+            driver,
+            by,
+            selector,
+            success_message=message,
+            error_message=f"Impossible de cliquer sur {selector}"
+        )</code></pre>
+                </div>
+
                 <h3>Flux d'exécution complet</h3>
                 <div class="info">
                     <strong>📊 Hiérarchie d'exécution :</strong>
@@ -682,17 +743,11 @@ click_element(
 │
 ├── utils/                          # Utilitaires et fonctions d'actions
 │   ├── __init__.py
-│   ├── order_utils/                # Utilitaires pour les commandes
+│   ├── order_utils/
 │   │   ├── __init__.py
-│   │   ├── buying_helper.py        # Déclencheur buying_helper
-│   │   ├── click_on_unit_ticket.py # Fonction d'action
-│   │   ├── click_on_ticket.py      # Fonction d'action
-│   │   ├── click_on_ticket_support.py
-│   │   ├── click_on_order_button.py
-│   │   ├── click_on_accept_cgu.py
-│   │   ├── click_on_validate_cart.py
-│   │   ├── validate_billing_adress.py
-│   │   └── is_card_display.py
+│   │   ├── action_store.py         # Store de clics regroupés (utilise click_on)
+│   │   ├── buying_helper.py        # Déclencheur qui consomme le store
+│   │   └── monthly_buying.py       # Autres déclencheurs / scénarios
 │   │
 │   └── shared_utils/               # Utilitaires partagés
 │       ├── __init__.py
@@ -738,29 +793,32 @@ if __name__ == "__main__":
 
                 <h4>Structure utils/order_utils/</h4>
                 <ul>
-                    <li><strong>buying_helper.py</strong> : Déclencheur qui orchestre le parcours d'achat</li>
-                    <li><strong>click_on_*.py</strong> : Fonctions d'actions spécifiques (une par fichier)</li>
+                    <li><strong>action_store.py</strong> : Liste/dictionnaire d'actions utilisant <code>click_on</code></li>
+                    <li><strong>buying_helper.py</strong> : Déclencheur qui consomme le store</li>
+                    <li><strong>monthly_buying.py</strong> : Autre déclencheur utilisant le store</li>
                     <li><strong>validate_*.py</strong> : Fonctions de validation</li>
                     <li><strong>is_*.py</strong> : Fonctions de vérification</li>
                 </ul>
 
                 <div class="example-box">
-                    <h4>Exemple : utils/order_utils/click_on_unit_ticket.py</h4>
-                    <pre><code>from selenium_ui_test_tool import click_element
+                    <h4>Exemple : utils/order_utils/action_store.py</h4>
+                    <pre><code>from selenium_ui_test_tool import click_on
 from selenium.webdriver.common.by import By
 
-def click_on_unit_ticket_section(driver):
-    """
-    Fonction d'action : Clique sur la section billet unitaire
-    Utilise l'utilitaire click_element
-    """
-    return click_element(
-        driver,
-        By.CSS_SELECTOR,
-        ".unit-ticket-section",
-        success_message="✅ Section billet unitaire cliquée",
-        error_message="❌ Impossible de cliquer sur la section"
-    )</code></pre>
+TICKET_ACTIONS = [
+    (By.XPATH, "//span[contains(text(),'Annuel')]", "Section Annuel cliquée"),
+    (By.XPATH, "//span[contains(text(),'Le Pass Annuel')]", "Pass annuel sélectionné"),
+]
+
+def run_ticket_actions(driver):
+    for by, selector, message in TICKET_ACTIONS:
+        click_on(
+            driver,
+            by,
+            selector,
+            success_message=message,
+            error_message=f"Impossible de cliquer sur {selector}"
+        )</code></pre>
                 </div>
 
                 <h3>Package shared_utils</h3>
@@ -797,8 +855,8 @@ def click_on_unit_ticket_section(driver):
                     <ol>
                         <li><strong>tests/test_buying.py</strong> → Crée un BaseTest avec le déclencheur</li>
                         <li><strong>utils/order_utils/buying_helper.py</strong> → Déclencheur qui orchestre les actions</li>
-                        <li><strong>utils/order_utils/click_on_*.py</strong> → Fonctions d'actions qui utilisent l'utilitaire</li>
-                        <li><strong>selenium_ui_test_tool.click_element</strong> → Utilitaire de la bibliothèque</li>
+                        <li><strong>utils/order_utils/action_store.py</strong> → Store d'actions basé sur <code>click_on</code></li>
+                        <li><strong>selenium_ui_test_tool.click_on / click_element</strong> → Utilitaires de la bibliothèque</li>
                     </ol>
                 </div>
             </section>
@@ -811,14 +869,14 @@ def click_on_unit_ticket_section(driver):
                 <ol>
                     <li><strong>BaseTest</strong> : Créez un test avec <code>BaseTest</code> en passant votre déclencheur via <code>test_function</code></li>
                     <li><strong>Déclencheur</strong> : Créez une fonction qui orchestre séquentiellement vos fonctions d'actions</li>
-                    <li><strong>Fonctions d'actions</strong> : Créez des fonctions atomiques qui utilisent l'utilitaire <code>click_element</code></li>
-                    <li><strong>Utilitaires</strong> : Utilisez <code>click_element</code> de la bibliothèque dans vos fonctions d'actions</li>
+                    <li><strong>Fonctions d'actions</strong> : Créez des fonctions atomiques ou des stores basés sur <code>click_on</code></li>
+                    <li><strong>Utilitaires</strong> : Utilisez <code>click_on</code> ou <code>click_element</code> selon votre besoin</li>
                     <li><strong>Architecture</strong> : Organisez votre code avec <code>tests/</code> et <code>utils/</code> par domaine fonctionnel</li>
                 </ol>
 
                 <div class="highlight">
                     <strong>📊 Hiérarchie complète :</strong><br>
-                    <code>BaseTest</code> → <code>Déclencheur</code> → <code>Fonctions d'actions</code> → <code>Utilitaires (click_element)</code>
+                    <code>BaseTest</code> → <code>Déclencheur</code> → <code>Fonctions d'actions</code> → <code>Utilitaires (click_on / click_element)</code>
                 </div>
 
                 <div class="info">

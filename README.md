@@ -90,6 +90,7 @@ from selenium_ui_test_tool import (
     wait_for_element,
     configure_actions,
     click_element,
+    click_on,
     get_env_var
 )
 from selenium.webdriver.common.by import By
@@ -110,6 +111,21 @@ success = configure_actions(driver, By.CSS_SELECTOR, ".my-button")
 click_element(driver, By.ID, "submit-button", 
               success_message="Bouton cliqué avec succès",
               error_message="Impossible de cliquer sur le bouton")
+
+# Créer un store d'actions avec click_on
+ticket_actions = [
+    (By.XPATH, "//span[contains(text(),'Annuel')]", "Section annuelle sélectionnée"),
+    (By.XPATH, "//span[contains(text(),'Le Pass Annuel')]", "Le Pass Annuel sélectionné"),
+]
+
+for by, selector, success_message in ticket_actions:
+    click_on(
+        driver,
+        by,
+        selector,
+        success_message=success_message,
+        error_message=f"Impossible de cliquer sur {selector}"
+    )
 
 # Récupérer une variable d'environnement
 username = get_env_var("LOGIN_USERNAME", required=True)
@@ -222,6 +238,39 @@ click_element(driver, By.CSS_SELECTOR, ".button",
               error_message="Impossible de cliquer sur le bouton")
 ```
 
+### `click_on(driver: WebDriver, by: By, selector: str, success_message: str, error_message: str) -> bool`
+
+Couche utilitaire basée sur `click_element` pour créer rapidement des fonctions d'actions regroupées dans un store.
+
+**Paramètres :**
+
+- `driver` : Instance de WebDriver
+- `by` / `selector` : Stratégie et sélecteur de l'élément
+- `success_message` : Message affiché en cas de succès
+- `error_message` : Message affiché en cas d'échec
+
+**Cas d'usage :** créer un dictionnaire ou une liste d'actions réutilisables.
+
+```python
+from selenium_ui_test_tool import click_on
+from selenium.webdriver.common.by import By
+
+TICKET_ACTIONS = [
+    (By.XPATH, "//span[contains(text(),'Annuel')]", "Section Annuel cliquée"),
+    (By.XPATH, "//span[contains(text(),'Le Pass Annuel')]", "Pass annuel sélectionné"),
+]
+
+def monthly_buying(driver):
+    for by, selector, success in TICKET_ACTIONS:
+        click_on(
+            driver,
+            by,
+            selector,
+            success_message=success,
+            error_message=f"Impossible de cliquer sur {selector}"
+        )
+```
+
 ### `get_env_var(name: str, required: bool = True) -> str | None`
 
 Récupère une variable d'environnement.
@@ -277,6 +326,43 @@ test = BaseTest(
     failure_message="❌ Échec de la connexion",
     url="https://example.com/login",
     exit_on_failure=True
+)
+
+test.run()
+```
+
+### Exemple : Store d'actions avec `click_on`
+
+```python
+from selenium_ui_test_tool import BaseTest, click_on
+from selenium.webdriver.common.by import By
+import time
+
+ACTIONS_MONTHLY = [
+    (By.XPATH, "//span[contains(text(),'Annuel')]", "Section Annuel ouverte"),
+    (By.XPATH, "//span[contains(text(),'Le Pass Annuel')]", "Pass annuel sélectionné"),
+]
+
+def monthly_buying(driver):
+    for by, selector, success in ACTIONS_MONTHLY:
+        click_on(
+            driver,
+            by,
+            selector,
+            success_message=success,
+            error_message=f"Impossible de cliquer sur {selector}"
+        )
+
+def buying_helper_monthly(driver):
+    time.sleep(2)
+    monthly_buying(driver)
+    return True
+
+test = BaseTest(
+    test_function=buying_helper_monthly,
+    success_message="✅ Achat mensuel réussi",
+    failure_message="❌ Échec du parcours d'achat",
+    url="https://example.com/store"
 )
 
 test.run()

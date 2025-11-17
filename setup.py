@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="selenium-ui-test-tool",
-    version="1.0.2",
+    version="1.0.3",
     author="Yann Dipita",
     author_email="dipitay@gmail.com",
     description="Bibliothèque Python pour faciliter les tests UI automatisés avec Selenium",
