@@ -94,6 +94,7 @@ from selenium_ui_test_tool import (
     fill_input,
     fill_login_form,
     fill_login_form_with_confirm_password,
+    upload_file,
     get_env_var
 )
 from selenium.webdriver.common.by import By
@@ -141,6 +142,16 @@ fill_login_form(
     by=By.ID,
     selector="login-form",
     button="login-button"
+)
+
+# Uploader un fichier
+upload_file(
+    driver,
+    file_path="FILE_PATH_ENV",  # Nom de la variable d'environnement contenant le chemin du fichier
+    input_selector="file-input",
+    by=By.ID,
+    success_message="Fichier uploadé avec succès",
+    error_message="Erreur lors de l'upload"
 )
 
 # Récupérer une variable d'environnement
@@ -359,6 +370,37 @@ fill_login_form_with_confirm_password(
     by=By.ID,
     selector="register-form",
     button="register-button"
+)
+```
+
+### `upload_file(driver: WebDriver, file_path: str, input_selector: str, by: By, success_message: str | None = None, error_message: str | None = None) -> bool`
+
+Upload un fichier via un champ input file en utilisant le chemin du fichier stocké dans une variable d'environnement.
+
+**Paramètres :**
+
+- `driver` : Instance de WebDriver
+- `file_path` : Nom de la variable d'environnement contenant le chemin absolu du fichier à uploader
+- `input_selector` : Sélecteur de l'élément input file
+- `by` : Stratégie de localisation (ex: `By.ID`, `By.CSS_SELECTOR`)
+- `success_message` : Message à afficher en cas de succès (optionnel)
+- `error_message` : Message à afficher en cas d'erreur (optionnel)
+
+**Retourne :** `True` si l'upload a réussi, `False` sinon
+
+**Exemple :**
+```python
+# Dans votre fichier .env :
+# FILE_PATH=/chemin/vers/mon/fichier.pdf
+
+# Dans votre code :
+upload_file(
+    driver,
+    file_path="FILE_PATH",  # Nom de la variable d'environnement
+    input_selector="file-upload",
+    by=By.ID,
+    success_message="✅ Fichier uploadé avec succès",
+    error_message="❌ Erreur lors de l'upload"
 )
 ```
 

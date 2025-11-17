@@ -16,8 +16,9 @@ from selenium_ui_test_tool.click_on.click_on import click_on
 from selenium_ui_test_tool.fill_input.fill_input import fill_input
 from selenium_ui_test_tool.fill_login_form.fill_login_form import fill_login_form
 from selenium_ui_test_tool.fill_login_form_with_confirm_password.fill_login_form_with_confirm_password import fill_login_form_with_confirm_password
+from selenium_ui_test_tool.upload_file.upload_file import upload_file
 
-__version__ = "1.0.7"
+__version__ = "1.0.9"
 __all__ = [
     "BaseTest",
     "create_driver",
@@ -30,5 +31,6 @@ __all__ = [
     "fill_input",
     "fill_login_form",
     "fill_login_form_with_confirm_password",
+    "upload_file",
 ]
 

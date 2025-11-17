@@ -6,9 +6,11 @@ def fill_login_form_with_confirm_password(driver, username_env="LOGIN_USERNAME",
     try:
         username = get_env_var(username_env)
         password = get_env_var(password_env)
+        confirm_password = get_env_var(password_env)
 
         fill_input(driver, by, selector, username)
         fill_input(driver, by, selector, password)
+        fill_input(driver, by, selector, confirm_password)
 
         configure_actions(driver, by, button)
 

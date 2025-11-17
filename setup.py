@@ -5,13 +5,13 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="selenium-ui-test-tool",
-    version="1.0.7",
+    version="1.0.9",
     author="Yann Dipita",
     author_email="dipitay@gmail.com",
     description="Bibliothèque Python pour faciliter les tests UI automatisés avec Selenium",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/yourusername/selenium-ui-test-tool",
+    url="https://kingcrud12.github.io/selenium_ui_test_tool/",
     packages=find_packages(),
     classifiers=[
         "Development Status :: 4 - Beta",

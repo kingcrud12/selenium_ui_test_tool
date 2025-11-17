@@ -608,6 +608,36 @@ fill_login_form_with_confirm_password(
                     en gérant automatiquement l'attente, le scroll et le remplissage des champs.
                 </div>
 
+                <h3>Utilitaire d'upload de fichier</h3>
+                <p>
+                    L'utilitaire <code>upload_file</code> permet d'uploader des fichiers via un champ input file 
+                    en utilisant le chemin du fichier stocké dans une variable d'environnement.
+                </p>
+
+                <h4>upload_file</h4>
+                <div class="example-box">
+                    <pre><code>from selenium_ui_test_tool import upload_file
+from selenium.webdriver.common.by import By
+
+# Dans votre fichier .env :
+# FILE_PATH=/chemin/vers/mon/fichier.pdf
+
+# Dans votre code :
+upload_file(
+    driver,
+    file_path="FILE_PATH",  # Nom de la variable d'environnement
+    input_selector="file-upload",
+    by=By.ID,
+    success_message="✅ Fichier uploadé avec succès",
+    error_message="❌ Erreur lors de l'upload"
+)</code></pre>
+                </div>
+
+                <div class="info">
+                    <strong>💡 Note :</strong> Le chemin du fichier doit être stocké dans une variable d'environnement 
+                    (fichier .env ou secrets GitHub Actions). Le chemin doit être absolu.
+                </div>
+
                 <h3>Autres utilitaires disponibles</h3>
 
                 <h4>1. wait_for_element</h4>

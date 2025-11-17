@@ -5,6 +5,21 @@ Tous les changements notables de ce projet seront documentés dans ce fichier.
 Le format est basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/),
 et ce projet adhère à [Semantic Versioning](https://semver.org/lang/fr/).
 
+## [1.0.9] - 2024-01-XX
+
+### Ajouté
+- Nouvel utilitaire `upload_file` pour uploader des fichiers via un champ input file
+- Export de `upload_file` dans l'API publique
+
+### Modifié
+- Documentation (README, docs/) mise à jour avec des exemples d'utilisation de `upload_file`
+
+## [1.0.8] - 2024-01-XX
+
+### Modifié
+- Amélioration de l'utilitaire `fill_login_form_with_confirm_password`
+- Mise à jour de l'URL de la homepage vers https://kingcrud12.github.io/selenium_ui_test_tool/
+
 ## [1.0.7] - 2024-01-XX
 
 ### Ajouté
