@@ -550,6 +550,64 @@ def click_element(driver, by, selector, wait_before_click=0,
         return False</code></pre>
                 </div>
 
+                <h3>Nouveaux utilitaires de formulaire</h3>
+                <p>
+                    La bibliothèque propose maintenant des utilitaires spécialisés pour remplir des formulaires, 
+                    simplifiant grandement les tests de connexion et d'inscription.
+                </p>
+
+                <h4>1. fill_input</h4>
+                <p>Remplit un champ de formulaire avec scroll automatique vers l'élément.</p>
+                <div class="example-box">
+                    <pre><code>from selenium_ui_test_tool import fill_input
+from selenium.webdriver.common.by import By
+
+# Remplir un champ username
+fill_input(driver, By.ID, "username", "mon_utilisateur")
+
+# Remplir un champ email
+fill_input(driver, By.CSS_SELECTOR, "input[type='email']", "email@example.com")</code></pre>
+                </div>
+
+                <h4>2. fill_login_form</h4>
+                <p>Remplit automatiquement un formulaire de connexion en utilisant les variables d'environnement.</p>
+                <div class="example-box">
+                    <pre><code>from selenium_ui_test_tool import fill_login_form
+from selenium.webdriver.common.by import By
+
+# Remplir et soumettre le formulaire de connexion
+fill_login_form(
+    driver,
+    username_env="LOGIN_USERNAME",
+    password_env="LOGIN_PASSWORD",
+    by=By.ID,
+    selector="login-form",
+    button="login-button"
+)</code></pre>
+                </div>
+
+                <h4>3. fill_login_form_with_confirm_password</h4>
+                <p>Remplit automatiquement un formulaire avec confirmation de mot de passe.</p>
+                <div class="example-box">
+                    <pre><code>from selenium_ui_test_tool import fill_login_form_with_confirm_password
+from selenium.webdriver.common.by import By
+
+# Formulaire d'inscription avec confirmation de mot de passe
+fill_login_form_with_confirm_password(
+    driver,
+    username_env="LOGIN_USERNAME",
+    password_env="LOGIN_PASSWORD",
+    by=By.ID,
+    selector="register-form",
+    button="register-button"
+)</code></pre>
+                </div>
+
+                <div class="success">
+                    <strong>✅ Avantage :</strong> Ces utilitaires simplifient considérablement les tests de formulaires 
+                    en gérant automatiquement l'attente, le scroll et le remplissage des champs.
+                </div>
+
                 <h3>Autres utilitaires disponibles</h3>
 
                 <h4>1. wait_for_element</h4>

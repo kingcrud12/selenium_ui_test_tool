@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "selenium-ui-test-tool"
-version = "1.0.3"
+version = "1.0.7"
 description = "Bibliothèque Python pour faciliter les tests UI automatisés avec Selenium"
 readme = "README.md"
 requires-python = ">=3.8"

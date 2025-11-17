@@ -91,6 +91,9 @@ from selenium_ui_test_tool import (
     configure_actions,
     click_element,
     click_on,
+    fill_input,
+    fill_login_form,
+    fill_login_form_with_confirm_password,
     get_env_var
 )
 from selenium.webdriver.common.by import By
@@ -126,6 +129,19 @@ for by, selector, success_message in ticket_actions:
         success_message=success_message,
         error_message=f"Impossible de cliquer sur {selector}"
     )
+
+# Remplir un champ de formulaire
+fill_input(driver, By.ID, "username", "mon_utilisateur")
+
+# Remplir un formulaire de connexion complet
+fill_login_form(
+    driver,
+    username_env="LOGIN_USERNAME",
+    password_env="LOGIN_PASSWORD",
+    by=By.ID,
+    selector="login-form",
+    button="login-button"
+)
 
 # Récupérer une variable d'environnement
 username = get_env_var("LOGIN_USERNAME", required=True)
@@ -271,6 +287,81 @@ def monthly_buying(driver):
         )
 ```
 
+### `fill_input(driver: WebDriver, by: By, selector: str, value: str, timeout: int = 10) -> bool`
+
+Remplit un champ de formulaire avec scroll automatique vers l'élément.
+
+**Paramètres :**
+
+- `driver` : Instance de WebDriver
+- `by` : Stratégie de localisation (ex: `By.ID`, `By.CSS_SELECTOR`)
+- `selector` : Sélecteur de l'élément
+- `value` : Valeur à saisir dans le champ
+- `timeout` : Temps d'attente maximum en secondes (défaut: 10)
+
+**Retourne :** `True` si le remplissage a réussi, `False` sinon
+
+**Exemple :**
+```python
+# Remplir un champ username
+fill_input(driver, By.ID, "username", "mon_utilisateur")
+
+# Remplir un champ email
+fill_input(driver, By.CSS_SELECTOR, "input[type='email']", "email@example.com")
+```
+
+### `fill_login_form(driver: WebDriver, username_env: str = "LOGIN_USERNAME", password_env: str = "LOGIN_PASSWORD", by: str = "id", selector: str = "test", button: str = "test") -> bool`
+
+Remplit automatiquement un formulaire de connexion en utilisant les variables d'environnement pour le username et le password, puis clique sur le bouton de connexion.
+
+**Paramètres :**
+
+- `driver` : Instance de WebDriver
+- `username_env` : Nom de la variable d'environnement pour le username (défaut: "LOGIN_USERNAME")
+- `password_env` : Nom de la variable d'environnement pour le password (défaut: "LOGIN_PASSWORD")
+- `by` : Stratégie de localisation pour les champs (défaut: "id")
+- `selector` : Sélecteur des champs de formulaire
+- `button` : Sélecteur du bouton de connexion
+
+**Retourne :** `True` si le formulaire a été rempli et soumis avec succès, `False` sinon
+
+**Exemple :**
+```python
+# Utilisation avec les variables d'environnement par défaut
+fill_login_form(
+    driver,
+    by=By.ID,
+    selector="login-form",
+    button="login-button"
+)
+```
+
+### `fill_login_form_with_confirm_password(driver: WebDriver, username_env: str = "LOGIN_USERNAME", password_env: str = "LOGIN_PASSWORD", by: str = "id", selector: str = "test", button: str = "test") -> bool`
+
+Remplit automatiquement un formulaire de connexion avec confirmation de mot de passe en utilisant les variables d'environnement.
+
+**Paramètres :**
+
+- `driver` : Instance de WebDriver
+- `username_env` : Nom de la variable d'environnement pour le username (défaut: "LOGIN_USERNAME")
+- `password_env` : Nom de la variable d'environnement pour le password (défaut: "LOGIN_PASSWORD")
+- `by` : Stratégie de localisation pour les champs (défaut: "id")
+- `selector` : Sélecteur des champs de formulaire
+- `button` : Sélecteur du bouton de connexion
+
+**Retourne :** `True` si le formulaire a été rempli et soumis avec succès, `False` sinon
+
+**Exemple :**
+```python
+# Formulaire avec confirmation de mot de passe
+fill_login_form_with_confirm_password(
+    driver,
+    by=By.ID,
+    selector="register-form",
+    button="register-button"
+)
+```
+
 ### `get_env_var(name: str, required: bool = True) -> str | None`
 
 Récupère une variable d'environnement.
@@ -286,33 +377,23 @@ Récupère une variable d'environnement.
 
 ## 💡 Exemples
 
-### Exemple complet : Test de connexion
+### Exemple complet : Test de connexion (avec `fill_login_form`)
 
 ```python
-from selenium_ui_test_tool import BaseTest, get_env_var, wait_for_element, click_element
+from selenium_ui_test_tool import BaseTest, fill_login_form, wait_for_element
 from selenium.webdriver.common.by import By
 
 def test_login(driver):
-    """Test de connexion à une application"""
-    username = get_env_var("LOGIN_USERNAME")
-    password = get_env_var("LOGIN_PASSWORD")
-    
-    # Attendre et remplir le champ username
-    username_field = wait_for_element(driver, By.ID, "username")
-    if not username_field:
-        return False
-    username_field.send_keys(username)
-    
-    # Attendre et remplir le champ password
-    password_field = wait_for_element(driver, By.ID, "password")
-    if not password_field:
-        return False
-    password_field.send_keys(password)
-    
-    # Cliquer sur le bouton de connexion avec message personnalisé
-    if not click_element(driver, By.ID, "login-button", 
-                         success_message="Connexion réussie",
-                         error_message="Échec de la connexion"):
+    """Test de connexion à une application avec fill_login_form"""
+    # Remplir et soumettre le formulaire de connexion automatiquement
+    if not fill_login_form(
+        driver,
+        username_env="LOGIN_USERNAME",
+        password_env="LOGIN_PASSWORD",
+        by=By.ID,
+        selector="login-form",
+        button="login-button"
+    ):
         return False
     
     # Vérifier que la connexion a réussi
@@ -322,6 +403,43 @@ def test_login(driver):
 # Exécuter le test
 test = BaseTest(
     test_function=test_login,
+    success_message="✅ Connexion réussie !",
+    failure_message="❌ Échec de la connexion",
+    url="https://example.com/login",
+    exit_on_failure=True
+)
+
+test.run()
+```
+
+### Exemple : Test de connexion manuel (avec `fill_input`)
+
+```python
+from selenium_ui_test_tool import BaseTest, fill_input, click_element, get_env_var
+from selenium.webdriver.common.by import By
+
+def test_login_manual(driver):
+    """Test de connexion avec remplissage manuel des champs"""
+    # Remplir le champ username
+    if not fill_input(driver, By.ID, "username", get_env_var("LOGIN_USERNAME")):
+        return False
+    
+    # Remplir le champ password
+    if not fill_input(driver, By.ID, "password", get_env_var("LOGIN_PASSWORD")):
+        return False
+    
+    # Cliquer sur le bouton de connexion
+    return click_element(
+        driver, 
+        By.ID, 
+        "login-button",
+        success_message="Connexion réussie",
+        error_message="Échec de la connexion"
+    )
+
+# Exécuter le test
+test = BaseTest(
+    test_function=test_login_manual,
     success_message="✅ Connexion réussie !",
     failure_message="❌ Échec de la connexion",
     url="https://example.com/login",

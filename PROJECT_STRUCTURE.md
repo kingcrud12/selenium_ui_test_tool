@@ -28,6 +28,9 @@ Ce projet est maintenant une bibliothèque Python installable pour faciliter les
   - `wait_element/` - Utilitaires d'attente d'éléments
   - `click_on/` - Utilitaire `click_on` pour composer des stores d'actions
   - `click_element/` - Utilitaire de clic avancé avec messages personnalisés
+  - `fill_input/` - Utilitaire pour remplir un champ de formulaire
+  - `fill_login_form/` - Utilitaire pour remplir automatiquement un formulaire de connexion
+  - `fill_login_form_with_confirm_password/` - Utilitaire pour remplir un formulaire avec confirmation de mot de passe
   - `config_actions/` - Configuration et exécution d'actions
   - `get_env_var/` - Gestion des variables d'environnement
   - `get_url/` - Navigation vers des URLs
@@ -79,6 +82,9 @@ Tous les éléments suivants sont disponibles via `from selenium_ui_test_tool im
 - `wait_for_element` - Attendre un élément
 - `click_element` - Cliquer sur un élément avec fonctionnalités avancées
 - `click_on` - Créer des stores d'actions lisibles
+- `fill_input` - Remplir un champ de formulaire
+- `fill_login_form` - Remplir automatiquement un formulaire de connexion
+- `fill_login_form_with_confirm_password` - Remplir un formulaire avec confirmation de mot de passe
 - `configure_actions` - Configurer et exécuter des actions
 - `get_env_var` - Récupérer une variable d'environnement
 

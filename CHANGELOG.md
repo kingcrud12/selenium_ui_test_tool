@@ -5,6 +5,30 @@ Tous les changements notables de ce projet seront documentés dans ce fichier.
 Le format est basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/),
 et ce projet adhère à [Semantic Versioning](https://semver.org/lang/fr/).
 
+## [1.0.7] - 2024-01-XX
+
+### Ajouté
+- Nouvel utilitaire `fill_input` pour remplir un champ de formulaire avec scroll automatique
+- Nouvel utilitaire `fill_login_form` pour remplir automatiquement un formulaire de connexion (username + password)
+- Nouvel utilitaire `fill_login_form_with_confirm_password` pour remplir un formulaire avec confirmation de mot de passe
+- Export des nouveaux utilitaires dans l'API publique
+
+### Modifié
+- Documentation (README, docs/) mise à jour avec des exemples d'utilisation des nouveaux utilitaires de remplissage de formulaires
+- Page web du tutoriel enrichie pour présenter les utilitaires de formulaire
+
+## [1.0.4] - 2024-01-XX
+
+### Ajouté
+- Nouvel utilitaire `fill_input` pour remplir un champ de formulaire avec scroll automatique
+- Nouvel utilitaire `fill_login_form` pour remplir automatiquement un formulaire de connexion (username + password)
+- Nouvel utilitaire `fill_login_form_with_confirm_password` pour remplir un formulaire avec confirmation de mot de passe
+- Export des nouveaux utilitaires dans l'API publique
+
+### Modifié
+- Documentation (README, docs/) mise à jour avec des exemples d'utilisation des nouveaux utilitaires de remplissage de formulaires
+- Page web du tutoriel enrichie pour présenter les utilitaires de formulaire
+
 ## [1.0.3] - 2024-01-XX
 
 ### Ajouté
