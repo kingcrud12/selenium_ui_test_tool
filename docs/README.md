@@ -1,25 +1,24 @@
-# Documentation Selenium UI Test Tool
+# Selenium UI Test Tool Docs
 
-Cette documentation est disponible en ligne via GitHub Pages.
+> 🇫🇷 Version française : [docs/README.fr.md](README.fr.md)
 
 ## Structure
 
-- `index.html` - Page principale du tutoriel
+- `index.html` – Main tutorial page served by GitHub Pages
 
-## Déploiement sur GitHub Pages
+## Deploy on GitHub Pages
 
-1. Créez un repository GitHub
-2. Activez GitHub Pages dans les paramètres du repository
-3. Sélectionnez la branche `main` et le dossier `/docs`
-4. La documentation sera accessible à : `https://votre-username.github.io/votre-repo/`
+1. Create a GitHub repository.
+2. Enable GitHub Pages in the repository settings.
+3. Select branch `main` and folder `/docs`.
+4. The site will be available at `https://your-username.github.io/your-repo/`.
 
-## Alternative : Utiliser Jekyll
+## Alternative: Jekyll
 
-Si vous préférez utiliser Jekyll (support natif de GitHub Pages), créez un fichier `_config.yml` :
+If you prefer the built-in Jekyll theme, create `_config.yml`:
 
 ```yaml
 theme: jekyll-theme-minimal
 ```
 
-Et renommez `index.html` en `index.md` si vous voulez utiliser Markdown.
-
+Rename `index.html` to `index.md` if you would rather work with Markdown.

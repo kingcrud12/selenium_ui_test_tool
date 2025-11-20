@@ -1,103 +1,102 @@
-# Structure du projet
+# Project Structure
 
-## Vue d'ensemble
+> 🇫🇷 Consulter la version française : [PROJECT_STRUCTURE.fr.md](PROJECT_STRUCTURE.fr.md)
 
-Ce projet est maintenant une bibliothèque Python installable pour faciliter les tests UI automatisés avec Selenium.
+## Overview
 
-## Fichiers principaux
+`selenium-ui-test-tool` is distributed as an installable Python package that accelerates Selenium-based UI tests.
+
+## Key files
 
 ### Configuration
-- `pyproject.toml` - Configuration moderne du package (PEP 518)
-- `setup.py` - Script d'installation classique (compatibilité)
-- `MANIFEST.in` - Fichiers à inclure dans la distribution
-- `requirements.txt` - Dépendances du projet
+- `pyproject.toml` – Modern packaging (PEP 518)
+- `setup.py` – Legacy installer for compatibility
+- `MANIFEST.in` – Extra files to bundle
+- `requirements.txt` – Project dependencies
 
 ### Documentation
-- `README.md` - Documentation principale avec exemples
-- `INSTALLATION.md` - Guide d'installation détaillé
-- `CHANGELOG.md` - Historique des versions
-- `CONTRIBUTING.md` - Guide pour les contributeurs
-- `MIGRATION.md` - Guide de migration depuis l'ancienne structure
-- `LICENSE` - Licence MIT
+- `README.md` – Main documentation with quick start
+- `INSTALLATION.md` – Detailed installation guide
+- `CHANGELOG.md` – Release history
+- `CONTRIBUTING.md` – How to contribute
+- `MIGRATION.md` – Steps to migrate from the previous layout
+- `LICENSE` – MIT license
 
-### Code source
-- `selenium_ui_test_tool/` - Package principal contenant tous les modules
-  - `__init__.py` - Point d'entrée du package, expose l'API publique
-  - `base_test/` - Classe BaseTest pour exécuter des tests
-  - `driver_builder/` - Construction et configuration du WebDriver
-  - `wait_element/` - Utilitaires d'attente d'éléments
-  - `click_on/` - Utilitaire `click_on` pour composer des stores d'actions
-  - `click_element/` - Utilitaire de clic avancé avec messages personnalisés
-  - `fill_input/` - Utilitaire pour remplir un champ de formulaire
-  - `fill_login_form/` - Utilitaire pour remplir automatiquement un formulaire de connexion
-  - `fill_login_form_with_confirm_password/` - Utilitaire pour remplir un formulaire avec confirmation de mot de passe
-  - `upload_file/` - Utilitaire pour uploader des fichiers via un champ input file
-  - `config_actions/` - Configuration et exécution d'actions
-  - `get_env_var/` - Gestion des variables d'environnement
-  - `get_url/` - Navigation vers des URLs
+### Source code
+- `selenium_ui_test_tool/` – Package entry point
+  - `__init__.py` – Exposes the public API
+  - `base_test/` – `BaseTest` orchestrator
+  - `driver_builder/` – WebDriver creation & options
+  - `wait_element/` – Explicit waits helpers
+  - `click_on/` – Opinionated `click_on` utility for action stores
+  - `click_element/` – Advanced click helper with logging
+  - `fill_input/` – Scroll + fill an input
+  - `fill_login_form/` – Auto-fill a login form
+  - `fill_login_form_with_confirm_password/` – Auto-fill with password confirmation
+  - `upload_file/` – Upload files using an env-var path
+  - `config_actions/` – Scroll + click primitive
+  - `get_env_var/` – Environment variable helper
+  - `get_url/` – Navigation helper
 
-### Exemples
-- `examples/` - Exemples d'utilisation de la bibliothèque
-  - `example_usage.py` - Exemples complets d'utilisation
+### Examples
+- `examples/` – How-to snippets
+  - `example_usage.py` – End-to-end sample
 
-### Configuration
-- `env.example` - Exemple de fichier de variables d'environnement
-- `.gitignore` - Fichiers à ignorer par Git
+### Configuration helpers
+- `env.example` – Sample `.env`
+- `.gitignore` – Git ignore rules
 
 ## Installation
 
 ```bash
-# Mode développement
+# Editable/dev mode
 pip install -e .
 
-# Depuis PyPI (quand publié)
+# From PyPI (when available)
 pip install selenium-ui-test-tool
 ```
 
-## Utilisation
+## Usage
 
 ```python
 from selenium_ui_test_tool import BaseTest, create_driver, wait_for_element
 
-# Utiliser BaseTest
+# Run a BaseTest scenario
 test = BaseTest(
     test_function=my_test_function,
-    success_message="✅ Test réussi",
-    failure_message="❌ Test échoué",
+    success_message="✅ Test passed",
+    failure_message="❌ Test failed",
     url="https://example.com"
 )
 test.run()
 
-# Ou utiliser les utilitaires directement
+# Or call utilities directly
 driver = create_driver(headless=False)
 element = wait_for_element(driver, By.ID, "my-element")
 ```
 
-## API publique
+## Public API
 
-Tous les éléments suivants sont disponibles via `from selenium_ui_test_tool import ...` :
+Everything below can be imported from `selenium_ui_test_tool`:
 
-- `BaseTest` - Classe principale pour les tests
-- `create_driver` - Créer un driver Chrome
-- `get_url` - Naviguer vers une URL
-- `wait_for_element` - Attendre un élément
-- `click_element` - Cliquer sur un élément avec fonctionnalités avancées
-- `click_on` - Créer des stores d'actions lisibles
-- `fill_input` - Remplir un champ de formulaire
-- `fill_login_form` - Remplir automatiquement un formulaire de connexion
-- `fill_login_form_with_confirm_password` - Remplir un formulaire avec confirmation de mot de passe
-- `upload_file` - Uploader un fichier via un champ input file
-- `configure_actions` - Configurer et exécuter des actions
-- `get_env_var` - Récupérer une variable d'environnement
+- `BaseTest`
+- `create_driver`
+- `get_url`
+- `wait_for_element`
+- `click_element`
+- `click_on`
+- `fill_input`
+- `fill_login_form`
+- `fill_login_form_with_confirm_password`
+- `upload_file`
+- `configure_actions`
+- `get_env_var`
 
-## Développement
+## Development
 
-Pour contribuer au projet :
+1. Fork the repository
+2. Create a feature branch
+3. Implement & test
+4. Submit a Pull Request
 
-1. Fork le repository
-2. Créez une branche pour votre fonctionnalité
-3. Développez et testez
-4. Soumettez une Pull Request
-
-Voir `CONTRIBUTING.md` pour plus de détails.
-
+See `CONTRIBUTING.md` for the detailed checklist.

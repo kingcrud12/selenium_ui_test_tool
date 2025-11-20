@@ -1,82 +1,82 @@
-# Guide d'installation
+# Installation Guide
 
-## Installation en mode développement
+> 🇫🇷 Lire ce guide en français : [INSTALLATION.fr.md](INSTALLATION.fr.md)
 
-Pour installer la bibliothèque en mode développement (editable) :
+## Development install
+
+Install the library in editable mode while hacking on it:
 
 ```bash
-# Cloner le repository (ou naviguer vers le dossier)
+# Clone (or move into) the repository
 cd selenium_ui_test_tool
 
-# Installer en mode développement
+# Install in editable mode
 pip install -e .
 ```
 
-## Installation depuis le code source
+## Install from source
 
 ```bash
-# Construire la distribution
+# Build the distribution archives
 python -m build
 
-# Installer depuis le wheel
+# Install from the freshly built wheel
 pip install dist/selenium_ui_test_tool-1.0.0-py3-none-any.whl
 ```
 
-## Installation depuis PyPI (quand publié)
+## Install from PyPI (once published)
 
 ```bash
 pip install selenium-ui-test-tool
 ```
 
-## Vérification de l'installation
+## Validate the installation
 
 ```python
-# Tester l'import
 from selenium_ui_test_tool import BaseTest, create_driver
-print("✅ Installation réussie !")
+print("✅ Installation successful!")
 ```
 
-## Dépendances système
+## System dependencies
 
 ### ChromeDriver
 
-La bibliothèque utilise `webdriver-manager` pour gérer automatiquement ChromeDriver, mais vous pouvez aussi :
+`webdriver-manager` downloads ChromeDriver automatically, but you can still:
 
-1. **Installer manuellement** : Téléchargez ChromeDriver depuis [chromedriver.chromium.org](https://chromedriver.chromium.org/)
-2. **Via Homebrew (macOS)** : `brew install chromedriver`
-3. **Via apt (Linux)** : `sudo apt-get install chromium-chromedriver`
+1. **Install manually** from [chromedriver.chromium.org](https://chromedriver.chromium.org/)
+2. **Homebrew (macOS)**: `brew install chromedriver`
+3. **apt (Linux)**: `sudo apt-get install chromium-chromedriver`
 
 ### Chrome/Chromium
 
-Assurez-vous d'avoir Chrome ou Chromium installé sur votre système.
+Make sure Google Chrome or Chromium is installed on the target machine.
 
-## Dépannage
+## Troubleshooting
 
-### Erreur : "chromedriver not found"
+### Error: `chromedriver not found`
 
-Solution : Définissez la variable d'environnement `CHROMEDRIVER_PATH` :
+Set the `CHROMEDRIVER_PATH` environment variable:
 
 ```bash
 export CHROMEDRIVER_PATH=/path/to/chromedriver
 ```
 
-Ou installez `webdriver-manager` :
+Or install `webdriver-manager`:
 
 ```bash
 pip install webdriver-manager
 ```
 
-### Erreur : "Module not found"
+### Error: `Module not found`
 
-Vérifiez que vous avez installé le package :
+Confirm that the package is installed:
 
 ```bash
 pip list | grep selenium-ui-test-tool
 ```
 
-Si absent, réinstallez :
+If it is missing, reinstall:
 
 ```bash
 pip install -e .
 ```
-

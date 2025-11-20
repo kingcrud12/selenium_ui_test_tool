@@ -1,12 +1,14 @@
-# Guide de migration
+# Migration Guide
 
-## Transformation en bibliothèque
+> 🇫🇷 Lire en français : [MIGRATION.fr.md](MIGRATION.fr.md)
 
-Ce projet a été transformé en bibliothèque Python installable. Voici les changements principaux :
+## Library transformation
+
+The project is now delivered as an installable Python package. Key changes:
 
 ## Structure
 
-### Avant
+### Before
 ```
 selenium_ui_test_tool/
 ├── base_test/
@@ -17,64 +19,62 @@ selenium_ui_test_tool/
 └── wait_element/
 ```
 
-### Après
+### After
 ```
 selenium_ui_test_tool/
-├── selenium_ui_test_tool/    # Package principal
+├── selenium_ui_test_tool/    # Package
 │   ├── base_test/
 │   ├── config_actions/
 │   ├── driver_builder/
 │   ├── get_env_var/
 │   ├── get_url/
 │   └── wait_element/
-├── examples/                  # Exemples d'utilisation
-├── pyproject.toml            # Configuration du package
-├── setup.py                  # Script d'installation
+├── examples/                 # Usage samples
+├── pyproject.toml            # Package config
+├── setup.py                  # Legacy installer
 └── README.md                 # Documentation
 ```
 
-## Changements d'imports
+## Import changes
 
-### Avant
+### Before
 ```python
 from driver_builder.driver_builder import create_driver
 from get_url.get_url import get_url
 ```
 
-### Après
+### After
 ```python
 from selenium_ui_test_tool import create_driver, get_url
-# ou
-from selenium_ui_test_tool.driver_builder.driver_builder import create_driver
+# orrom selenium_ui_test_tool.driver_builder.driver_builder import create_driver
 ```
 
 ## Installation
 
-### Mode développement
+### Development mode
 ```bash
 pip install -e .
 ```
 
-### Depuis PyPI (quand publié)
+### From PyPI (when published)
 ```bash
 pip install selenium-ui-test-tool
 ```
 
-## Utilisation
+## Usage
 
-### Avant
+### Before
 ```python
 from base_test.base_test import BaseTest
 ```
 
-### Après
+### After
 ```python
 from selenium_ui_test_tool import BaseTest
 ```
 
 ## Notes
 
-- Les anciens dossiers à la racine ont été supprimés
-- Tous les développements doivent utiliser le package `selenium_ui_test_tool`
-- Les imports internes ont été mis à jour pour utiliser le nom du package
-
+- Legacy root folders were removed.
+- Always import from the `selenium_ui_test_tool` namespace.
+- All internal imports were updated accordingly.

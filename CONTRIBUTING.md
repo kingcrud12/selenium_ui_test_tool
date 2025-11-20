@@ -1,75 +1,74 @@
-# Guide de contribution
+# Contributing Guide
 
-Merci de votre intérêt pour contribuer à Selenium UI Test Tool ! 🎉
+> 🇫🇷 Lire ce guide en français : [CONTRIBUTING.fr.md](CONTRIBUTING.fr.md)
 
-## Comment contribuer
+Thank you for helping improve Selenium UI Test Tool! 🎉
 
-### Signaler un bug
+## How to contribute
 
-Si vous trouvez un bug :
+### Report a bug
 
-1. Vérifiez qu'il n'existe pas déjà une issue ouverte
-2. Créez une nouvelle issue avec :
-   - Une description claire du bug
-   - Les étapes pour reproduire
-   - Le comportement attendu vs le comportement actuel
-   - Votre environnement (OS, Python, Selenium versions)
-   - Un exemple de code minimal si possible
+1. Check that the issue does not already exist.
+2. Open a new issue including:
+   - clear description of the bug
+   - steps to reproduce
+   - expected vs. actual behavior
+   - environment details (OS, Python, Selenium)
+   - minimal reproducible code when possible
 
-### Proposer une fonctionnalité
+### Propose a feature
 
-1. Créez une issue pour discuter de la fonctionnalité
-2. Attendez la validation avant de commencer à coder
-3. Implémentez la fonctionnalité en suivant les conventions du projet
+1. Open an issue to discuss the idea first.
+2. Wait for validation before coding.
+3. Follow the project conventions when implementing.
 
-### Soumettre une Pull Request
+### Submit a Pull Request
 
-1. **Fork** le projet
-2. **Créez une branche** pour votre fonctionnalité (`git checkout -b feature/AmazingFeature`)
-3. **Commitez** vos changements (`git commit -m 'Add some AmazingFeature'`)
-4. **Push** vers la branche (`git push origin feature/AmazingFeature`)
-5. **Ouvrez une Pull Request**
+1. **Fork** the repository.
+2. **Create a branch** (`git checkout -b feature/AmazingFeature`).
+3. **Commit** your changes (`git commit -m 'Add AmazingFeature'`).
+4. **Push** the branch (`git push origin feature/AmazingFeature`).
+5. **Open a Pull Request**.
 
-## Standards de code
+## Coding standards
 
-### Style Python
+### Python style
 
-- Suivez PEP 8 pour le style de code
-- Utilisez des docstrings pour toutes les fonctions et classes
-- Type hints recommandés pour les signatures de fonctions
+- Follow PEP 8.
+- Add docstrings to all public functions and classes.
+- Prefer type hints on function signatures.
 
 ### Tests
 
-- Ajoutez des tests pour toute nouvelle fonctionnalité
-- Assurez-vous que tous les tests passent avant de soumettre
+- Add tests for every new feature.
+- Ensure all tests pass before submitting.
 
 ### Documentation
 
-- Mettez à jour la documentation si nécessaire
-- Ajoutez des exemples d'utilisation pour les nouvelles fonctionnalités
+- Update docs when needed.
+- Provide usage examples for new utilities.
 
-## Structure du code
+## Code layout
 
 ```
 selenium_ui_test_tool/
 ├── selenium_ui_test_tool/
-│   ├── base_test/          # Classe principale pour les tests
-│   ├── driver_builder/     # Construction du driver
-│   ├── wait_element/       # Utilitaires d'attente
-│   ├── config_actions/     # Configuration d'actions
-│   ├── get_env_var/        # Gestion des variables d'environnement
-│   └── get_url/            # Navigation
+│   ├── base_test/
+│   ├── driver_builder/
+│   ├── wait_element/
+│   ├── config_actions/
+│   ├── get_env_var/
+│   └── get_url/
 ```
 
-## Processus de développement
+## Development workflow
 
-1. Créez votre branche depuis `main`
-2. Développez votre fonctionnalité
-3. Testez localement
-4. Mettez à jour la documentation si nécessaire
-5. Soumettez votre PR
+1. Branch off `main`.
+2. Implement your change.
+3. Test locally.
+4. Update documentation if needed.
+5. Submit the PR.
 
-## Questions ?
+## Questions?
 
-N'hésitez pas à ouvrir une issue pour toute question !
-
+Open an issue whenever something is unclear!

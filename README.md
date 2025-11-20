@@ -1,25 +1,35 @@
 # Selenium UI Test Tool
 
-Bibliothèque Python pour faciliter les tests UI automatisés avec Selenium WebDriver.
+Python library that simplifies Selenium WebDriver UI test automation.
 
-## 📋 Table des matières
+## 🌐 Languages
 
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Utilisation](#utilisation)
-- [API Reference](#api-reference)
-- [Exemples](#exemples)
-- [Contribuer](#contribuer)
+- 🇫🇷 [Lire la documentation en français](README.fr.md)
+
+## 📋 Table of Contents
+
+- [Installation](#-installation)
+- [Configuration](#-configuration)
+- [Usage](#-usage)
+- [API Reference](#-api-reference)
+- [Examples](#-examples)
+- [CI/CD Mode](#-cicd-mode)
+- [Project Structure](#-project-structure)
+- [Contributing](#-contributing)
+- [License](#-license)
+- [Author](#-author)
+- [Report a Bug](#-report-a-bug)
+- [Contact](#-contact)
 
 ## 🚀 Installation
 
-### Installation depuis PyPI (quand publié)
+### Install from PyPI (when published)
 
 ```bash
 pip install selenium-ui-test-tool
 ```
 
-### Installation depuis le code source
+### Install from source
 
 ```bash
 git clone <repository-url>
@@ -27,7 +37,7 @@ cd selenium_ui_test_tool
 pip install -e .
 ```
 
-### Dépendances
+### Dependencies
 
 - Python >= 3.8
 - Selenium >= 4.15.0
@@ -36,44 +46,43 @@ pip install -e .
 
 ## ⚙️ Configuration
 
-### Variables d'environnement
+### Environment variables
 
-Créez un fichier `.env` à la racine de votre projet avec les variables nécessaires :
+Create a `.env` file at the root of your project with the required variables:
 
 ```env
-# Exemple de configuration
-CHROMEDRIVER_PATH=/path/to/chromedriver  # Optionnel
-HEADLESS=false  # true pour exécuter en mode headless
-CI=false  # true si exécuté en CI/CD
+# Sample configuration
+CHROMEDRIVER_PATH=/path/to/chromedriver  # Optional
+HEADLESS=false  # true to run headless
+CI=false  # true when running in CI/CD
 ```
 
-### Configuration ChromeDriver
+### ChromeDriver setup
 
-La bibliothèque gère automatiquement ChromeDriver de plusieurs façons :
+The library automatically handles ChromeDriver in several ways:
 
-1. **Variable d'environnement** : Si `CHROMEDRIVER_PATH` est défini, elle l'utilise
-2. **webdriver-manager** : Télécharge et gère automatiquement la version appropriée
-3. **Fallback** : Utilise `/opt/homebrew/bin/chromedriver` (macOS Homebrew)
+1. **Environment variable**: if `CHROMEDRIVER_PATH` is set it will be used.
+2. **webdriver-manager**: downloads and manages the matching version for you.
+3. **Fallback**: uses `/opt/homebrew/bin/chromedriver` (macOS Homebrew) when available.
 
-## 📖 Utilisation
+## 📖 Usage
 
-### Exemple basique
+### Basic example
 
 ```python
 from selenium_ui_test_tool import BaseTest
 from selenium.webdriver.common.by import By
 
 def test_example(driver):
-    """Fonction de test qui retourne True si le test réussit"""
-    # Votre logique de test ici
+    """Return True when the page title contains 'Example'."""
     title = driver.title
     return "Example" in title
 
-# Créer et exécuter le test
+# Create and run the test
 test = BaseTest(
     test_function=test_example,
-    success_message="✅ Test réussi !",
-    failure_message="❌ Test échoué !",
+    success_message="✅ Test passed!",
+    failure_message="❌ Test failed!",
     url="https://example.com",
     exit_on_failure=True
 )
@@ -81,7 +90,7 @@ test = BaseTest(
 test.run()
 ```
 
-### Utilisation des utilitaires
+### Using the utilities
 
 ```python
 from selenium_ui_test_tool import (
@@ -99,27 +108,31 @@ from selenium_ui_test_tool import (
 )
 from selenium.webdriver.common.by import By
 
-# Créer un driver
+# Create a driver
 driver = create_driver(headless=False)
 
-# Naviguer vers une URL
+# Navigate to a URL
 get_url(driver, "https://example.com")
 
-# Attendre un élément
+# Wait for an element
 element = wait_for_element(driver, By.ID, "my-element", timeout=10)
 
-# Configurer et exécuter une action
-success = configure_actions(driver, By.CSS_SELECTOR, ".my-button")
+# Configure and run a scroll+click action
+configure_actions(driver, By.CSS_SELECTOR, ".my-button")
 
-# Cliquer sur un élément avec messages personnalisés
-click_element(driver, By.ID, "submit-button", 
-              success_message="Bouton cliqué avec succès",
-              error_message="Impossible de cliquer sur le bouton")
+# Click with custom messages
+click_element(
+    driver,
+    By.ID,
+    "submit-button",
+    success_message="Button clicked successfully",
+    error_message="Unable to click the button"
+)
 
-# Créer un store d'actions avec click_on
+# Build an action store with click_on
 ticket_actions = [
-    (By.XPATH, "//span[contains(text(),'Annuel')]", "Section annuelle sélectionnée"),
-    (By.XPATH, "//span[contains(text(),'Le Pass Annuel')]", "Le Pass Annuel sélectionné"),
+    (By.XPATH, "//span[contains(text(),'Annual')]", "Annual section selected"),
+    (By.XPATH, "//span[contains(text(),'Annual Pass')]", "Annual Pass selected"),
 ]
 
 for by, selector, success_message in ticket_actions:
@@ -128,13 +141,13 @@ for by, selector, success_message in ticket_actions:
         by,
         selector,
         success_message=success_message,
-        error_message=f"Impossible de cliquer sur {selector}"
+        error_message=f"Unable to click {selector}"
     )
 
-# Remplir un champ de formulaire
-fill_input(driver, By.ID, "username", "mon_utilisateur")
+# Fill a form field
+fill_input(driver, By.ID, "username", "my_user")
 
-# Remplir un formulaire de connexion complet
+# Fill a full login form
 fill_login_form(
     driver,
     username_env="LOGIN_USERNAME",
@@ -144,20 +157,20 @@ fill_login_form(
     button="login-button"
 )
 
-# Uploader un fichier
+# Upload a file based on an env var path
 upload_file(
     driver,
-    file_path="FILE_PATH_ENV",  # Nom de la variable d'environnement contenant le chemin du fichier
+    file_path="FILE_PATH_ENV",  # Environment variable with the absolute path
     input_selector="file-input",
     by=By.ID,
-    success_message="Fichier uploadé avec succès",
-    error_message="Erreur lors de l'upload"
+    success_message="File uploaded",
+    error_message="Upload failed"
 )
 
-# Récupérer une variable d'environnement
+# Read an environment variable
 username = get_env_var("LOGIN_USERNAME", required=True)
 
-# N'oubliez pas de fermer le driver
+# Always quit the driver
 driver.quit()
 ```
 
@@ -165,9 +178,7 @@ driver.quit()
 
 ### `BaseTest`
 
-Classe principale pour exécuter des tests UI automatisés.
-
-#### Constructeur
+Main class that orchestrates complete UI tests.
 
 ```python
 BaseTest(
@@ -179,255 +190,73 @@ BaseTest(
 )
 ```
 
-**Paramètres :**
+- `test_function`: callable that receives a `WebDriver` and returns `True`/`False`.
+- `success_message`: message printed when the test succeeds.
+- `failure_message`: message printed when the test fails.
+- `url`: target URL to load.
+- `exit_on_failure`: exit the process with code `1` when the test fails.
 
-- `test_function` : Fonction qui prend un `WebDriver` en paramètre et retourne un `bool` indiquant le succès du test
-- `success_message` : Message affiché si le test réussit
-- `failure_message` : Message affiché si le test échoue
-- `url` : URL à charger dans le navigateur
-- `exit_on_failure` : Si `True`, le programme s'arrête avec le code 1 en cas d'échec
+Methods:
 
-#### Méthodes
-
-- `setup()` : Initialise le driver et charge l'URL
-- `teardown()` : Ferme le driver
-- `run()` : Exécute le test complet (setup → test → teardown)
+- `setup()` – create the driver and open the URL.
+- `teardown()` – close the driver.
+- `run()` – run the full flow (setup → trigger → teardown).
 
 ### `create_driver(headless: bool = False) -> WebDriver`
 
-Crée et configure une instance de Chrome WebDriver.
-
-**Paramètres :**
-
-- `headless` : Si `True`, le navigateur s'exécute en mode headless
-
-**Retourne :** Instance de `selenium.webdriver.chrome.webdriver.WebDriver`
+Create and configure a Chrome WebDriver instance.
 
 ### `get_url(driver: WebDriver, url: str) -> None`
 
-Navigue vers une URL donnée.
-
-**Paramètres :**
-
-- `driver` : Instance de WebDriver
-- `url` : URL à charger
+Navigate to a given URL.
 
 ### `wait_for_element(driver: WebDriver, by: By, selector: str, timeout: int = 10) -> WebElement | None`
 
-Attend qu'un élément soit présent dans le DOM.
-
-**Paramètres :**
-
-- `driver` : Instance de WebDriver
-- `by` : Stratégie de localisation (ex: `By.ID`, `By.CSS_SELECTOR`)
-- `selector` : Sélecteur de l'élément
-- `timeout` : Temps d'attente maximum en secondes (défaut: 10)
-
-**Retourne :** L'élément trouvé ou `None` si timeout
+Wait for an element to appear in the DOM.
 
 ### `configure_actions(driver: WebDriver, by: By, selector: str) -> bool`
 
-Configure et exécute une action sur un élément (scroll + click).
+Scroll to an element and click it.
 
-**Paramètres :**
+### `click_element(...) -> bool`
 
-- `driver` : Instance de WebDriver
-- `by` : Stratégie de localisation
-- `selector` : Sélecteur de l'élément
+Enhanced click helper that adds waits, verification, and custom messages.
 
-**Retourne :** `True` si l'action a réussi, `False` sinon
+### `click_on(...) -> bool`
 
-### `click_element(driver: WebDriver, by: By, selector: str, wait_before_click: int = 0, success_message: str | None = None, error_message: str | None = None, verify_before_click: bool = True) -> bool`
+Thin wrapper above `click_element` that enforces success/error messages.
 
-Clique sur un élément avec des fonctionnalités avancées (attente, messages personnalisés, vérification).
+### `fill_input(...) -> bool`
 
-**Paramètres :**
+Scroll to an element, clear the field, and send keys.
 
-- `driver` : Instance de WebDriver
-- `by` : Stratégie de localisation (ex: `By.ID`, `By.CSS_SELECTOR`)
-- `selector` : Sélecteur de l'élément
-- `wait_before_click` : Temps d'attente en secondes avant de cliquer (défaut: 0)
-- `success_message` : Message à afficher en cas de succès (optionnel)
-- `error_message` : Message à afficher en cas d'erreur (optionnel)
-- `verify_before_click` : Si `True`, vérifie que l'élément existe avant de cliquer (défaut: `True`)
+### `fill_login_form(...) -> bool`
 
-**Retourne :** `True` si le clic a réussi, `False` sinon
+Automatically fill username/password fields from environment variables and submit.
 
-**Exemple :**
-```python
-# Cliquer avec un message de succès
-click_element(driver, By.ID, "submit-btn", 
-              success_message="Formulaire soumis avec succès")
+### `fill_login_form_with_confirm_password(...) -> bool`
 
-# Cliquer après une attente
-click_element(driver, By.CSS_SELECTOR, ".button", 
-              wait_before_click=2,
-              error_message="Impossible de cliquer sur le bouton")
-```
+Same as `fill_login_form` but also fills a confirmation password field.
 
-### `click_on(driver: WebDriver, by: By, selector: str, success_message: str, error_message: str) -> bool`
+### `upload_file(...) -> bool`
 
-Couche utilitaire basée sur `click_element` pour créer rapidement des fonctions d'actions regroupées dans un store.
-
-**Paramètres :**
-
-- `driver` : Instance de WebDriver
-- `by` / `selector` : Stratégie et sélecteur de l'élément
-- `success_message` : Message affiché en cas de succès
-- `error_message` : Message affiché en cas d'échec
-
-**Cas d'usage :** créer un dictionnaire ou une liste d'actions réutilisables.
-
-```python
-from selenium_ui_test_tool import click_on
-from selenium.webdriver.common.by import By
-
-TICKET_ACTIONS = [
-    (By.XPATH, "//span[contains(text(),'Annuel')]", "Section Annuel cliquée"),
-    (By.XPATH, "//span[contains(text(),'Le Pass Annuel')]", "Pass annuel sélectionné"),
-]
-
-def monthly_buying(driver):
-    for by, selector, success in TICKET_ACTIONS:
-        click_on(
-            driver,
-            by,
-            selector,
-            success_message=success,
-            error_message=f"Impossible de cliquer sur {selector}"
-        )
-```
-
-### `fill_input(driver: WebDriver, by: By, selector: str, value: str, timeout: int = 10) -> bool`
-
-Remplit un champ de formulaire avec scroll automatique vers l'élément.
-
-**Paramètres :**
-
-- `driver` : Instance de WebDriver
-- `by` : Stratégie de localisation (ex: `By.ID`, `By.CSS_SELECTOR`)
-- `selector` : Sélecteur de l'élément
-- `value` : Valeur à saisir dans le champ
-- `timeout` : Temps d'attente maximum en secondes (défaut: 10)
-
-**Retourne :** `True` si le remplissage a réussi, `False` sinon
-
-**Exemple :**
-```python
-# Remplir un champ username
-fill_input(driver, By.ID, "username", "mon_utilisateur")
-
-# Remplir un champ email
-fill_input(driver, By.CSS_SELECTOR, "input[type='email']", "email@example.com")
-```
-
-### `fill_login_form(driver: WebDriver, username_env: str = "LOGIN_USERNAME", password_env: str = "LOGIN_PASSWORD", by: str = "id", selector: str = "test", button: str = "test") -> bool`
-
-Remplit automatiquement un formulaire de connexion en utilisant les variables d'environnement pour le username et le password, puis clique sur le bouton de connexion.
-
-**Paramètres :**
-
-- `driver` : Instance de WebDriver
-- `username_env` : Nom de la variable d'environnement pour le username (défaut: "LOGIN_USERNAME")
-- `password_env` : Nom de la variable d'environnement pour le password (défaut: "LOGIN_PASSWORD")
-- `by` : Stratégie de localisation pour les champs (défaut: "id")
-- `selector` : Sélecteur des champs de formulaire
-- `button` : Sélecteur du bouton de connexion
-
-**Retourne :** `True` si le formulaire a été rempli et soumis avec succès, `False` sinon
-
-**Exemple :**
-```python
-# Utilisation avec les variables d'environnement par défaut
-fill_login_form(
-    driver,
-    by=By.ID,
-    selector="login-form",
-    button="login-button"
-)
-```
-
-### `fill_login_form_with_confirm_password(driver: WebDriver, username_env: str = "LOGIN_USERNAME", password_env: str = "LOGIN_PASSWORD", by: str = "id", selector: str = "test", button: str = "test") -> bool`
-
-Remplit automatiquement un formulaire de connexion avec confirmation de mot de passe en utilisant les variables d'environnement.
-
-**Paramètres :**
-
-- `driver` : Instance de WebDriver
-- `username_env` : Nom de la variable d'environnement pour le username (défaut: "LOGIN_USERNAME")
-- `password_env` : Nom de la variable d'environnement pour le password (défaut: "LOGIN_PASSWORD")
-- `by` : Stratégie de localisation pour les champs (défaut: "id")
-- `selector` : Sélecteur des champs de formulaire
-- `button` : Sélecteur du bouton de connexion
-
-**Retourne :** `True` si le formulaire a été rempli et soumis avec succès, `False` sinon
-
-**Exemple :**
-```python
-# Formulaire avec confirmation de mot de passe
-fill_login_form_with_confirm_password(
-    driver,
-    by=By.ID,
-    selector="register-form",
-    button="register-button"
-)
-```
-
-### `upload_file(driver: WebDriver, file_path: str, input_selector: str, by: By, success_message: str | None = None, error_message: str | None = None) -> bool`
-
-Upload un fichier via un champ input file en utilisant le chemin du fichier stocké dans une variable d'environnement.
-
-**Paramètres :**
-
-- `driver` : Instance de WebDriver
-- `file_path` : Nom de la variable d'environnement contenant le chemin absolu du fichier à uploader
-- `input_selector` : Sélecteur de l'élément input file
-- `by` : Stratégie de localisation (ex: `By.ID`, `By.CSS_SELECTOR`)
-- `success_message` : Message à afficher en cas de succès (optionnel)
-- `error_message` : Message à afficher en cas d'erreur (optionnel)
-
-**Retourne :** `True` si l'upload a réussi, `False` sinon
-
-**Exemple :**
-```python
-# Dans votre fichier .env :
-# FILE_PATH=/chemin/vers/mon/fichier.pdf
-
-# Dans votre code :
-upload_file(
-    driver,
-    file_path="FILE_PATH",  # Nom de la variable d'environnement
-    input_selector="file-upload",
-    by=By.ID,
-    success_message="✅ Fichier uploadé avec succès",
-    error_message="❌ Erreur lors de l'upload"
-)
-```
+Upload a file through an `<input type="file">` element using a path stored in the `.env` file.
 
 ### `get_env_var(name: str, required: bool = True) -> str | None`
 
-Récupère une variable d'environnement.
+Retrieve an environment variable and raise a helpful error if it is missing.
 
-**Paramètres :**
+> Refer to the French documentation for the full parameter details or use the inline docstrings shipped with the package.
 
-- `name` : Nom de la variable d'environnement
-- `required` : Si `True`, lève une exception si la variable n'est pas trouvée
+## 💡 Examples
 
-**Retourne :** Valeur de la variable ou `None` si non trouvée et `required=False`
-
-**Lève :** `ValueError` si la variable est requise mais non trouvée
-
-## 💡 Exemples
-
-### Exemple complet : Test de connexion (avec `fill_login_form`)
+### Complete login test (with `fill_login_form`)
 
 ```python
 from selenium_ui_test_tool import BaseTest, fill_login_form, wait_for_element
 from selenium.webdriver.common.by import By
 
 def test_login(driver):
-    """Test de connexion à une application avec fill_login_form"""
-    # Remplir et soumettre le formulaire de connexion automatiquement
     if not fill_login_form(
         driver,
         username_env="LOGIN_USERNAME",
@@ -437,16 +266,14 @@ def test_login(driver):
         button="login-button"
     ):
         return False
-    
-    # Vérifier que la connexion a réussi
+
     welcome_message = wait_for_element(driver, By.CLASS_NAME, "welcome", timeout=5)
     return welcome_message is not None
 
-# Exécuter le test
 test = BaseTest(
     test_function=test_login,
-    success_message="✅ Connexion réussie !",
-    failure_message="❌ Échec de la connexion",
+    success_message="✅ Logged in successfully!",
+    failure_message="❌ Login failed",
     url="https://example.com/login",
     exit_on_failure=True
 )
@@ -454,36 +281,31 @@ test = BaseTest(
 test.run()
 ```
 
-### Exemple : Test de connexion manuel (avec `fill_input`)
+### Manual login test (with `fill_input`)
 
 ```python
 from selenium_ui_test_tool import BaseTest, fill_input, click_element, get_env_var
 from selenium.webdriver.common.by import By
 
 def test_login_manual(driver):
-    """Test de connexion avec remplissage manuel des champs"""
-    # Remplir le champ username
     if not fill_input(driver, By.ID, "username", get_env_var("LOGIN_USERNAME")):
         return False
-    
-    # Remplir le champ password
+
     if not fill_input(driver, By.ID, "password", get_env_var("LOGIN_PASSWORD")):
         return False
-    
-    # Cliquer sur le bouton de connexion
+
     return click_element(
-        driver, 
-        By.ID, 
+        driver,
+        By.ID,
         "login-button",
-        success_message="Connexion réussie",
-        error_message="Échec de la connexion"
+        success_message="Login successful",
+        error_message="Login failed"
     )
 
-# Exécuter le test
 test = BaseTest(
     test_function=test_login_manual,
-    success_message="✅ Connexion réussie !",
-    failure_message="❌ Échec de la connexion",
+    success_message="✅ Login successful!",
+    failure_message="❌ Login failed",
     url="https://example.com/login",
     exit_on_failure=True
 )
@@ -491,7 +313,7 @@ test = BaseTest(
 test.run()
 ```
 
-### Exemple : Store d'actions avec `click_on`
+### Action store with `click_on`
 
 ```python
 from selenium_ui_test_tool import BaseTest, click_on
@@ -499,8 +321,8 @@ from selenium.webdriver.common.by import By
 import time
 
 ACTIONS_MONTHLY = [
-    (By.XPATH, "//span[contains(text(),'Annuel')]", "Section Annuel ouverte"),
-    (By.XPATH, "//span[contains(text(),'Le Pass Annuel')]", "Pass annuel sélectionné"),
+    (By.XPATH, "//span[contains(text(),'Monthly')]", "Monthly section opened"),
+    (By.XPATH, "//span[contains(text(),'Monthly Pass')]", "Monthly Pass selected"),
 ]
 
 def monthly_buying(driver):
@@ -510,7 +332,7 @@ def monthly_buying(driver):
             by,
             selector,
             success_message=success,
-            error_message=f"Impossible de cliquer sur {selector}"
+            error_message=f"Unable to click {selector}"
         )
 
 def buying_helper_monthly(driver):
@@ -520,71 +342,69 @@ def buying_helper_monthly(driver):
 
 test = BaseTest(
     test_function=buying_helper_monthly,
-    success_message="✅ Achat mensuel réussi",
-    failure_message="❌ Échec du parcours d'achat",
+    success_message="✅ Monthly purchase completed",
+    failure_message="❌ Purchase flow failed",
     url="https://example.com/store"
 )
 
 test.run()
 ```
 
-### Exemple : Utilisation en mode headless
+### Headless mode
 
 ```python
 from selenium_ui_test_tool import create_driver, get_url
 import os
 
-# Définir le mode headless via variable d'environnement
 os.environ["HEADLESS"] = "true"
 
 driver = create_driver(headless=True)
 get_url(driver, "https://example.com")
 
-# Votre code de test ici
+# Run your checks...
 
 driver.quit()
 ```
 
-### Exemple : Gestion des erreurs
+### Error handling
 
 ```python
 from selenium_ui_test_tool import BaseTest, wait_for_element
 from selenium.webdriver.common.by import By
 
 def test_with_error_handling(driver):
-    """Test avec gestion d'erreurs robuste"""
     try:
         element = wait_for_element(driver, By.ID, "my-element", timeout=5)
         if element is None:
-            print("⚠️ Élément non trouvé")
+            print("⚠️ Element not found")
             return False
-        
-        # Votre logique de test
+
+        # Your assertions
         return True
     except Exception as e:
-        print(f"❌ Erreur lors du test : {e}")
+        print(f"❌ Test error: {e}")
         return False
 
 test = BaseTest(
     test_function=test_with_error_handling,
-    success_message="✅ Test réussi",
-    failure_message="❌ Test échoué",
+    success_message="✅ Test passed",
+    failure_message="❌ Test failed",
     url="https://example.com",
-    exit_on_failure=False  # Ne pas arrêter le programme en cas d'échec
+    exit_on_failure=False
 )
 
 test.run()
 ```
 
-## 🔧 Mode CI/CD
+## 🔧 CI/CD Mode
 
-La bibliothèque détecte automatiquement si elle s'exécute en environnement CI/CD via la variable d'environnement `CI=true`. En mode CI :
+When `CI=true` is detected:
 
-- Le navigateur s'exécute automatiquement en mode headless
-- Les variables d'environnement sont lues depuis les secrets GitHub Actions (ou équivalent)
-- Pas de pause interactive après l'exécution
+- Chrome automatically runs headless.
+- Environment variables are read from GitHub Secrets (or similar).
+- No interactive pause happens at the end.
 
-### Configuration GitHub Actions
+### GitHub Actions sample
 
 ```yaml
 name: UI Tests
@@ -611,33 +431,19 @@ jobs:
           python your_test_script.py
 ```
 
-## 📝 Structure du projet
+## 📝 Project Structure
 
 ```
 selenium_ui_test_tool/
 ├── selenium_ui_test_tool/
 │   ├── __init__.py
 │   ├── base_test/
-│   │   ├── __init__.py
-│   │   └── base_test.py
 │   ├── click_element/
-│   │   ├── __init__.py
-│   │   └── click_element.py
 │   ├── config_actions/
-│   │   ├── __init__.py
-│   │   └── config_actions.py
 │   ├── driver_builder/
-│   │   ├── __init__.py
-│   │   └── driver_builder.py
 │   ├── get_env_var/
-│   │   ├── __init__.py
-│   │   └── get_env_var.py
 │   ├── get_url/
-│   │   ├── __init__.py
-│   │   └── get_url.py
 │   └── wait_element/
-│       ├── __init__.py
-│       └── wait_elements.py
 ├── pyproject.toml
 ├── setup.py
 ├── requirements.txt
@@ -645,37 +451,35 @@ selenium_ui_test_tool/
 └── env.example
 ```
 
-## 🤝 Contribuer
+## 🤝 Contributing
 
-Les contributions sont les bienvenues ! Pour contribuer :
+1. Fork the project.
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`).
+3. Commit your changes (`git commit -m 'Add AmazingFeature'`).
+4. Push to the branch (`git push origin feature/AmazingFeature`).
+5. Open a Pull Request.
 
-1. Fork le projet
-2. Créez une branche pour votre fonctionnalité (`git checkout -b feature/AmazingFeature`)
-3. Committez vos changements (`git commit -m 'Add some AmazingFeature'`)
-4. Push vers la branche (`git push origin feature/AmazingFeature`)
-5. Ouvrez une Pull Request
+## 📄 License
 
-## 📄 Licence
+MIT License – see `LICENSE` for details.
 
-Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
-
-## 📄 Auteur
+## 👤 Author
 
 Yann Dipita
 
-## 🐛 Signaler un bug
+## 🐛 Report a Bug
 
-Si vous trouvez un bug, veuillez ouvrir une issue sur GitHub avec :
-- Une description claire du bug
-- Les étapes pour reproduire
-- Le comportement attendu vs le comportement actuel
-- Votre environnement (OS, Python, Selenium versions)
+Please open an issue with:
+
+- clear description,
+- reproduction steps,
+- expected vs. actual behavior,
+- your environment (OS, Python, Selenium versions).
 
 ## 📧 Contact
 
-Pour toute question, contactez dipitay@gmail.com.
+For any question: [dipitay@gmail.com](mailto:dipitay@gmail.com).
 
 ---
 
-**Note :** Cette bibliothèque est en développement actif. L'API peut changer entre les versions mineures.
-
+**Note:** This library is under active development. Minor releases may introduce breaking changes.
