@@ -43,6 +43,41 @@
             opacity: 0.9;
         }
 
+        .language-selector {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .lang-btn.active {
+            background: white;
+            color: #667eea;
+            border-color: white;
+            font-weight: bold;
+        }
+
+        header {
+            position: relative;
+        }
+
         nav {
             background: white;
             padding: 20px;
@@ -236,62 +271,66 @@
 </head>
 <body>
     <header>
-        <h1>Selenium UI Test Tool</h1>
-        <p>Guide complet d'automatisation de tests UI</p>
+        <div class="language-selector">
+            <button class="lang-btn active" onclick="changeLanguage('fr')" id="lang-fr">FR</button>
+            <button class="lang-btn" onclick="changeLanguage('en')" id="lang-en">EN</button>
+        </div>
+        <h1 data-i18n="header.title">Selenium UI Test Tool</h1>
+        <p data-i18n="header.subtitle">Guide complet d'automatisation de tests UI</p>
     </header>
 
     <div class="container">
         <nav>
             <ul>
-                <li><a href="#introduction">Introduction</a></li>
-                <li><a href="#concept-base-test">BaseTest</a></li>
-                <li><a href="#concept-declencheur">Déclencheur</a></li>
-                <li><a href="#fonctions-actions">Fonctions d'actions</a></li>
-                <li><a href="#utilitaires">Utilitaires</a></li>
-                <li><a href="#exemple-tc004">Exemple TC004</a></li>
-                <li><a href="#architecture">Architecture</a></li>
+                <li><a href="#introduction" data-i18n="nav.introduction">Introduction</a></li>
+                <li><a href="#concept-base-test" data-i18n="nav.base-test">BaseTest</a></li>
+                <li><a href="#concept-declencheur" data-i18n="nav.trigger">Déclencheur</a></li>
+                <li><a href="#fonctions-actions" data-i18n="nav.action-functions">Fonctions d'actions</a></li>
+                <li><a href="#utilitaires" data-i18n="nav.utilities">Utilitaires</a></li>
+                <li><a href="#exemple-tc004" data-i18n="nav.example-tc004">Exemple TC004</a></li>
+                <li><a href="#architecture" data-i18n="nav.architecture">Architecture</a></li>
             </ul>
         </nav>
 
         <div class="content">
             <section id="introduction">
-                <h2>📚 Introduction</h2>
-                <p>
+                <h2 data-i18n="intro.title">📚 Introduction</h2>
+                <p data-i18n="intro.description">
                     <strong>selenium-ui-test-tool</strong> est une bibliothèque Python conçue pour simplifier 
                     l'automatisation de tests UI avec Selenium WebDriver. Elle offre une approche structurée 
                     et modulaire pour créer des tests robustes et maintenables.
                 </p>
 
                 <div class="info">
-                    <strong>💡 Objectif :</strong> Réduire la complexité des tests Selenium en fournissant 
-                    des abstractions simples et des utilitaires réutilisables.
+                    <strong data-i18n="intro.objective.label">💡 Objectif :</strong> <span data-i18n="intro.objective.text">Réduire la complexité des tests Selenium en fournissant 
+                    des abstractions simples et des utilitaires réutilisables.</span>
                 </div>
 
-                <h3>Installation</h3>
+                <h3 data-i18n="intro.installation.title">Installation</h3>
                 <div class="code-block">
                     <code>pip install selenium-ui-test-tool</code>
                 </div>
             </section>
 
             <section id="concept-base-test">
-                <h2>🎯 Concept de BaseTest</h2>
-                <p>
+                <h2 data-i18n="basetest.title">🎯 Concept de BaseTest</h2>
+                <p data-i18n="basetest.description">
                     <strong>BaseTest</strong> est la classe centrale qui crée un test complet. Elle prend en paramètre 
                     une fonction appelée <strong>déclencheur</strong> qui orchestre votre scénario de test.
                 </p>
 
-                <h3>Hiérarchie des concepts</h3>
+                <h3 data-i18n="basetest.hierarchy.title">Hiérarchie des concepts</h3>
                 <div class="info">
-                    <strong>📊 Structure en 4 niveaux :</strong>
+                    <strong data-i18n="basetest.hierarchy.label">📊 Structure en 4 niveaux :</strong>
                     <ol>
-                        <li><strong>BaseTest</strong> : Classe qui gère le cycle de vie complet (setup → exécution → teardown)</li>
-                        <li><strong>Déclencheur</strong> : Fonction qui orchestre séquentiellement les fonctions d'actions</li>
-                        <li><strong>Fonctions d'actions</strong> : Fonctions qui effectuent une action spécifique sur la page</li>
-                        <li><strong>Utilitaires</strong> : Fonctions de la bibliothèque utilisées dans les fonctions d'actions</li>
+                        <li data-i18n="basetest.hierarchy.level1"><strong>BaseTest</strong> : Classe qui gère le cycle de vie complet (setup → exécution → teardown)</li>
+                        <li data-i18n="basetest.hierarchy.level2"><strong>Déclencheur</strong> : Fonction qui orchestre séquentiellement les fonctions d'actions</li>
+                        <li data-i18n="basetest.hierarchy.level3"><strong>Fonctions d'actions</strong> : Fonctions qui effectuent une action spécifique sur la page</li>
+                        <li data-i18n="basetest.hierarchy.level4"><strong>Utilitaires</strong> : Fonctions de la bibliothèque utilisées dans les fonctions d'actions</li>
                     </ol>
                 </div>
 
-                <h3>Structure d'un BaseTest</h3>
+                <h3 data-i18n="basetest.structure.title">Structure d'un BaseTest</h3>
                 <div class="code-block">
                     <code>from selenium_ui_test_tool import BaseTest
 from utils.order_utils.buying_helper import buying_helper
@@ -309,38 +348,38 @@ if __name__ == "__main__":
     test_buying_unit_ticket()</code>
                 </div>
 
-                <h3>Rôle de BaseTest</h3>
+                <h3 data-i18n="basetest.role.title">Rôle de BaseTest</h3>
                 <ul>
-                    <li><strong>Setup</strong> : Crée le WebDriver et navigue vers l'URL</li>
-                    <li><strong>Execution</strong> : Appelle votre fonction déclencheur avec le driver</li>
-                    <li><strong>Teardown</strong> : Ferme le WebDriver proprement</li>
-                    <li><strong>Gestion des résultats</strong> : Affiche les messages de succès/échec</li>
+                    <li data-i18n="basetest.role.setup"><strong>Setup</strong> : Crée le WebDriver et navigue vers l'URL</li>
+                    <li data-i18n="basetest.role.execution"><strong>Execution</strong> : Appelle votre fonction déclencheur avec le driver</li>
+                    <li data-i18n="basetest.role.teardown"><strong>Teardown</strong> : Ferme le WebDriver proprement</li>
+                    <li data-i18n="basetest.role.results"><strong>Gestion des résultats</strong> : Affiche les messages de succès/échec</li>
                 </ul>
 
-                <div class="highlight">
+                <div class="highlight" data-i18n="basetest.important">
                     <strong>⚠️ Important :</strong> Le paramètre <code>test_function</code> doit être une fonction 
                     qui accepte un paramètre <code>driver</code> (WebDriver). Cette fonction est votre <strong>déclencheur</strong>.
                 </div>
             </section>
 
             <section id="concept-declencheur">
-                <h2>🎬 Concept de Déclencheur (Orchestrateur)</h2>
-                <p>
+                <h2 data-i18n="trigger.title">🎬 Concept de Déclencheur (Orchestrateur)</h2>
+                <p data-i18n="trigger.description">
                     Le <strong>déclencheur</strong> est la fonction passée à <code>BaseTest</code> via le paramètre 
                     <code>test_function</code>. Son rôle est d'<strong>orchestrer de façon séquentielle</strong> 
                     l'exécution des fonctions d'actions pour réaliser un scénario de test complet.
                 </p>
 
-                <h3>Rôle du déclencheur</h3>
+                <h3 data-i18n="trigger.role.title">Rôle du déclencheur</h3>
                 <ul>
-                    <li><strong>Orchestrer</strong> : Appeler les fonctions d'actions dans le bon ordre</li>
-                    <li><strong>Séquentiel</strong> : Exécuter les actions une par une, dans l'ordre du scénario</li>
-                    <li><strong>Coordonner</strong> : Gérer le flux logique du parcours utilisateur</li>
-                    <li><strong>Simplifier</strong> : Centraliser la logique de séquencement</li>
+                    <li data-i18n="trigger.role.orchestrate"><strong>Orchestrer</strong> : Appeler les fonctions d'actions dans le bon ordre</li>
+                    <li data-i18n="trigger.role.sequential"><strong>Séquentiel</strong> : Exécuter les actions une par une, dans l'ordre du scénario</li>
+                    <li data-i18n="trigger.role.coordinate"><strong>Coordonner</strong> : Gérer le flux logique du parcours utilisateur</li>
+                    <li data-i18n="trigger.role.simplify"><strong>Simplifier</strong> : Centraliser la logique de séquencement</li>
                 </ul>
 
                 <div class="example-box">
-                    <h4>Exemple réel : buying_helper (déclencheur de TC004)</h4>
+                    <h4 data-i18n="trigger.example.title">Exemple réel : buying_helper (déclencheur de TC004)</h4>
                     <pre><code>import time
 from utils.order_utils.click_on_accept_cgu import click_on_cgu_checkbox
 from utils.order_utils.click_on_order_button import click_on_order_button
@@ -373,38 +412,38 @@ def buying_helper(driver):
     input("cliquez sur entrée")</code></pre>
                 </div>
 
-                <h3>Caractéristiques du déclencheur</h3>
+                <h3 data-i18n="trigger.characteristics.title">Caractéristiques du déclencheur</h3>
                 <ul>
-                    <li><strong>Une fonction = un scénario complet</strong> : Le déclencheur représente un parcours utilisateur entier</li>
-                    <li><strong>Appels séquentiels</strong> : Les fonctions d'actions sont appelées dans l'ordre du scénario</li>
-                    <li><strong>Pas de logique métier complexe</strong> : Le déclencheur se contente d'orchestrer, la logique est dans les actions</li>
-                    <li><strong>Accepte le driver</strong> : Reçoit le WebDriver en paramètre depuis BaseTest</li>
+                    <li data-i18n="trigger.characteristics.one"><strong>Une fonction = un scénario complet</strong> : Le déclencheur représente un parcours utilisateur entier</li>
+                    <li data-i18n="trigger.characteristics.two"><strong>Appels séquentiels</strong> : Les fonctions d'actions sont appelées dans l'ordre du scénario</li>
+                    <li data-i18n="trigger.characteristics.three"><strong>Pas de logique métier complexe</strong> : Le déclencheur se contente d'orchestrer, la logique est dans les actions</li>
+                    <li data-i18n="trigger.characteristics.four"><strong>Accepte le driver</strong> : Reçoit le WebDriver en paramètre depuis BaseTest</li>
                 </ul>
 
-                <div class="success">
+                <div class="success" data-i18n="trigger.advantage">
                     <strong>✅ Avantage :</strong> Le déclencheur offre une vue d'ensemble claire du scénario de test 
                     en montrant la séquence complète des actions.
                 </div>
             </section>
 
             <section id="fonctions-actions">
-                <h2>⚙️ Concepts de Fonctions d'Actions</h2>
-                <p>
+                <h2 data-i18n="actions.title">⚙️ Concepts de Fonctions d'Actions</h2>
+                <p data-i18n="actions.description">
                     Les <strong>fonctions d'actions</strong> sont des fonctions que vous créez pour effectuer 
                     une action spécifique sur la page web. Elles utilisent les utilitaires <strong>click_element</strong> 
                     ou <strong>click_on</strong> fournis par la bibliothèque.
                 </p>
 
-                <h3>Rôle des fonctions d'actions</h3>
+                <h3 data-i18n="actions.role.title">Rôle des fonctions d'actions</h3>
                 <ul>
-                    <li><strong>Atomiques</strong> : Chaque fonction effectue une seule action précise</li>
-                    <li><strong>Réutilisables</strong> : Peuvent être utilisées dans plusieurs déclencheurs</li>
-                    <li><strong>Utilisent l'utilitaire</strong> : Appellent <code>click_element</code> ou <code>click_on</code> pour effectuer l'action</li>
-                    <li><strong>Spécifiques au contexte</strong> : Adaptées à votre application</li>
+                    <li data-i18n="actions.role.atomic"><strong>Atomiques</strong> : Chaque fonction effectue une seule action précise</li>
+                    <li data-i18n="actions.role.reusable"><strong>Réutilisables</strong> : Peuvent être utilisées dans plusieurs déclencheurs</li>
+                    <li data-i18n="actions.role.use-util"><strong>Utilisent l'utilitaire</strong> : Appellent <code>click_element</code> ou <code>click_on</code> pour effectuer l'action</li>
+                    <li data-i18n="actions.role.specific"><strong>Spécifiques au contexte</strong> : Adaptées à votre application</li>
                 </ul>
 
                 <div class="example-box">
-                    <h4>Exemple : Fonction d'action click_on_unit_ticket_section</h4>
+                    <h4 data-i18n="actions.example.title">Exemple : Fonction d'action click_on_unit_ticket_section</h4>
                     <pre><code>from selenium_ui_test_tool import click_on
 from selenium.webdriver.common.by import By
 
@@ -421,7 +460,7 @@ def click_on_unit_ticket_section(driver):
     )</code></pre>
                 </div>
 
-                <h3>Structure d'une fonction d'action</h3>
+                <h3 data-i18n="actions.structure.title">Structure d'une fonction d'action</h3>
                 <div class="code-block">
                     <code>def ma_fonction_action(driver):
     """
@@ -474,15 +513,15 @@ def monthly_buying(driver):
             </section>
 
             <section id="utilitaires">
-                <h2>🛠️ Utilitaires</h2>
-                <p>
+                <h2 data-i18n="utilities.title">🛠️ Utilitaires</h2>
+                <p data-i18n="utilities.description">
                     Les <strong>utilitaires</strong> sont des fonctions fournies par la bibliothèque 
                     <code>selenium_ui_test_tool</code>. Elles sont utilisées <strong>dans vos fonctions d'actions</strong> 
                     pour effectuer les opérations sur la page web.
                 </p>
 
-                <h3>Nouveau : utilitaire <code>click_on</code></h3>
-                <p>
+                <h3 data-i18n="utilities.clickon.title">Nouveau : utilitaire <code>click_on</code></h3>
+                <p data-i18n="utilities.clickon.description">
                     <code>click_on</code> enveloppe <code>click_element</code> avec des messages obligatoires. 
                     Il est pensé pour créer des stores d'actions lisibles.
                 </p>
@@ -501,14 +540,14 @@ def click_on_custom(driver):
     )</code></pre>
                 </div>
 
-                <h3>Utilitaire avancé : click_element</h3>
-                <p>
+                <h3 data-i18n="utilities.clickelement.title">Utilitaire avancé : click_element</h3>
+                <p data-i18n="utilities.clickelement.description">
                     <code>click_element</code> est l'utilitaire le plus utilisé dans les fonctions d'actions. 
                     Il gère automatiquement l'attente, la vérification et le clic sur un élément.
                 </p>
 
                 <div class="example-box">
-                    <h4>Implémentation de l'utilitaire click_element</h4>
+                    <h4 data-i18n="utilities.clickelement.implementation">Implémentation de l'utilitaire click_element</h4>
                     <pre><code>import time
 from selenium_ui_test_tool import configure_actions, wait_for_element
 
@@ -550,8 +589,8 @@ def click_element(driver, by, selector, wait_before_click=0,
         return False</code></pre>
                 </div>
 
-                <h3>Nouveaux utilitaires de formulaire</h3>
-                <p>
+                <h3 data-i18n="utilities.forms.title">Nouveaux utilitaires de formulaire</h3>
+                <p data-i18n="utilities.forms.description">
                     La bibliothèque propose maintenant des utilitaires spécialisés pour remplir des formulaires, 
                     simplifiant grandement les tests de connexion et d'inscription.
                 </p>
@@ -608,8 +647,8 @@ fill_login_form_with_confirm_password(
                     en gérant automatiquement l'attente, le scroll et le remplissage des champs.
                 </div>
 
-                <h3>Utilitaire d'upload de fichier</h3>
-                <p>
+                <h3 data-i18n="utilities.upload.title">Utilitaire d'upload de fichier</h3>
+                <p data-i18n="utilities.upload.description">
                     L'utilitaire <code>upload_file</code> permet d'uploader des fichiers via un champ input file 
                     en utilisant le chemin du fichier stocké dans une variable d'environnement.
                 </p>
@@ -672,8 +711,8 @@ configure_actions(driver, By.CSS_SELECTOR, ".my-button")</code>
             </section>
 
             <section id="exemple-tc004">
-                <h2>📋 Exemple complet : TC004 - Test d'achat de billet unitaire</h2>
-                <p>
+                <h2 data-i18n="example.title">📋 Exemple complet : TC004 - Test d'achat de billet unitaire</h2>
+                <p data-i18n="example.description">
                     Voici l'exemple réel de TC004 montrant la structure complète avec BaseTest, déclencheur, 
                     fonctions d'actions et utilitaires.
                 </p>
@@ -813,8 +852,8 @@ def monthly_buying(driver):
             </section>
 
             <section id="architecture">
-                <h2>🏗️ Architecture du projet</h2>
-                <p>
+                <h2 data-i18n="architecture.title">🏗️ Architecture du projet</h2>
+                <p data-i18n="architecture.description">
                     Une architecture bien structurée facilite la maintenance et la réutilisabilité de vos tests. 
                     Voici la structure recommandée basée sur l'exemple TC004.
                 </p>
@@ -950,8 +989,8 @@ def run_ticket_actions(driver):
             </section>
 
             <section>
-                <h2>🎓 Résumé</h2>
-                <p>
+                <h2 data-i18n="summary.title">🎓 Résumé</h2>
+                <p data-i18n="summary.description">
                     Pour créer des tests UI robustes avec <strong>selenium_ui_test_tool</strong>, suivez cette hiérarchie :
                 </p>
                 <ol>
@@ -976,7 +1015,7 @@ def run_ticket_actions(driver):
         </div>
 
         <footer>
-            <p>© 2024 Selenium UI Test Tool - Créé par Yann Dipita</p>
+            <p data-i18n="footer.copyright">© 2024 Selenium UI Test Tool - Créé par Yann Dipita</p>
             <p>
                 <a href="https://pypi.org/project/selenium-ui-test-tool/" target="_blank">PyPI</a> | 
                 <a href="https://github.com/kingcrud12/selenium_ui_test_tool" target="_blank">GitHub</a>
@@ -985,6 +1024,189 @@ def run_ticket_actions(driver):
     </div>
 
     <script>
+        // Translations object
+        const translations = {
+            fr: {
+                'header.title': 'Selenium UI Test Tool',
+                'header.subtitle': 'Guide complet d\'automatisation de tests UI',
+                'nav.introduction': 'Introduction',
+                'nav.base-test': 'BaseTest',
+                'nav.trigger': 'Déclencheur',
+                'nav.action-functions': 'Fonctions d\'actions',
+                'nav.utilities': 'Utilitaires',
+                'nav.example-tc004': 'Exemple TC004',
+                'nav.architecture': 'Architecture',
+                'intro.title': '📚 Introduction',
+                'intro.description': '<strong>selenium-ui-test-tool</strong> est une bibliothèque Python conçue pour simplifier l\'automatisation de tests UI avec Selenium WebDriver. Elle offre une approche structurée et modulaire pour créer des tests robustes et maintenables.',
+                'intro.objective.label': '💡 Objectif :',
+                'intro.objective.text': 'Réduire la complexité des tests Selenium en fournissant des abstractions simples et des utilitaires réutilisables.',
+                'intro.installation.title': 'Installation',
+                'basetest.title': '🎯 Concept de BaseTest',
+                'basetest.description': '<strong>BaseTest</strong> est la classe centrale qui crée un test complet. Elle prend en paramètre une fonction appelée <strong>déclencheur</strong> qui orchestre votre scénario de test.',
+                'basetest.hierarchy.title': 'Hiérarchie des concepts',
+                'basetest.hierarchy.label': '📊 Structure en 4 niveaux :',
+                'basetest.hierarchy.level1': '<strong>BaseTest</strong> : Classe qui gère le cycle de vie complet (setup → exécution → teardown)',
+                'basetest.hierarchy.level2': '<strong>Déclencheur</strong> : Fonction qui orchestre séquentiellement les fonctions d\'actions',
+                'basetest.hierarchy.level3': '<strong>Fonctions d\'actions</strong> : Fonctions qui effectuent une action spécifique sur la page',
+                'basetest.hierarchy.level4': '<strong>Utilitaires</strong> : Fonctions de la bibliothèque utilisées dans les fonctions d\'actions',
+                'basetest.structure.title': 'Structure d\'un BaseTest',
+                'basetest.role.title': 'Rôle de BaseTest',
+                'basetest.role.setup': '<strong>Setup</strong> : Crée le WebDriver et navigue vers l\'URL',
+                'basetest.role.execution': '<strong>Execution</strong> : Appelle votre fonction déclencheur avec le driver',
+                'basetest.role.teardown': '<strong>Teardown</strong> : Ferme le WebDriver proprement',
+                'basetest.role.results': '<strong>Gestion des résultats</strong> : Affiche les messages de succès/échec',
+                'basetest.important': '<strong>⚠️ Important :</strong> Le paramètre <code>test_function</code> doit être une fonction qui accepte un paramètre <code>driver</code> (WebDriver). Cette fonction est votre <strong>déclencheur</strong>.',
+                'trigger.title': '🎬 Concept de Déclencheur (Orchestrateur)',
+                'trigger.description': 'Le <strong>déclencheur</strong> est la fonction passée à <code>BaseTest</code> via le paramètre <code>test_function</code>. Son rôle est d\'<strong>orchestrer de façon séquentielle</strong> l\'exécution des fonctions d\'actions pour réaliser un scénario de test complet.',
+                'trigger.role.title': 'Rôle du déclencheur',
+                'trigger.role.orchestrate': '<strong>Orchestrer</strong> : Appeler les fonctions d\'actions dans le bon ordre',
+                'trigger.role.sequential': '<strong>Séquentiel</strong> : Exécuter les actions une par une, dans l\'ordre du scénario',
+                'trigger.role.coordinate': '<strong>Coordonner</strong> : Gérer le flux logique du parcours utilisateur',
+                'trigger.role.simplify': '<strong>Simplifier</strong> : Centraliser la logique de séquencement',
+                'trigger.example.title': 'Exemple réel : buying_helper (déclencheur de TC004)',
+                'trigger.characteristics.title': 'Caractéristiques du déclencheur',
+                'trigger.characteristics.one': '<strong>Une fonction = un scénario complet</strong> : Le déclencheur représente un parcours utilisateur entier',
+                'trigger.characteristics.two': '<strong>Appels séquentiels</strong> : Les fonctions d\'actions sont appelées dans l\'ordre du scénario',
+                'trigger.characteristics.three': '<strong>Pas de logique métier complexe</strong> : Le déclencheur se contente d\'orchestrer, la logique est dans les actions',
+                'trigger.characteristics.four': '<strong>Accepte le driver</strong> : Reçoit le WebDriver en paramètre depuis BaseTest',
+                'trigger.advantage': '<strong>✅ Avantage :</strong> Le déclencheur offre une vue d\'ensemble claire du scénario de test en montrant la séquence complète des actions.',
+                'actions.title': '⚙️ Concepts de Fonctions d\'Actions',
+                'actions.description': 'Les <strong>fonctions d\'actions</strong> sont des fonctions que vous créez pour effectuer une action spécifique sur la page web. Elles utilisent les utilitaires <strong>click_element</strong> ou <strong>click_on</strong> fournis par la bibliothèque.',
+                'actions.role.title': 'Rôle des fonctions d\'actions',
+                'actions.role.atomic': '<strong>Atomiques</strong> : Chaque fonction effectue une seule action précise',
+                'actions.role.reusable': '<strong>Réutilisables</strong> : Peuvent être utilisées dans plusieurs déclencheurs',
+                'actions.role.use-util': '<strong>Utilisent l\'utilitaire</strong> : Appellent <code>click_element</code> ou <code>click_on</code> pour effectuer l\'action',
+                'actions.role.specific': '<strong>Spécifiques au contexte</strong> : Adaptées à votre application',
+                'actions.example.title': 'Exemple : Fonction d\'action click_on_unit_ticket_section',
+                'actions.structure.title': 'Structure d\'une fonction d\'action',
+                'utilities.title': '🛠️ Utilitaires',
+                'utilities.description': 'Les <strong>utilitaires</strong> sont des fonctions fournies par la bibliothèque <code>selenium_ui_test_tool</code>. Elles sont utilisées <strong>dans vos fonctions d\'actions</strong> pour effectuer les opérations sur la page web.',
+                'utilities.clickon.title': 'Nouveau : utilitaire <code>click_on</code>',
+                'utilities.clickon.description': '<code>click_on</code> enveloppe <code>click_element</code> avec des messages obligatoires. Il est pensé pour créer des stores d\'actions lisibles.',
+                'utilities.clickelement.title': 'Utilitaire avancé : click_element',
+                'utilities.clickelement.description': '<code>click_element</code> est l\'utilitaire le plus utilisé dans les fonctions d\'actions. Il gère automatiquement l\'attente, la vérification et le clic sur un élément.',
+                'utilities.clickelement.implementation': 'Implémentation de l\'utilitaire click_element',
+                'utilities.forms.title': 'Nouveaux utilitaires de formulaire',
+                'utilities.forms.description': 'La bibliothèque propose maintenant des utilitaires spécialisés pour remplir des formulaires, simplifiant grandement les tests de connexion et d\'inscription.',
+                'utilities.upload.title': 'Utilitaire d\'upload de fichier',
+                'utilities.upload.description': 'L\'utilitaire <code>upload_file</code> permet d\'uploader des fichiers via un champ input file en utilisant le chemin du fichier stocké dans une variable d\'environnement.',
+                'example.title': '📋 Exemple complet : TC004 - Test d\'achat de billet unitaire',
+                'example.description': 'Voici l\'exemple réel de TC004 montrant la structure complète avec BaseTest, déclencheur, fonctions d\'actions et utilitaires.',
+                'architecture.title': '🏗️ Architecture du projet',
+                'architecture.description': 'Une architecture bien structurée facilite la maintenance et la réutilisabilité de vos tests. Voici la structure recommandée basée sur l\'exemple TC004.',
+                'summary.title': '🎓 Résumé',
+                'summary.description': 'Pour créer des tests UI robustes avec <strong>selenium_ui_test_tool</strong>, suivez cette hiérarchie :',
+                'footer.copyright': '© 2024 Selenium UI Test Tool - Créé par Yann Dipita'
+            },
+            en: {
+                'header.title': 'Selenium UI Test Tool',
+                'header.subtitle': 'Complete Guide to UI Test Automation',
+                'nav.introduction': 'Introduction',
+                'nav.base-test': 'BaseTest',
+                'nav.trigger': 'Trigger',
+                'nav.action-functions': 'Action Functions',
+                'nav.utilities': 'Utilities',
+                'nav.example-tc004': 'Example TC004',
+                'nav.architecture': 'Architecture',
+                'intro.title': '📚 Introduction',
+                'intro.description': '<strong>selenium-ui-test-tool</strong> is a Python library designed to simplify UI test automation with Selenium WebDriver. It provides a structured and modular approach to creating robust and maintainable tests.',
+                'intro.objective.label': '💡 Objective:',
+                'intro.objective.text': 'Reduce the complexity of Selenium tests by providing simple abstractions and reusable utilities.',
+                'intro.installation.title': 'Installation',
+                'basetest.title': '🎯 BaseTest Concept',
+                'basetest.description': '<strong>BaseTest</strong> is the central class that creates a complete test. It takes as a parameter a function called <strong>trigger</strong> that orchestrates your test scenario.',
+                'basetest.hierarchy.title': 'Concept Hierarchy',
+                'basetest.hierarchy.label': '📊 4-Level Structure:',
+                'basetest.hierarchy.level1': '<strong>BaseTest</strong>: Class that manages the complete lifecycle (setup → execution → teardown)',
+                'basetest.hierarchy.level2': '<strong>Trigger</strong>: Function that sequentially orchestrates action functions',
+                'basetest.hierarchy.level3': '<strong>Action Functions</strong>: Functions that perform a specific action on the page',
+                'basetest.hierarchy.level4': '<strong>Utilities</strong>: Library functions used in action functions',
+                'basetest.structure.title': 'BaseTest Structure',
+                'basetest.role.title': 'BaseTest Role',
+                'basetest.role.setup': '<strong>Setup</strong>: Creates the WebDriver and navigates to the URL',
+                'basetest.role.execution': '<strong>Execution</strong>: Calls your trigger function with the driver',
+                'basetest.role.teardown': '<strong>Teardown</strong>: Closes the WebDriver properly',
+                'basetest.role.results': '<strong>Result Management</strong>: Displays success/failure messages',
+                'basetest.important': '<strong>⚠️ Important:</strong> The <code>test_function</code> parameter must be a function that accepts a <code>driver</code> parameter (WebDriver). This function is your <strong>trigger</strong>.',
+                'trigger.title': '🎬 Trigger Concept (Orchestrator)',
+                'trigger.description': 'The <strong>trigger</strong> is the function passed to <code>BaseTest</code> via the <code>test_function</code> parameter. Its role is to <strong>sequentially orchestrate</strong> the execution of action functions to complete a test scenario.',
+                'trigger.role.title': 'Trigger Role',
+                'trigger.role.orchestrate': '<strong>Orchestrate</strong>: Call action functions in the correct order',
+                'trigger.role.sequential': '<strong>Sequential</strong>: Execute actions one by one, in scenario order',
+                'trigger.role.coordinate': '<strong>Coordinate</strong>: Manage the logical flow of the user journey',
+                'trigger.role.simplify': '<strong>Simplify</strong>: Centralize sequencing logic',
+                'trigger.example.title': 'Real Example: buying_helper (TC004 trigger)',
+                'trigger.characteristics.title': 'Trigger Characteristics',
+                'trigger.characteristics.one': '<strong>One function = one complete scenario</strong>: The trigger represents a complete user journey',
+                'trigger.characteristics.two': '<strong>Sequential calls</strong>: Action functions are called in scenario order',
+                'trigger.characteristics.three': '<strong>No complex business logic</strong>: The trigger only orchestrates, logic is in actions',
+                'trigger.characteristics.four': '<strong>Accepts driver</strong>: Receives the WebDriver as a parameter from BaseTest',
+                'trigger.advantage': '<strong>✅ Advantage:</strong> The trigger provides a clear overview of the test scenario by showing the complete sequence of actions.',
+                'actions.title': '⚙️ Action Functions Concepts',
+                'actions.description': '<strong>Action functions</strong> are functions you create to perform a specific action on the web page. They use the <strong>click_element</strong> or <strong>click_on</strong> utilities provided by the library.',
+                'actions.role.title': 'Action Functions Role',
+                'actions.role.atomic': '<strong>Atomic</strong>: Each function performs a single precise action',
+                'actions.role.reusable': '<strong>Reusable</strong>: Can be used in multiple triggers',
+                'actions.role.use-util': '<strong>Use utility</strong>: Call <code>click_element</code> or <code>click_on</code> to perform the action',
+                'actions.role.specific': '<strong>Context-specific</strong>: Adapted to your application',
+                'actions.example.title': 'Example: click_on_unit_ticket_section action function',
+                'actions.structure.title': 'Action Function Structure',
+                'utilities.title': '🛠️ Utilities',
+                'utilities.description': '<strong>Utilities</strong> are functions provided by the <code>selenium_ui_test_tool</code> library. They are used <strong>in your action functions</strong> to perform operations on the web page.',
+                'utilities.clickon.title': 'New: <code>click_on</code> utility',
+                'utilities.clickon.description': '<code>click_on</code> wraps <code>click_element</code> with mandatory messages. It is designed to create readable action stores.',
+                'utilities.clickelement.title': 'Advanced utility: click_element',
+                'utilities.clickelement.description': '<code>click_element</code> is the most used utility in action functions. It automatically handles waiting, verification, and clicking on an element.',
+                'utilities.clickelement.implementation': 'click_element utility implementation',
+                'utilities.forms.title': 'New Form Utilities',
+                'utilities.forms.description': 'The library now offers specialized utilities for filling forms, greatly simplifying login and registration tests.',
+                'utilities.upload.title': 'File Upload Utility',
+                'utilities.upload.description': 'The <code>upload_file</code> utility allows uploading files via an input file field using the file path stored in an environment variable.',
+                'example.title': '📋 Complete Example: TC004 - Unit Ticket Purchase Test',
+                'example.description': 'Here is the real TC004 example showing the complete structure with BaseTest, trigger, action functions, and utilities.',
+                'architecture.title': '🏗️ Project Architecture',
+                'architecture.description': 'A well-structured architecture facilitates maintenance and reusability of your tests. Here is the recommended structure based on the TC004 example.',
+                'summary.title': '🎓 Summary',
+                'summary.description': 'To create robust UI tests with <strong>selenium_ui_test_tool</strong>, follow this hierarchy:',
+                'footer.copyright': '© 2024 Selenium UI Test Tool - Created by Yann Dipita'
+            }
+        };
+
+        // Get saved language or default to French
+        let currentLang = localStorage.getItem('preferredLanguage') || 'fr';
+
+        // Function to change language
+        function changeLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('preferredLanguage', lang);
+            
+            // Update active button
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(`lang-${lang}`).classList.add('active');
+            
+            // Update HTML lang attribute
+            document.documentElement.lang = lang;
+            
+            // Translate all elements with data-i18n
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                        element.value = translations[lang][key];
+                    } else {
+                        element.innerHTML = translations[lang][key];
+                    }
+                }
+            });
+        }
+
+        // Initialize language on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            changeLanguage(currentLang);
+        });
+
         // Smooth scroll pour la navigation
         document.querySelectorAll('nav a').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
