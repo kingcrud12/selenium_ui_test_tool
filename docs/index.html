@@ -475,17 +475,17 @@ def click_on_unit_ticket_section(driver):
     )</code>
                 </div>
 
-                <h3>Exemples de fonctions d'actions (TC004)</h3>
+                <h3 data-i18n="actions.examples.title">Exemples de fonctions d'actions (TC004)</h3>
                 <ul>
-                    <li><code>click_on_unit_ticket_section(driver)</code> - Clique sur la section billet unitaire</li>
-                    <li><code>click_on_ticket(driver)</code> - Clique sur un ticket</li>
-                    <li><code>click_on_ticket_support(driver)</code> - Clique sur le support du ticket</li>
-                    <li><code>click_on_order_button(driver)</code> - Clique sur le bouton commander</li>
-                    <li><code>click_on_cgu_checkbox(driver)</code> - Clique sur la checkbox CGU</li>
-                    <li><code>click_on_validate_cart(driver)</code> - Valide le panier</li>
+                    <li data-i18n="actions.examples.item1"><code>click_on_unit_ticket_section(driver)</code> - Clique sur la section billet unitaire</li>
+                    <li data-i18n="actions.examples.item2"><code>click_on_ticket(driver)</code> - Clique sur un ticket</li>
+                    <li data-i18n="actions.examples.item3"><code>click_on_ticket_support(driver)</code> - Clique sur le support du ticket</li>
+                    <li data-i18n="actions.examples.item4"><code>click_on_order_button(driver)</code> - Clique sur le bouton commander</li>
+                    <li data-i18n="actions.examples.item5"><code>click_on_cgu_checkbox(driver)</code> - Clique sur la checkbox CGU</li>
+                    <li data-i18n="actions.examples.item6"><code>click_on_validate_cart(driver)</code> - Valide le panier</li>
                 </ul>
 
-                <h3>Store d'actions avec <code>click_on</code></h3>
+                <h3 data-i18n="actions.store.title">Store d'actions avec <code>click_on</code></h3>
                 <div class="example-box">
                     <pre><code>from selenium_ui_test_tool import click_on
 from selenium.webdriver.common.by import By
@@ -506,7 +506,7 @@ def monthly_buying(driver):
         )</code></pre>
                 </div>
 
-                <div class="highlight">
+                <div class="highlight" data-i18n="actions.store.highlight">
                     <strong>💡 Important :</strong> <code>click_on</code> encapsule <code>click_element</code> pour accélérer 
                     la création d'actions et permet de regrouper plusieurs clics dans un store réutilisable.
                 </div>
@@ -595,8 +595,8 @@ def click_element(driver, by, selector, wait_before_click=0,
                     simplifiant grandement les tests de connexion et d'inscription.
                 </p>
 
-                <h4>1. fill_input</h4>
-                <p>Remplit un champ de formulaire avec scroll automatique vers l'élément.</p>
+                <h4 data-i18n="utilities.forms.fill_input.title">1. fill_input</h4>
+                <p data-i18n="utilities.forms.fill_input.description">Remplit un champ de formulaire avec scroll automatique vers l'élément.</p>
                 <div class="example-box">
                     <pre><code>from selenium_ui_test_tool import fill_input
 from selenium.webdriver.common.by import By
@@ -608,8 +608,8 @@ fill_input(driver, By.ID, "username", "mon_utilisateur")
 fill_input(driver, By.CSS_SELECTOR, "input[type='email']", "email@example.com")</code></pre>
                 </div>
 
-                <h4>2. fill_login_form</h4>
-                <p>Remplit automatiquement un formulaire de connexion en utilisant les variables d'environnement.</p>
+                <h4 data-i18n="utilities.forms.fill_login_form.title">2. fill_login_form</h4>
+                <p data-i18n="utilities.forms.fill_login_form.description">Remplit automatiquement un formulaire de connexion en utilisant les variables d'environnement.</p>
                 <div class="example-box">
                     <pre><code>from selenium_ui_test_tool import fill_login_form
 from selenium.webdriver.common.by import By
@@ -625,8 +625,8 @@ fill_login_form(
 )</code></pre>
                 </div>
 
-                <h4>3. fill_login_form_with_confirm_password</h4>
-                <p>Remplit automatiquement un formulaire avec confirmation de mot de passe.</p>
+                <h4 data-i18n="utilities.forms.fill_login_with_confirm.title">3. fill_login_form_with_confirm_password</h4>
+                <p data-i18n="utilities.forms.fill_login_with_confirm.description">Remplit automatiquement un formulaire avec confirmation de mot de passe.</p>
                 <div class="example-box">
                     <pre><code>from selenium_ui_test_tool import fill_login_form_with_confirm_password
 from selenium.webdriver.common.by import By
@@ -642,7 +642,7 @@ fill_login_form_with_confirm_password(
 )</code></pre>
                 </div>
 
-                <div class="success">
+                <div class="success" data-i18n="utilities.forms.success">
                     <strong>✅ Avantage :</strong> Ces utilitaires simplifient considérablement les tests de formulaires 
                     en gérant automatiquement l'attente, le scroll et le remplissage des champs.
                 </div>
@@ -653,7 +653,7 @@ fill_login_form_with_confirm_password(
                     en utilisant le chemin du fichier stocké dans une variable d'environnement.
                 </p>
 
-                <h4>upload_file</h4>
+                <h4 data-i18n="utilities.upload.heading">upload_file</h4>
                 <div class="example-box">
                     <pre><code>from selenium_ui_test_tool import upload_file
 from selenium.webdriver.common.by import By
@@ -672,39 +672,39 @@ upload_file(
 )</code></pre>
                 </div>
 
-                <div class="info">
+                <div class="info" data-i18n="utilities.upload.note">
                     <strong>💡 Note :</strong> Le chemin du fichier doit être stocké dans une variable d'environnement 
                     (fichier .env ou secrets GitHub Actions). Le chemin doit être absolu.
                 </div>
 
-                <h3>Autres utilitaires disponibles</h3>
+                <h3 data-i18n="utilities.more.title">Autres utilitaires disponibles</h3>
 
-                <h4>1. wait_for_element</h4>
-                <p>Attend qu'un élément soit présent dans le DOM.</p>
+                <h4 data-i18n="utilities.more.wait.title">1. wait_for_element</h4>
+                <p data-i18n="utilities.more.wait.description">Attend qu'un élément soit présent dans le DOM.</p>
                 <div class="code-block">
                     <code>from selenium_ui_test_tool import wait_for_element
 
 element = wait_for_element(driver, By.ID, "mon-element", timeout=10)</code>
                 </div>
 
-                <h4>2. configure_actions</h4>
-                <p>Exécute une action simple (scroll + click). Utilisé par <code>click_element</code>.</p>
+                <h4 data-i18n="utilities.more.configure.title">2. configure_actions</h4>
+                <p data-i18n="utilities.more.configure.description">Exécute une action simple (scroll + click). Utilisé par <code>click_element</code>.</p>
                 <div class="code-block">
                     <code>from selenium_ui_test_tool import configure_actions
 
 configure_actions(driver, By.CSS_SELECTOR, ".my-button")</code>
                 </div>
 
-                <h4>3. create_driver</h4>
-                <p>Crée et configure un WebDriver Chrome (utilisé par BaseTest).</p>
+                <h4 data-i18n="utilities.more.create_driver.title">3. create_driver</h4>
+                <p data-i18n="utilities.more.create_driver.description">Crée et configure un WebDriver Chrome (utilisé par BaseTest).</p>
 
-                <h4>4. get_url</h4>
-                <p>Navigue vers une URL (utilisé par BaseTest).</p>
+                <h4 data-i18n="utilities.more.get_url.title">4. get_url</h4>
+                <p data-i18n="utilities.more.get_url.description">Navigue vers une URL (utilisé par BaseTest).</p>
 
-                <h4>5. get_env_var</h4>
-                <p>Récupère une variable d'environnement depuis le fichier .env.</p>
+                <h4 data-i18n="utilities.more.get_env_var.title">5. get_env_var</h4>
+                <p data-i18n="utilities.more.get_env_var.description">Récupère une variable d'environnement depuis le fichier .env.</p>
 
-                <div class="info">
+                <div class="info" data-i18n="utilities.more.hierarchy">
                     <strong>💡 Hiérarchie :</strong> Les utilitaires sont utilisés <strong>dans</strong> les fonctions d'actions, 
                     qui sont appelées <strong>par</strong> le déclencheur, qui est exécuté <strong>par</strong> BaseTest.
                 </div>
@@ -717,7 +717,7 @@ configure_actions(driver, By.CSS_SELECTOR, ".my-button")</code>
                     fonctions d'actions et utilitaires.
                 </p>
 
-                <h3>1. BaseTest (Point d'entrée)</h3>
+                <h3 data-i18n="example.section1.title">1. BaseTest (Point d'entrée)</h3>
                 <div class="example-box">
                     <pre><code>from selenium_ui_test_tool import BaseTest
 from utils.order_utils.buying_helper import buying_helper
@@ -735,7 +735,7 @@ if __name__ == "__main__":
     test_buying_unit_ticket()</code></pre>
                 </div>
 
-                <h3>2. Déclencheur (buying_helper)</h3>
+                <h3 data-i18n="example.section2.title">2. Déclencheur (buying_helper)</h3>
                 <div class="example-box">
                     <pre><code>import time
 from utils.order_utils.click_on_accept_cgu import click_on_cgu_checkbox
@@ -769,7 +769,7 @@ def buying_helper(driver):
     input("cliquez sur entrée")</code></pre>
                 </div>
 
-                <h3>3. Fonction d'action (exemple : click_on_unit_ticket_section)</h3>
+                <h3 data-i18n="example.section3.title">3. Fonction d'action (exemple : click_on_unit_ticket_section)</h3>
                 <div class="example-box">
                     <pre><code>from selenium_ui_test_tool import click_element
 from selenium.webdriver.common.by import By
@@ -788,7 +788,7 @@ def click_on_unit_ticket_section(driver):
     )</code></pre>
                 </div>
 
-                <h3>4. Utilitaire (click_element - dans la bibliothèque)</h3>
+                <h3 data-i18n="example.section4.title">4. Utilitaire (click_element - dans la bibliothèque)</h3>
                 <div class="example-box">
                     <pre><code># Cet utilitaire est fourni par selenium_ui_test_tool
 # Il est utilisé dans vos fonctions d'actions
@@ -807,7 +807,7 @@ click_element(
 )</code></pre>
                 </div>
 
-                <h3>5. Store d'actions (click_on)</h3>
+                <h3 data-i18n="example.section5.title">5. Store d'actions (click_on)</h3>
                 <div class="example-box">
                     <pre><code>from selenium_ui_test_tool import click_on
 from selenium.webdriver.common.by import By
@@ -828,8 +828,8 @@ def monthly_buying(driver):
         )</code></pre>
                 </div>
 
-                <h3>Flux d'exécution complet</h3>
-                <div class="info">
+                <h3 data-i18n="example.flow.title">Flux d'exécution complet</h3>
+                <div class="info" data-i18n="example.flow.content">
                     <strong>📊 Hiérarchie d'exécution :</strong>
                     <ol>
                         <li><strong>BaseTest.run()</strong> → Crée le driver, navigue vers l'URL</li>
@@ -842,12 +842,12 @@ def monthly_buying(driver):
                     </ol>
                 </div>
 
-                <h3>Avantages de cette structure</h3>
+                <h3 data-i18n="example.advantages.title">Avantages de cette structure</h3>
                 <ul>
-                    <li><strong>Séparation des responsabilités</strong> : Chaque niveau a un rôle clair</li>
-                    <li><strong>Réutilisabilité</strong> : Les fonctions d'actions peuvent être réutilisées</li>
-                    <li><strong>Maintenabilité</strong> : Facile de modifier une action sans affecter les autres</li>
-                    <li><strong>Lisibilité</strong> : Le déclencheur montre clairement le scénario complet</li>
+                    <li data-i18n="example.advantages.item1"><strong>Séparation des responsabilités</strong> : Chaque niveau a un rôle clair</li>
+                    <li data-i18n="example.advantages.item2"><strong>Réutilisabilité</strong> : Les fonctions d'actions peuvent être réutilisées</li>
+                    <li data-i18n="example.advantages.item3"><strong>Maintenabilité</strong> : Facile de modifier une action sans affecter les autres</li>
+                    <li data-i18n="example.advantages.item4"><strong>Lisibilité</strong> : Le déclencheur montre clairement le scénario complet</li>
                 </ul>
             </section>
 
@@ -858,7 +858,7 @@ def monthly_buying(driver):
                     Voici la structure recommandée basée sur l'exemple TC004.
                 </p>
 
-                <h3>Structure recommandée (basée sur TC004)</h3>
+                <h3 data-i18n="architecture.structure.title">Structure recommandée (basée sur TC004)</h3>
                 <div class="code-block">
                     <code>mon_projet/
 ├── tests/                          # Package de tests
@@ -887,14 +887,14 @@ def monthly_buying(driver):
 └── main.py                          # Point d'entrée (optionnel)</code>
                 </div>
 
-                <h3>Package de tests (tests/)</h3>
-                <p>
+                <h3 data-i18n="architecture.tests.title">Package de tests (tests/)</h3>
+                <p data-i18n="architecture.tests.description">
                     Le package <code>tests/</code> contient vos fichiers de test. Chaque fichier crée un 
                     <code>BaseTest</code> avec un déclencheur spécifique.
                 </p>
 
                 <div class="example-box">
-                    <h4>Exemple : tests/test_buying.py</h4>
+                    <h4 data-i18n="architecture.tests.example.title">Exemple : tests/test_buying.py</h4>
                     <pre><code>from selenium_ui_test_tool import BaseTest
 from utils.order_utils.buying_helper import buying_helper
 
@@ -912,23 +912,23 @@ if __name__ == "__main__":
     test_buying_unit_ticket()</code></pre>
                 </div>
 
-                <h3>Package utils (utils/)</h3>
-                <p>
+                <h3 data-i18n="architecture.utils.title">Package utils (utils/)</h3>
+                <p data-i18n="architecture.utils.description">
                     Le package <code>utils/</code> est organisé par domaine fonctionnel. Chaque sous-package 
                     contient les déclencheurs et fonctions d'actions liés à un domaine spécifique.
                 </p>
 
-                <h4>Structure utils/order_utils/</h4>
+                <h4 data-i18n="architecture.utils.structure.title">Structure utils/order_utils/</h4>
                 <ul>
-                    <li><strong>action_store.py</strong> : Liste/dictionnaire d'actions utilisant <code>click_on</code></li>
-                    <li><strong>buying_helper.py</strong> : Déclencheur qui consomme le store</li>
-                    <li><strong>monthly_buying.py</strong> : Autre déclencheur utilisant le store</li>
-                    <li><strong>validate_*.py</strong> : Fonctions de validation</li>
-                    <li><strong>is_*.py</strong> : Fonctions de vérification</li>
+                    <li data-i18n="architecture.utils.structure.item1"><strong>action_store.py</strong> : Liste/dictionnaire d'actions utilisant <code>click_on</code></li>
+                    <li data-i18n="architecture.utils.structure.item2"><strong>buying_helper.py</strong> : Déclencheur qui consomme le store</li>
+                    <li data-i18n="architecture.utils.structure.item3"><strong>monthly_buying.py</strong> : Autre déclencheur utilisant le store</li>
+                    <li data-i18n="architecture.utils.structure.item4"><strong>validate_*.py</strong> : Fonctions de validation</li>
+                    <li data-i18n="architecture.utils.structure.item5"><strong>is_*.py</strong> : Fonctions de vérification</li>
                 </ul>
 
                 <div class="example-box">
-                    <h4>Exemple : utils/order_utils/action_store.py</h4>
+                    <h4 data-i18n="architecture.utils.example.title">Exemple : utils/order_utils/action_store.py</h4>
                     <pre><code>from selenium_ui_test_tool import click_on
 from selenium.webdriver.common.by import By
 
@@ -948,36 +948,36 @@ def run_ticket_actions(driver):
         )</code></pre>
                 </div>
 
-                <h3>Package shared_utils</h3>
-                <p>
+                <h3 data-i18n="architecture.shared.title">Package shared_utils</h3>
+                <p data-i18n="architecture.shared.description">
                     Le package <code>shared_utils/</code> contient les utilitaires partagés entre plusieurs 
                     domaines (logger, helpers génériques, etc.).
                 </p>
 
                 <div class="example-box">
-                    <h4>Exemple : utils/shared_utils/logger.py</h4>
+                    <h4 data-i18n="architecture.shared.example.title">Exemple : utils/shared_utils/logger.py</h4>
                     <pre><code>def logger(driver):
     """Utilitaire partagé pour logger des informations"""
     print(f"URL actuelle : {driver.current_url}")
     print(f"Titre de la page : {driver.title}")</code></pre>
                 </div>
 
-                <h3>Avantages de cette architecture</h3>
+                <h3 data-i18n="architecture.benefits.title">Avantages de cette architecture</h3>
                 <ul>
-                    <li><strong>Organisation par domaine</strong> : Chaque sous-package (order_utils, etc.) regroupe les fonctions liées</li>
-                    <li><strong>Réutilisabilité</strong> : Les fonctions d'actions peuvent être réutilisées dans plusieurs déclencheurs</li>
-                    <li><strong>Maintenabilité</strong> : Facile de trouver et modifier une fonction d'action spécifique</li>
-                    <li><strong>Lisibilité</strong> : Structure claire montrant la hiérarchie BaseTest → Déclencheur → Actions → Utilitaires</li>
-                    <li><strong>Séparation des responsabilités</strong> : Chaque niveau a un rôle bien défini</li>
+                    <li data-i18n="architecture.benefits.item1"><strong>Organisation par domaine</strong> : Chaque sous-package (order_utils, etc.) regroupe les fonctions liées</li>
+                    <li data-i18n="architecture.benefits.item2"><strong>Réutilisabilité</strong> : Les fonctions d'actions peuvent être réutilisées dans plusieurs déclencheurs</li>
+                    <li data-i18n="architecture.benefits.item3"><strong>Maintenabilité</strong> : Facile de trouver et modifier une fonction d'action spécifique</li>
+                    <li data-i18n="architecture.benefits.item4"><strong>Lisibilité</strong> : Structure claire montrant la hiérarchie BaseTest → Déclencheur → Actions → Utilitaires</li>
+                    <li data-i18n="architecture.benefits.item5"><strong>Séparation des responsabilités</strong> : Chaque niveau a un rôle bien défini</li>
                 </ul>
 
-                <div class="success">
+                <div class="success" data-i18n="architecture.benefits.success">
                     <strong>✅ Bonne pratique :</strong> Organisez vos fonctions d'actions par domaine fonctionnel 
                     (order_utils, login_utils, etc.) pour une meilleure maintenabilité.
                 </div>
 
-                <h3>Résumé de la hiérarchie</h3>
-                <div class="info">
+                <h3 data-i18n="architecture.summary.title">Résumé de la hiérarchie</h3>
+                <div class="info" data-i18n="architecture.summary.content">
                     <strong>📊 Flux complet :</strong>
                     <ol>
                         <li><strong>tests/test_buying.py</strong> → Crée un BaseTest avec le déclencheur</li>
@@ -994,19 +994,19 @@ def run_ticket_actions(driver):
                     Pour créer des tests UI robustes avec <strong>selenium_ui_test_tool</strong>, suivez cette hiérarchie :
                 </p>
                 <ol>
-                    <li><strong>BaseTest</strong> : Créez un test avec <code>BaseTest</code> en passant votre déclencheur via <code>test_function</code></li>
-                    <li><strong>Déclencheur</strong> : Créez une fonction qui orchestre séquentiellement vos fonctions d'actions</li>
-                    <li><strong>Fonctions d'actions</strong> : Créez des fonctions atomiques ou des stores basés sur <code>click_on</code></li>
-                    <li><strong>Utilitaires</strong> : Utilisez <code>click_on</code> ou <code>click_element</code> selon votre besoin</li>
-                    <li><strong>Architecture</strong> : Organisez votre code avec <code>tests/</code> et <code>utils/</code> par domaine fonctionnel</li>
+                    <li data-i18n="summary.steps.item1"><strong>BaseTest</strong> : Créez un test avec <code>BaseTest</code> en passant votre déclencheur via <code>test_function</code></li>
+                    <li data-i18n="summary.steps.item2"><strong>Déclencheur</strong> : Créez une fonction qui orchestre séquentiellement vos fonctions d'actions</li>
+                    <li data-i18n="summary.steps.item3"><strong>Fonctions d'actions</strong> : Créez des fonctions atomiques ou des stores basés sur <code>click_on</code></li>
+                    <li data-i18n="summary.steps.item4"><strong>Utilitaires</strong> : Utilisez <code>click_on</code> ou <code>click_element</code> selon votre besoin</li>
+                    <li data-i18n="summary.steps.item5"><strong>Architecture</strong> : Organisez votre code avec <code>tests/</code> et <code>utils/</code> par domaine fonctionnel</li>
                 </ol>
 
-                <div class="highlight">
+                <div class="highlight" data-i18n="summary.highlight">
                     <strong>📊 Hiérarchie complète :</strong><br>
                     <code>BaseTest</code> → <code>Déclencheur</code> → <code>Fonctions d'actions</code> → <code>Utilitaires (click_on / click_element)</code>
                 </div>
 
-                <div class="info">
+                <div class="info" data-i18n="summary.info">
                     <strong>📚 Documentation complète :</strong> 
                     Consultez le <a href="https://github.com/kingcrud12/selenium_ui_test_tool/blob/main/README.md" target="_blank">README officiel</a> 
                     pour plus de détails sur l'API.
@@ -1079,6 +1079,15 @@ def run_ticket_actions(driver):
                 'actions.role.specific': '<strong>Spécifiques au contexte</strong> : Adaptées à votre application',
                 'actions.example.title': 'Exemple : Fonction d\'action click_on_unit_ticket_section',
                 'actions.structure.title': 'Structure d\'une fonction d\'action',
+                'actions.examples.title': 'Exemples de fonctions d\'actions (TC004)',
+                'actions.examples.item1': '<code>click_on_unit_ticket_section(driver)</code> - Clique sur la section billet unitaire',
+                'actions.examples.item2': '<code>click_on_ticket(driver)</code> - Clique sur un ticket',
+                'actions.examples.item3': '<code>click_on_ticket_support(driver)</code> - Clique sur le support du ticket',
+                'actions.examples.item4': '<code>click_on_order_button(driver)</code> - Clique sur le bouton commander',
+                'actions.examples.item5': '<code>click_on_cgu_checkbox(driver)</code> - Clique sur la checkbox CGU',
+                'actions.examples.item6': '<code>click_on_validate_cart(driver)</code> - Valide le panier',
+                'actions.store.title': 'Store d\'actions avec <code>click_on</code>',
+                'actions.store.highlight': '<strong>💡 Important :</strong> <code>click_on</code> encapsule <code>click_element</code> pour accélérer la création d\'actions et permet de regrouper plusieurs clics dans un store réutilisable.',
                 'utilities.title': '🛠️ Utilitaires',
                 'utilities.description': 'Les <strong>utilitaires</strong> sont des fonctions fournies par la bibliothèque <code>selenium_ui_test_tool</code>. Elles sont utilisées <strong>dans vos fonctions d\'actions</strong> pour effectuer les opérations sur la page web.',
                 'utilities.clickon.title': 'Nouveau : utilitaire <code>click_on</code>',
@@ -1088,14 +1097,79 @@ def run_ticket_actions(driver):
                 'utilities.clickelement.implementation': 'Implémentation de l\'utilitaire click_element',
                 'utilities.forms.title': 'Nouveaux utilitaires de formulaire',
                 'utilities.forms.description': 'La bibliothèque propose maintenant des utilitaires spécialisés pour remplir des formulaires, simplifiant grandement les tests de connexion et d\'inscription.',
+                'utilities.forms.fill_input.title': '1. fill_input',
+                'utilities.forms.fill_input.description': 'Remplit un champ de formulaire avec scroll automatique vers l\'élément.',
+                'utilities.forms.fill_login_form.title': '2. fill_login_form',
+                'utilities.forms.fill_login_form.description': 'Remplit automatiquement un formulaire de connexion en utilisant les variables d\'environnement.',
+                'utilities.forms.fill_login_with_confirm.title': '3. fill_login_form_with_confirm_password',
+                'utilities.forms.fill_login_with_confirm.description': 'Remplit automatiquement un formulaire avec confirmation de mot de passe.',
+                'utilities.forms.success': '<strong>✅ Avantage :</strong> Ces utilitaires simplifient considérablement les tests de formulaires en gérant automatiquement l\'attente, le scroll et le remplissage des champs.',
                 'utilities.upload.title': 'Utilitaire d\'upload de fichier',
                 'utilities.upload.description': 'L\'utilitaire <code>upload_file</code> permet d\'uploader des fichiers via un champ input file en utilisant le chemin du fichier stocké dans une variable d\'environnement.',
+                'utilities.upload.heading': 'upload_file',
+                'utilities.upload.note': '<strong>💡 Note :</strong> Le chemin du fichier doit être stocké dans une variable d\'environnement (fichier .env ou secrets GitHub Actions). Le chemin doit être absolu.',
+                'utilities.more.title': 'Autres utilitaires disponibles',
+                'utilities.more.wait.title': '1. wait_for_element',
+                'utilities.more.wait.description': 'Attend qu\'un élément soit présent dans le DOM.',
+                'utilities.more.configure.title': '2. configure_actions',
+                'utilities.more.configure.description': 'Exécute une action simple (scroll + click). Utilisé par <code>click_element</code>.',
+                'utilities.more.create_driver.title': '3. create_driver',
+                'utilities.more.create_driver.description': 'Crée et configure un WebDriver Chrome (utilisé par BaseTest).',
+                'utilities.more.get_url.title': '4. get_url',
+                'utilities.more.get_url.description': 'Navigue vers une URL (utilisé par BaseTest).',
+                'utilities.more.get_env_var.title': '5. get_env_var',
+                'utilities.more.get_env_var.description': 'Récupère une variable d\'environnement depuis le fichier .env.',
+                'utilities.more.hierarchy': '<strong>💡 Hiérarchie :</strong> Les utilitaires sont utilisés <strong>dans</strong> les fonctions d\'actions, qui sont appelées <strong>par</strong> le déclencheur, qui est exécuté <strong>par</strong> BaseTest.',
                 'example.title': '📋 Exemple complet : TC004 - Test d\'achat de billet unitaire',
                 'example.description': 'Voici l\'exemple réel de TC004 montrant la structure complète avec BaseTest, déclencheur, fonctions d\'actions et utilitaires.',
+                'example.section1.title': '1. BaseTest (Point d\'entrée)',
+                'example.section2.title': '2. Déclencheur (buying_helper)',
+                'example.section3.title': '3. Fonction d\'action (exemple : click_on_unit_ticket_section)',
+                'example.section4.title': '4. Utilitaire (click_element - dans la bibliothèque)',
+                'example.section5.title': '5. Store d\'actions (click_on)',
+                'example.flow.title': 'Flux d\'exécution complet',
+                'example.flow.content': '<strong>📊 Hiérarchie d\'exécution :</strong><ol><li><strong>BaseTest.run()</strong> → Crée le driver, navigue vers l\'URL</li><li><strong>BaseTest</strong> appelle → <strong>buying_helper(driver)</strong> (déclencheur)</li><li><strong>buying_helper</strong> appelle → <strong>click_on_unit_ticket_section(driver)</strong> (fonction d\'action)</li><li><strong>click_on_unit_ticket_section</strong> appelle → <strong>click_element(...)</strong> (utilitaire)</li><li><strong>click_element</strong> utilise → <strong>configure_actions</strong> et <strong>wait_for_element</strong> (utilitaires de base)</li><li>Le processus se répète pour chaque action dans le déclencheur</li><li><strong>BaseTest</strong> ferme le driver</li></ol>',
+                'example.advantages.title': 'Avantages de cette structure',
+                'example.advantages.item1': '<strong>Séparation des responsabilités</strong> : Chaque niveau a un rôle clair',
+                'example.advantages.item2': '<strong>Réutilisabilité</strong> : Les fonctions d\'actions peuvent être réutilisées',
+                'example.advantages.item3': '<strong>Maintenabilité</strong> : Facile de modifier une action sans affecter les autres',
+                'example.advantages.item4': '<strong>Lisibilité</strong> : Le déclencheur montre clairement le scénario complet',
                 'architecture.title': '🏗️ Architecture du projet',
                 'architecture.description': 'Une architecture bien structurée facilite la maintenance et la réutilisabilité de vos tests. Voici la structure recommandée basée sur l\'exemple TC004.',
+                'architecture.structure.title': 'Structure recommandée (basée sur TC004)',
+                'architecture.tests.title': 'Package de tests (tests/)',
+                'architecture.tests.description': 'Le package <code>tests/</code> contient vos fichiers de test. Chaque fichier crée un <code>BaseTest</code> avec un déclencheur spécifique.',
+                'architecture.tests.example.title': 'Exemple : tests/test_buying.py',
+                'architecture.utils.title': 'Package utils (utils/)',
+                'architecture.utils.description': 'Le package <code>utils/</code> est organisé par domaine fonctionnel. Chaque sous-package contient les déclencheurs et fonctions d\'actions liés à un domaine spécifique.',
+                'architecture.utils.structure.title': 'Structure utils/order_utils/',
+                'architecture.utils.structure.item1': '<strong>action_store.py</strong> : Liste/dictionnaire d\'actions utilisant <code>click_on</code>',
+                'architecture.utils.structure.item2': '<strong>buying_helper.py</strong> : Déclencheur qui consomme le store',
+                'architecture.utils.structure.item3': '<strong>monthly_buying.py</strong> : Autre déclencheur utilisant le store',
+                'architecture.utils.structure.item4': '<strong>validate_*.py</strong> : Fonctions de validation',
+                'architecture.utils.structure.item5': '<strong>is_*.py</strong> : Fonctions de vérification',
+                'architecture.utils.example.title': 'Exemple : utils/order_utils/action_store.py',
+                'architecture.shared.title': 'Package shared_utils',
+                'architecture.shared.description': 'Le package <code>shared_utils/</code> contient les utilitaires partagés entre plusieurs domaines (logger, helpers génériques, etc.).',
+                'architecture.shared.example.title': 'Exemple : utils/shared_utils/logger.py',
+                'architecture.benefits.title': 'Avantages de cette architecture',
+                'architecture.benefits.item1': '<strong>Organisation par domaine</strong> : Chaque sous-package (order_utils, etc.) regroupe les fonctions liées',
+                'architecture.benefits.item2': '<strong>Réutilisabilité</strong> : Les fonctions d\'actions peuvent être réutilisées dans plusieurs déclencheurs',
+                'architecture.benefits.item3': '<strong>Maintenabilité</strong> : Facile de trouver et modifier une fonction d\'action spécifique',
+                'architecture.benefits.item4': '<strong>Lisibilité</strong> : Structure claire montrant la hiérarchie BaseTest → Déclencheur → Actions → Utilitaires',
+                'architecture.benefits.item5': '<strong>Séparation des responsabilités</strong> : Chaque niveau a un rôle bien défini',
+                'architecture.benefits.success': '<strong>✅ Bonne pratique :</strong> Organisez vos fonctions d\'actions par domaine fonctionnel (order_utils, login_utils, etc.) pour une meilleure maintenabilité.',
+                'architecture.summary.title': 'Résumé de la hiérarchie',
+                'architecture.summary.content': '<strong>📊 Flux complet :</strong><ol><li><strong>tests/test_buying.py</strong> → Crée un BaseTest avec le déclencheur</li><li><strong>utils/order_utils/buying_helper.py</strong> → Déclencheur qui orchestre les actions</li><li><strong>utils/order_utils/action_store.py</strong> → Store d\'actions basé sur <code>click_on</code></li><li><strong>selenium_ui_test_tool.click_on / click_element</strong> → Utilitaires de la bibliothèque</li></ol>',
                 'summary.title': '🎓 Résumé',
                 'summary.description': 'Pour créer des tests UI robustes avec <strong>selenium_ui_test_tool</strong>, suivez cette hiérarchie :',
+                'summary.steps.item1': '<strong>BaseTest</strong> : Créez un test avec <code>BaseTest</code> en passant votre déclencheur via <code>test_function</code>',
+                'summary.steps.item2': '<strong>Déclencheur</strong> : Créez une fonction qui orchestre séquentiellement vos fonctions d\'actions',
+                'summary.steps.item3': '<strong>Fonctions d\'actions</strong> : Créez des fonctions atomiques ou des stores basés sur <code>click_on</code>',
+                'summary.steps.item4': '<strong>Utilitaires</strong> : Utilisez <code>click_on</code> ou <code>click_element</code> selon votre besoin',
+                'summary.steps.item5': '<strong>Architecture</strong> : Organisez votre code avec <code>tests/</code> et <code>utils/</code> par domaine fonctionnel',
+                'summary.highlight': '<strong>📊 Hiérarchie complète :</strong><br><code>BaseTest</code> → <code>Déclencheur</code> → <code>Fonctions d\'actions</code> → <code>Utilitaires (click_on / click_element)</code>',
+                'summary.info': '<strong>📚 Documentation complète :</strong> Consultez le <a href="https://github.com/kingcrud12/selenium_ui_test_tool/blob/main/README.md" target="_blank">README officiel</a> pour plus de détails sur l\'API.',
                 'footer.copyright': '© 2024 Selenium UI Test Tool - Créé par Yann Dipita'
             },
             en: {
@@ -1151,6 +1225,15 @@ def run_ticket_actions(driver):
                 'actions.role.specific': '<strong>Context-specific</strong>: Adapted to your application',
                 'actions.example.title': 'Example: click_on_unit_ticket_section action function',
                 'actions.structure.title': 'Action Function Structure',
+                'actions.examples.title': 'Action Function Examples (TC004)',
+                'actions.examples.item1': '<code>click_on_unit_ticket_section(driver)</code> - Click the unit ticket section',
+                'actions.examples.item2': '<code>click_on_ticket(driver)</code> - Click a ticket',
+                'actions.examples.item3': '<code>click_on_ticket_support(driver)</code> - Click the ticket support',
+                'actions.examples.item4': '<code>click_on_order_button(driver)</code> - Click the order button',
+                'actions.examples.item5': '<code>click_on_cgu_checkbox(driver)</code> - Click the CGU checkbox',
+                'actions.examples.item6': '<code>click_on_validate_cart(driver)</code> - Validate the cart',
+                'actions.store.title': 'Action store with <code>click_on</code>',
+                'actions.store.highlight': '<strong>💡 Important:</strong> <code>click_on</code> wraps <code>click_element</code> to speed up action creation and lets you group multiple clicks into a reusable store.',
                 'utilities.title': '🛠️ Utilities',
                 'utilities.description': '<strong>Utilities</strong> are functions provided by the <code>selenium_ui_test_tool</code> library. They are used <strong>in your action functions</strong> to perform operations on the web page.',
                 'utilities.clickon.title': 'New: <code>click_on</code> utility',
@@ -1160,14 +1243,79 @@ def run_ticket_actions(driver):
                 'utilities.clickelement.implementation': 'click_element utility implementation',
                 'utilities.forms.title': 'New Form Utilities',
                 'utilities.forms.description': 'The library now offers specialized utilities for filling forms, greatly simplifying login and registration tests.',
+                'utilities.forms.fill_input.title': '1. fill_input',
+                'utilities.forms.fill_input.description': 'Fills a form field and automatically scrolls to the element.',
+                'utilities.forms.fill_login_form.title': '2. fill_login_form',
+                'utilities.forms.fill_login_form.description': 'Automatically fills a login form using environment variables.',
+                'utilities.forms.fill_login_with_confirm.title': '3. fill_login_form_with_confirm_password',
+                'utilities.forms.fill_login_with_confirm.description': 'Automatically fills a form that includes password confirmation.',
+                'utilities.forms.success': '<strong>✅ Benefit:</strong> These utilities greatly simplify form tests by handling wait, scroll, and field filling for you.',
                 'utilities.upload.title': 'File Upload Utility',
                 'utilities.upload.description': 'The <code>upload_file</code> utility allows uploading files via an input file field using the file path stored in an environment variable.',
+                'utilities.upload.heading': 'upload_file',
+                'utilities.upload.note': '<strong>💡 Note:</strong> The file path must be stored in an environment variable (.env file or GitHub Actions secrets). The path must be absolute.',
+                'utilities.more.title': 'Other Available Utilities',
+                'utilities.more.wait.title': '1. wait_for_element',
+                'utilities.more.wait.description': 'Waits until an element is present in the DOM.',
+                'utilities.more.configure.title': '2. configure_actions',
+                'utilities.more.configure.description': 'Performs a simple scroll + click action. Used by <code>click_element</code>.',
+                'utilities.more.create_driver.title': '3. create_driver',
+                'utilities.more.create_driver.description': 'Creates and configures a Chrome WebDriver (used by BaseTest).',
+                'utilities.more.get_url.title': '4. get_url',
+                'utilities.more.get_url.description': 'Navigates to a URL (used by BaseTest).',
+                'utilities.more.get_env_var.title': '5. get_env_var',
+                'utilities.more.get_env_var.description': 'Retrieves an environment variable from the .env file.',
+                'utilities.more.hierarchy': '<strong>💡 Hierarchy:</strong> Utilities are used <strong>inside</strong> action functions, which are called <strong>by</strong> the trigger, which is executed <strong>by</strong> BaseTest.',
                 'example.title': '📋 Complete Example: TC004 - Unit Ticket Purchase Test',
                 'example.description': 'Here is the real TC004 example showing the complete structure with BaseTest, trigger, action functions, and utilities.',
+                'example.section1.title': '1. BaseTest (Entry Point)',
+                'example.section2.title': '2. Trigger (buying_helper)',
+                'example.section3.title': '3. Action Function (example: click_on_unit_ticket_section)',
+                'example.section4.title': '4. Utility (click_element - inside the library)',
+                'example.section5.title': '5. Action Store (click_on)',
+                'example.flow.title': 'Full Execution Flow',
+                'example.flow.content': '<strong>📊 Execution hierarchy:</strong><ol><li><strong>BaseTest.run()</strong> → Creates the driver, navigates to the URL</li><li><strong>BaseTest</strong> calls → <strong>buying_helper(driver)</strong> (trigger)</li><li><strong>buying_helper</strong> calls → <strong>click_on_unit_ticket_section(driver)</strong> (action function)</li><li><strong>click_on_unit_ticket_section</strong> calls → <strong>click_element(...)</strong> (utility)</li><li><strong>click_element</strong> uses → <strong>configure_actions</strong> and <strong>wait_for_element</strong> (base utilities)</li><li>The process repeats for each action in the trigger</li><li><strong>BaseTest</strong> closes the driver</li></ol>',
+                'example.advantages.title': 'Benefits of this structure',
+                'example.advantages.item1': '<strong>Separation of concerns</strong>: Each layer has a clear role',
+                'example.advantages.item2': '<strong>Reusability</strong>: Action functions can be reused',
+                'example.advantages.item3': '<strong>Maintainability</strong>: Easy to modify one action without impacting others',
+                'example.advantages.item4': '<strong>Readability</strong>: The trigger clearly shows the full scenario',
                 'architecture.title': '🏗️ Project Architecture',
                 'architecture.description': 'A well-structured architecture facilitates maintenance and reusability of your tests. Here is the recommended structure based on the TC004 example.',
+                'architecture.structure.title': 'Recommended structure (based on TC004)',
+                'architecture.tests.title': 'tests/ package',
+                'architecture.tests.description': 'The <code>tests/</code> package contains your test files. Each file creates a <code>BaseTest</code> with a specific trigger.',
+                'architecture.tests.example.title': 'Example: tests/test_buying.py',
+                'architecture.utils.title': 'utils/ package',
+                'architecture.utils.description': 'The <code>utils/</code> package is organized by functional domain. Each subpackage groups triggers and action functions for that domain.',
+                'architecture.utils.structure.title': 'Structure of utils/order_utils/',
+                'architecture.utils.structure.item1': '<strong>action_store.py</strong>: List/dict of actions using <code>click_on</code>',
+                'architecture.utils.structure.item2': '<strong>buying_helper.py</strong>: Trigger that consumes the store',
+                'architecture.utils.structure.item3': '<strong>monthly_buying.py</strong>: Another trigger using the store',
+                'architecture.utils.structure.item4': '<strong>validate_*.py</strong>: Validation functions',
+                'architecture.utils.structure.item5': '<strong>is_*.py</strong>: Verification functions',
+                'architecture.utils.example.title': 'Example: utils/order_utils/action_store.py',
+                'architecture.shared.title': 'shared_utils package',
+                'architecture.shared.description': 'The <code>shared_utils/</code> package contains utilities shared by multiple domains (logger, generic helpers, etc.).',
+                'architecture.shared.example.title': 'Example: utils/shared_utils/logger.py',
+                'architecture.benefits.title': 'Benefits of this architecture',
+                'architecture.benefits.item1': '<strong>Domain organization</strong>: Each subpackage (order_utils, etc.) groups related functions',
+                'architecture.benefits.item2': '<strong>Reusability</strong>: Action functions can be reused across triggers',
+                'architecture.benefits.item3': '<strong>Maintainability</strong>: Easy to find and update a specific action function',
+                'architecture.benefits.item4': '<strong>Readability</strong>: Clear structure showing BaseTest → Trigger → Actions → Utilities',
+                'architecture.benefits.item5': '<strong>Separation of concerns</strong>: Each layer has a defined responsibility',
+                'architecture.benefits.success': '<strong>✅ Best practice:</strong> Organize your action functions by functional domain (order_utils, login_utils, etc.) for better maintainability.',
+                'architecture.summary.title': 'Hierarchy summary',
+                'architecture.summary.content': '<strong>📊 Full flow:</strong><ol><li><strong>tests/test_buying.py</strong> → Creates a BaseTest with the trigger</li><li><strong>utils/order_utils/buying_helper.py</strong> → Trigger orchestrating the actions</li><li><strong>utils/order_utils/action_store.py</strong> → Action store powered by <code>click_on</code></li><li><strong>selenium_ui_test_tool.click_on / click_element</strong> → Library utilities</li></ol>',
                 'summary.title': '🎓 Summary',
                 'summary.description': 'To create robust UI tests with <strong>selenium_ui_test_tool</strong>, follow this hierarchy:',
+                'summary.steps.item1': '<strong>BaseTest</strong>: Build a test with <code>BaseTest</code> and pass your trigger via <code>test_function</code>',
+                'summary.steps.item2': '<strong>Trigger</strong>: Create a function that sequentially orchestrates your action functions',
+                'summary.steps.item3': '<strong>Action functions</strong>: Build atomic functions or action stores based on <code>click_on</code>',
+                'summary.steps.item4': '<strong>Utilities</strong>: Use <code>click_on</code> or <code>click_element</code> as needed',
+                'summary.steps.item5': '<strong>Architecture</strong>: Organize your code with <code>tests/</code> and <code>utils/</code> by functional domain',
+                'summary.highlight': '<strong>📊 Complete hierarchy:</strong><br><code>BaseTest</code> → <code>Trigger</code> → <code>Action functions</code> → <code>Utilities (click_on / click_element)</code>',
+                'summary.info': '<strong>📚 Full documentation:</strong> See the <a href="https://github.com/kingcrud12/selenium_ui_test_tool/blob/main/README.md" target="_blank">official README</a> for more API details.',
                 'footer.copyright': '© 2024 Selenium UI Test Tool - Created by Yann Dipita'
             }
         };
