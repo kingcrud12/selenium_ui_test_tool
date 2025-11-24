@@ -677,6 +677,32 @@ upload_file(
                     (fichier .env ou secrets GitHub Actions). Le chemin doit être absolu.
                 </div>
 
+                <h3 data-i18n="utilities.assert.title">Nouvel utilitaire : assert_text_present</h3>
+                <p data-i18n="utilities.assert.description">
+                    <code>assert_text_present</code> attend l'apparition d'un élément puis vérifie que son texte contient la valeur attendue.
+                    Idéal pour valider des toasts, alertes ou messages de confirmation sans écrire d'assertions personnalisées.
+                </p>
+
+                <h4 data-i18n="utilities.assert.heading">assert_text_present</h4>
+                <div class="example-box">
+                    <pre><code>from selenium_ui_test_tool import assert_text_present
+from selenium.webdriver.common.by import By
+
+# Vérifier qu'un message de confirmation est affiché
+assert_text_present(
+    driver,
+    By.CSS_SELECTOR,
+    ".toast-message",
+    expected_text="Commande réussie",
+    timeout=5
+)</code></pre>
+                </div>
+
+                <div class="info" data-i18n="utilities.assert.note">
+                    <strong>💡 Astuce :</strong> L'utilitaire lève automatiquement une <code>AssertionError</code> si l'élément est introuvable
+                    ou si le texte ne correspond pas. Idéal pour vos pipelines CI/CD.
+                </div>
+
                 <h3 data-i18n="utilities.more.title">Autres utilitaires disponibles</h3>
 
                 <h4 data-i18n="utilities.more.wait.title">1. wait_for_element</h4>
@@ -1108,6 +1134,10 @@ def run_ticket_actions(driver):
                 'utilities.upload.description': 'L\'utilitaire <code>upload_file</code> permet d\'uploader des fichiers via un champ input file en utilisant le chemin du fichier stocké dans une variable d\'environnement.',
                 'utilities.upload.heading': 'upload_file',
                 'utilities.upload.note': '<strong>💡 Note :</strong> Le chemin du fichier doit être stocké dans une variable d\'environnement (fichier .env ou secrets GitHub Actions). Le chemin doit être absolu.',
+                'utilities.assert.title': 'Nouvel utilitaire : assert_text_present',
+                'utilities.assert.description': '<code>assert_text_present</code> attend l\'apparition d\'un élément puis vérifie que son texte contient la valeur attendue. Idéal pour valider des toasts, alertes ou messages de confirmation sans écrire d\'assertions personnalisées.',
+                'utilities.assert.heading': 'assert_text_present',
+                'utilities.assert.note': '<strong>💡 Astuce :</strong> L\'utilitaire lève automatiquement une <code>AssertionError</code> si l\'élément est introuvable ou si le texte ne correspond pas. Parfait pour vos pipelines CI/CD.',
                 'utilities.more.title': 'Autres utilitaires disponibles',
                 'utilities.more.wait.title': '1. wait_for_element',
                 'utilities.more.wait.description': 'Attend qu\'un élément soit présent dans le DOM.',
@@ -1254,6 +1284,10 @@ def run_ticket_actions(driver):
                 'utilities.upload.description': 'The <code>upload_file</code> utility allows uploading files via an input file field using the file path stored in an environment variable.',
                 'utilities.upload.heading': 'upload_file',
                 'utilities.upload.note': '<strong>💡 Note:</strong> The file path must be stored in an environment variable (.env file or GitHub Actions secrets). The path must be absolute.',
+                'utilities.assert.title': 'New Utility: assert_text_present',
+                'utilities.assert.description': '<code>assert_text_present</code> waits for an element and ensures its text contains the expected value. Perfect for validating toasts, alerts, or confirmation messages without custom assertions.',
+                'utilities.assert.heading': 'assert_text_present',
+                'utilities.assert.note': '<strong>💡 Tip:</strong> The helper automatically raises an <code>AssertionError</code> when the element is missing or the text does not match, which keeps CI pipelines strict.',
                 'utilities.more.title': 'Other Available Utilities',
                 'utilities.more.wait.title': '1. wait_for_element',
                 'utilities.more.wait.description': 'Waits until an element is present in the DOM.',

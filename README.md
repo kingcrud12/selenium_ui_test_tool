@@ -104,6 +104,7 @@ from selenium_ui_test_tool import (
     fill_login_form,
     fill_login_form_with_confirm_password,
     upload_file,
+    assert_text_present,
     get_env_var
 )
 from selenium.webdriver.common.by import By
@@ -165,6 +166,15 @@ upload_file(
     by=By.ID,
     success_message="File uploaded",
     error_message="Upload failed"
+)
+
+# Assert that text is present on the page
+assert_text_present(
+    driver,
+    By.CSS_SELECTOR,
+    ".toast-message",
+    expected_text="Order completed",
+    timeout=5
 )
 
 # Read an environment variable
@@ -245,6 +255,16 @@ Upload a file through an `<input type="file">` element using a path stored in th
 ### `get_env_var(name: str, required: bool = True) -> str | None`
 
 Retrieve an environment variable and raise a helpful error if it is missing.
+
+### `assert_text_present(driver, by, selector, expected_text, timeout=10) -> bool`
+
+Wait for an element to appear, then assert that its text contains the expected substring. Raises `AssertionError` when the text does not match.
+
+- `driver`: Selenium WebDriver instance.
+- `by`: Locator strategy from Selenium's `By`.
+- `selector`: Locator used to find the element.
+- `expected_text`: Substring that must be present within the element text.
+- `timeout`: Seconds to wait for the element before failing (default `10`).
 
 > Refer to the French documentation for the full parameter details or use the inline docstrings shipped with the package.
 

@@ -1,8 +1,8 @@
 """
-Selenium UI Test Tool - Bibliothèque pour faciliter les tests UI automatisés avec Selenium
+Selenium UI Test Tool - Python library that simplifies Selenium WebDriver UI test automation
 
-Cette bibliothèque fournit des outils et des classes utilitaires pour simplifier
-la création et l'exécution de tests UI automatisés avec Selenium WebDriver.
+This library provides utilities and helper classes to simplify the creation and execution
+of automated UI tests with Selenium WebDriver.
 """
 
 from selenium_ui_test_tool.base_test.base_test import BaseTest
@@ -17,8 +17,9 @@ from selenium_ui_test_tool.fill_input.fill_input import fill_input
 from selenium_ui_test_tool.fill_login_form.fill_login_form import fill_login_form
 from selenium_ui_test_tool.fill_login_form_with_confirm_password.fill_login_form_with_confirm_password import fill_login_form_with_confirm_password
 from selenium_ui_test_tool.upload_file.upload_file import upload_file
+from selenium_ui_test_tool.assert_text_present.assert_text_present import assert_text_present
 
-__version__ = "1.0.9"
+__version__ = "2.1.0"
 __all__ = [
     "BaseTest",
     "create_driver",
@@ -32,5 +33,6 @@ __all__ = [
     "fill_login_form",
     "fill_login_form_with_confirm_password",
     "upload_file",
+    "assert_text_present",
 ]
 

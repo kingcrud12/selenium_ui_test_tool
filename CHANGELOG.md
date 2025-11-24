@@ -5,6 +5,38 @@ Tous les changements notables de ce projet seront documentés dans ce fichier.
 Le format est basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/),
 et ce projet adhère à [Semantic Versioning](https://semver.org/lang/fr/).
 
+## [2.1.0] - 2024-11-24
+
+### Ajouté
+- Nouvel utilitaire `assert_text_present` pour vérifier la présence d'un texte dans un élément
+- Export de `assert_text_present` dans l'API publique (`__all__`, `__init__.py`)
+- Documentation mise à jour (README EN/FR, Project Structure, docs/index.html) avec exemples bilingues
+
+### Modifié
+- Traductions FR/EN complètes sur la page GitHub Pages avec la nouvelle section `assert_text_present`
+- Exemple d'utilisation général enrichi dans les README EN/FR
+
+## [2.0.0] - 2024-11-17
+
+### Ajouté
+- Documentation complète en anglais pour tous les fichiers Markdown (README, INSTALLATION, PROJECT_STRUCTURE, CONTRIBUTING, MIGRATION)
+- Versions françaises préservées dans des fichiers `.fr.md` séparés
+- Système de navigation bilingue avec liens entre versions FR/EN
+- Tutoriel web (GitHub Pages) avec sélecteur de langue FR/EN fonctionnel
+
+### Modifié
+- README.md principal maintenant en anglais (version française dans README.fr.md)
+- Description du package sur PyPI mise à jour en anglais
+- Tous les guides de documentation traduits en anglais avec liens vers les versions françaises
+
+### Documentation
+- README.md : Documentation principale en anglais avec lien vers README.fr.md
+- INSTALLATION.md : Guide d'installation en anglais
+- PROJECT_STRUCTURE.md : Structure du projet en anglais
+- CONTRIBUTING.md : Guide de contribution en anglais
+- MIGRATION.md : Guide de migration en anglais
+- docs/index.html : Tutoriel web avec traduction complète FR/EN
+
 ## [1.0.9] - 2024-01-XX
 
 ### Ajouté

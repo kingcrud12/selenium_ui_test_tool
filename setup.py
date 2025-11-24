@@ -5,10 +5,10 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="selenium-ui-test-tool",
-    version="1.0.9",
+    version="2.1.0",
     author="Yann Dipita",
     author_email="dipitay@gmail.com",
-    description="Bibliothèque Python pour faciliter les tests UI automatisés avec Selenium",
+    description="Python library that simplifies Selenium WebDriver UI test automation",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://kingcrud12.github.io/selenium_ui_test_tool/",

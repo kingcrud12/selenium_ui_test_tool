@@ -95,6 +95,7 @@ from selenium_ui_test_tool import (
     fill_login_form,
     fill_login_form_with_confirm_password,
     upload_file,
+    assert_text_present,
     get_env_var
 )
 from selenium.webdriver.common.by import By
@@ -152,6 +153,15 @@ upload_file(
     by=By.ID,
     success_message="Fichier uploadé avec succès",
     error_message="Erreur lors de l'upload"
+)
+
+# Vérifier qu'un texte est présent
+assert_text_present(
+    driver,
+    By.CSS_SELECTOR,
+    ".toast-message",
+    expected_text="Commande terminée",
+    timeout=5
 )
 
 # Récupérer une variable d'environnement
@@ -407,6 +417,16 @@ upload_file(
 ### `get_env_var(name: str, required: bool = True) -> str | None`
 
 Récupère une variable d'environnement.
+
+### `assert_text_present(driver: WebDriver, by: By, selector: str, expected_text: str, timeout: int = 10) -> bool`
+
+Vérifie qu'un élément est présent puis que son texte contient la sous-chaîne attendue. Lève une `AssertionError` si l'élément est introuvable ou si le texte ne correspond pas.
+
+- `driver` : Instance de WebDriver
+- `by` : Stratégie de localisation (ex: `By.ID`, `By.CSS_SELECTOR`)
+- `selector` : Sélecteur de l'élément à vérifier
+- `expected_text` : Sous-chaîne devant être présente dans le texte de l'élément
+- `timeout` : Temps maximal d'attente de l'élément (10 secondes par défaut)
 
 **Paramètres :**
 

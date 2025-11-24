@@ -34,6 +34,7 @@
   - `fill_login_form/` – Auto-fill a login form
   - `fill_login_form_with_confirm_password/` – Auto-fill with password confirmation
   - `upload_file/` – Upload files using an env-var path
+  - `assert_text_present/` – Assertion helper to validate text content
   - `config_actions/` – Scroll + click primitive
   - `get_env_var/` – Environment variable helper
   - `get_url/` – Navigation helper
@@ -89,6 +90,7 @@ Everything below can be imported from `selenium_ui_test_tool`:
 - `fill_login_form`
 - `fill_login_form_with_confirm_password`
 - `upload_file`
+- `assert_text_present`
 - `configure_actions`
 - `get_env_var`
 
