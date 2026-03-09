@@ -1,10 +1,48 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="scroll-smooth">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tutoriel - Selenium UI Test Tool</title>
+    <title>Selenium UI Test Tool</title>
+    <!-- Use Inter font like Tailwind does -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
+        :root {
+            /* Tailwind-inspired dark mode palette */
+            --bg-body: #0f172a;
+            /* slate-900 */
+            --bg-surface: #1e293b;
+            /* slate-800 */
+            --bg-surface-hover: #334155;
+            /* slate-700 */
+            --text-primary: #f8fafc;
+            /* slate-50 */
+            --text-secondary: #94a3b8;
+            /* slate-400 */
+            --border-color: #334155;
+            /* slate-700 */
+
+            /* Accents */
+            --accent-primary: #38bdf8;
+            /* light blue 400 */
+            --accent-secondary: #818cf8;
+            /* indigo 400 */
+
+            /* Syntax highlighting (dark) */
+            --code-bg: #0b1120;
+            /* darker than slate-900 */
+            --code-border: #1e293b;
+            --keyword: #c678dd;
+            --function: #61afef;
+            --string: #98c379;
+            --comment: #5c6370;
+            --punctuation: #abb2bf;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,1397 +50,819 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-primary);
             line-height: 1.6;
-            color: #333;
-            background: #f5f5f5;
+            -webkit-font-smoothing: antialiased;
         }
 
+        /* Utility classes */
         .container {
-            max-width: 1200px;
+            max-width: 1280px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 0 1.5rem;
         }
 
-        header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 60px 20px;
-            text-align: center;
-            margin-bottom: 40px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(to right, var(--accent-primary), var(--accent-secondary));
         }
 
-        header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
+        /* Navigation */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(12px);
+            background-color: rgba(15, 23, 42, 0.75);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
         }
 
-        header p {
-            font-size: 1.2em;
-            opacity: 0.9;
-        }
-
-        .language-selector {
-            position: absolute;
-            top: 20px;
-            right: 20px;
+        .nav-content {
             display: flex;
-            gap: 10px;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .logo svg {
+            color: var(--accent-primary);
+            width: 24px;
+            height: 24px;
+        }
+
+        .main-nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .main-nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .main-nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        /* Language Switcher */
+        .lang-switch {
+            display: flex;
+            background: var(--bg-surface);
+            border-radius: 9999px;
+            padding: 0.25rem;
+            border: 1px solid var(--border-color);
         }
 
         .lang-btn {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            padding: 8px 16px;
-            border-radius: 4px;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
             cursor: pointer;
-            font-size: 0.9em;
-            transition: all 0.3s;
-        }
-
-        .lang-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            border-color: rgba(255, 255, 255, 0.5);
+            transition: all 0.2s;
         }
 
         .lang-btn.active {
-            background: white;
-            color: #667eea;
-            border-color: white;
-            font-weight: bold;
+            background: var(--bg-body);
+            color: var(--text-primary);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
         }
 
-        header {
+        /* Hero Section */
+        .hero {
+            padding: 6rem 0;
             position: relative;
+            overflow: hidden;
         }
 
-        nav {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        /* Gradient blob background */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, rgba(15, 23, 42, 0) 70%);
+            z-index: -1;
+            pointer-events: none;
         }
 
-        nav ul {
-            list-style: none;
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-text h1 {
+            font-size: 3.5rem;
+            line-height: 1.1;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.025em;
+        }
+
+        .hero-text p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+
+        .hero-actions {
             display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
+            gap: 1rem;
         }
 
-        nav a {
-            color: #667eea;
+        .btn-primary {
+            background-color: var(--text-primary);
+            color: var(--bg-body);
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
             text-decoration: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            transition: background 0.3s;
+            transition: transform 0.2s, background-color 0.2s;
         }
 
-        nav a:hover {
-            background: #f0f0f0;
+        .btn-primary:hover {
+            background-color: #e2e8f0;
+            transform: translateY(-1px);
         }
 
-        .content {
-            background: white;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
+        .btn-secondary {
+            background-color: var(--bg-surface);
+            color: var(--text-primary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        h2 {
-            color: #667eea;
-            margin-top: 40px;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 3px solid #667eea;
+        .btn-secondary:hover {
+            background-color: var(--bg-surface-hover);
+            border-color: #475569;
         }
 
-        h3 {
-            color: #764ba2;
-            margin-top: 30px;
-            margin-bottom: 15px;
+        /* Code Blocks */
+        .code-window {
+            background: var(--code-bg);
+            border-radius: 0.75rem;
+            border: 1px solid var(--code-border);
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        h4 {
-            color: #555;
-            margin-top: 20px;
-            margin-bottom: 10px;
+        .code-header {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--code-border);
+            background: rgba(255, 255, 255, 0.02);
+            gap: 0.5rem;
+        }
+
+        .mac-btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .mac-btn.close {
+            background: #ff5f56;
+        }
+
+        .mac-btn.min {
+            background: #ffbd2e;
+        }
+
+        .mac-btn.max {
+            background: #27c93f;
+        }
+
+        .code-title {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            font-family: monospace;
+            margin-left: 0.5rem;
         }
 
         pre {
-            background: #f8f9fa;
-            border: 1px solid #e9ecef;
-            border-radius: 4px;
-            padding: 20px;
+            padding: 1.5rem;
             overflow-x: auto;
-            margin: 20px 0;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Menlo', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--punctuation);
         }
 
-        code {
-            font-family: 'Monaco', 'Courier New', monospace;
-            font-size: 0.9em;
+        /* Syntax Highlighting Classes */
+        .kw {
+            color: var(--keyword);
         }
 
-        .code-block {
-            background: #282c34;
-            color: #abb2bf;
-            padding: 20px;
-            border-radius: 4px;
-            overflow-x: auto;
-            margin: 20px 0;
+        /* Keyword */
+        .fn {
+            color: var(--function);
         }
 
-        .code-block code {
-            color: #abb2bf;
+        /* Function */
+        .st {
+            color: var(--string);
         }
 
-        .highlight {
-            background: #fff3cd;
-            padding: 15px;
-            border-left: 4px solid #ffc107;
-            margin: 20px 0;
-            border-radius: 4px;
+        /* String */
+        .cm {
+            color: var(--comment);
+            font-style: italic;
         }
 
-        .info {
-            background: #d1ecf1;
-            padding: 15px;
-            border-left: 4px solid #0c5460;
-            margin: 20px 0;
-            border-radius: 4px;
+        /* Comment */
+
+        /* Features Section */
+        .features {
+            padding: 6rem 0;
+            border-top: 1px solid var(--border-color);
         }
 
-        .success {
-            background: #d4edda;
-            padding: 15px;
-            border-left: 4px solid #28a745;
-            margin: 20px 0;
-            border-radius: 4px;
-        }
-
-        ul, ol {
-            margin-left: 30px;
-            margin-bottom: 20px;
-        }
-
-        li {
-            margin-bottom: 8px;
-        }
-
-        .example-box {
-            background: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 4px;
-            padding: 20px;
-            margin: 20px 0;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 3px;
-            font-size: 0.85em;
-            font-weight: bold;
-            margin-right: 8px;
-        }
-
-        .badge-primary {
-            background: #667eea;
-            color: white;
-        }
-
-        .badge-success {
-            background: #28a745;
-            color: white;
-        }
-
-        .badge-info {
-            background: #17a2b8;
-            color: white;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #dee2e6;
-        }
-
-        th {
-            background: #f8f9fa;
-            font-weight: bold;
-            color: #667eea;
-        }
-
-        tr:hover {
-            background: #f8f9fa;
-        }
-
-        footer {
+        .section-header {
             text-align: center;
-            padding: 40px 20px;
-            color: #666;
-            margin-top: 60px;
+            max-width: 800px;
+            margin: 0 auto 4rem;
         }
 
-        @media (max-width: 768px) {
-            header h1 {
-                font-size: 1.8em;
+        .section-header h2 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -0.025em;
+        }
+
+        .section-header p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+        }
+
+        .grid-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--bg-surface);
+            padding: 2rem;
+            border-radius: 1rem;
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-2px);
+            border-color: #475569;
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 0.75rem;
+            background: rgba(56, 189, 248, 0.1);
+            color: var(--accent-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Documentation Section */
+        .docs-section {
+            padding: 6rem 0;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .doc-topic {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 4rem;
+            align-items: start;
+            margin-bottom: 6rem;
+        }
+
+        .doc-topic:last-child {
+            margin-bottom: 0;
+        }
+
+        .doc-text h3 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .doc-text p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+
+        .method-list {
+            list-style: none;
+        }
+
+        .method-item {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+            margin-bottom: 0.75rem;
+            background: var(--bg-surface);
+        }
+
+        .method-name {
+            font-family: monospace;
+            color: var(--accent-primary);
+            font-weight: 600;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .method-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 4rem 0;
+            margin-top: 4rem;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        footer a:hover {
+            color: var(--accent-primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+
+            .hero-content,
+            .doc-topic {
+                grid-template-columns: 1fr;
+                gap: 2rem;
             }
 
-            nav ul {
-                flex-direction: column;
+            .hero-text {
+                text-align: center;
             }
 
-            .content {
-                padding: 20px;
+            .hero-actions {
+                justify-content: center;
+            }
+
+            .hero-text p {
+                margin: 0 auto 2rem;
+            }
+
+            .main-nav-links {
+                display: none;
+                /* simple mobile view */
             }
         }
     </style>
 </head>
+
 <body>
-    <header>
-        <div class="language-selector">
-            <button class="lang-btn active" onclick="changeLanguage('fr')" id="lang-fr">FR</button>
-            <button class="lang-btn" onclick="changeLanguage('en')" id="lang-en">EN</button>
-        </div>
-        <h1 data-i18n="header.title">Selenium UI Test Tool</h1>
-        <p data-i18n="header.subtitle">Guide complet d'automatisation de tests UI</p>
-    </header>
 
-    <div class="container">
-        <nav>
-            <ul>
-                <li><a href="#introduction" data-i18n="nav.introduction">Introduction</a></li>
-                <li><a href="#concept-base-test" data-i18n="nav.base-test">BaseTest</a></li>
-                <li><a href="#concept-declencheur" data-i18n="nav.trigger">Déclencheur</a></li>
-                <li><a href="#fonctions-actions" data-i18n="nav.action-functions">Fonctions d'actions</a></li>
-                <li><a href="#utilitaires" data-i18n="nav.utilities">Utilitaires</a></li>
-                <li><a href="#exemple-tc004" data-i18n="nav.example-tc004">Exemple TC004</a></li>
-                <li><a href="#architecture" data-i18n="nav.architecture">Architecture</a></li>
-            </ul>
-        </nav>
-
-        <div class="content">
-            <section id="introduction">
-                <h2 data-i18n="intro.title">📚 Introduction</h2>
-                <p data-i18n="intro.description">
-                    <strong>selenium-ui-test-tool</strong> est une bibliothèque Python conçue pour simplifier 
-                    l'automatisation de tests UI avec Selenium WebDriver. Elle offre une approche structurée 
-                    et modulaire pour créer des tests robustes et maintenables.
-                </p>
-
-                <div class="info">
-                    <strong data-i18n="intro.objective.label">💡 Objectif :</strong> <span data-i18n="intro.objective.text">Réduire la complexité des tests Selenium en fournissant 
-                    des abstractions simples et des utilitaires réutilisables.</span>
-                </div>
-
-                <h3 data-i18n="intro.installation.title">Installation</h3>
-                <div class="code-block">
-                    <code>pip install selenium-ui-test-tool</code>
-                </div>
-            </section>
-
-            <section id="concept-base-test">
-                <h2 data-i18n="basetest.title">🎯 Concept de BaseTest</h2>
-                <p data-i18n="basetest.description">
-                    <strong>BaseTest</strong> est la classe centrale qui crée un test complet. Elle prend en paramètre 
-                    une fonction appelée <strong>déclencheur</strong> qui orchestre votre scénario de test.
-                </p>
-
-                <h3 data-i18n="basetest.hierarchy.title">Hiérarchie des concepts</h3>
-                <div class="info">
-                    <strong data-i18n="basetest.hierarchy.label">📊 Structure en 4 niveaux :</strong>
-                    <ol>
-                        <li data-i18n="basetest.hierarchy.level1"><strong>BaseTest</strong> : Classe qui gère le cycle de vie complet (setup → exécution → teardown)</li>
-                        <li data-i18n="basetest.hierarchy.level2"><strong>Déclencheur</strong> : Fonction qui orchestre séquentiellement les fonctions d'actions</li>
-                        <li data-i18n="basetest.hierarchy.level3"><strong>Fonctions d'actions</strong> : Fonctions qui effectuent une action spécifique sur la page</li>
-                        <li data-i18n="basetest.hierarchy.level4"><strong>Utilitaires</strong> : Fonctions de la bibliothèque utilisées dans les fonctions d'actions</li>
-                    </ol>
-                </div>
-
-                <h3 data-i18n="basetest.structure.title">Structure d'un BaseTest</h3>
-                <div class="code-block">
-                    <code>from selenium_ui_test_tool import BaseTest
-from utils.order_utils.buying_helper import buying_helper
-
-def test_buying_unit_ticket():
-    test = BaseTest(
-        test_function=buying_helper,  # ← Le déclencheur qui orchestre les actions
-        url="https://mapageweb.com",
-        success_message="✅ Commande créée avec succès",
-        failure_message="⚠️ Erreur lors du parcours de commande"
-    )
-    test.run()
-
-if __name__ == "__main__":
-    test_buying_unit_ticket()</code>
-                </div>
-
-                <h3 data-i18n="basetest.role.title">Rôle de BaseTest</h3>
-                <ul>
-                    <li data-i18n="basetest.role.setup"><strong>Setup</strong> : Crée le WebDriver et navigue vers l'URL</li>
-                    <li data-i18n="basetest.role.execution"><strong>Execution</strong> : Appelle votre fonction déclencheur avec le driver</li>
-                    <li data-i18n="basetest.role.teardown"><strong>Teardown</strong> : Ferme le WebDriver proprement</li>
-                    <li data-i18n="basetest.role.results"><strong>Gestion des résultats</strong> : Affiche les messages de succès/échec</li>
-                </ul>
-
-                <div class="highlight" data-i18n="basetest.important">
-                    <strong>⚠️ Important :</strong> Le paramètre <code>test_function</code> doit être une fonction 
-                    qui accepte un paramètre <code>driver</code> (WebDriver). Cette fonction est votre <strong>déclencheur</strong>.
-                </div>
-            </section>
-
-            <section id="concept-declencheur">
-                <h2 data-i18n="trigger.title">🎬 Concept de Déclencheur (Orchestrateur)</h2>
-                <p data-i18n="trigger.description">
-                    Le <strong>déclencheur</strong> est la fonction passée à <code>BaseTest</code> via le paramètre 
-                    <code>test_function</code>. Son rôle est d'<strong>orchestrer de façon séquentielle</strong> 
-                    l'exécution des fonctions d'actions pour réaliser un scénario de test complet.
-                </p>
-
-                <h3 data-i18n="trigger.role.title">Rôle du déclencheur</h3>
-                <ul>
-                    <li data-i18n="trigger.role.orchestrate"><strong>Orchestrer</strong> : Appeler les fonctions d'actions dans le bon ordre</li>
-                    <li data-i18n="trigger.role.sequential"><strong>Séquentiel</strong> : Exécuter les actions une par une, dans l'ordre du scénario</li>
-                    <li data-i18n="trigger.role.coordinate"><strong>Coordonner</strong> : Gérer le flux logique du parcours utilisateur</li>
-                    <li data-i18n="trigger.role.simplify"><strong>Simplifier</strong> : Centraliser la logique de séquencement</li>
-                </ul>
-
-                <div class="example-box">
-                    <h4 data-i18n="trigger.example.title">Exemple réel : buying_helper (déclencheur de TC004)</h4>
-                    <pre><code>import time
-from utils.order_utils.click_on_accept_cgu import click_on_cgu_checkbox
-from utils.order_utils.click_on_order_button import click_on_order_button
-from utils.order_utils.click_on_ticket import click_on_ticket
-from utils.order_utils.click_on_ticket_support import click_on_ticket_support
-from utils.order_utils.click_on_unit_ticket import click_on_unit_ticket_section
-from utils.order_utils.click_on_validate_cart import click_on_validate_cart
-from utils.order_utils.is_card_display import is_card_display
-from utils.order_utils.validate_billing_adress import click_on_validate_adress_billing
-from utils.shared_utils.logger import logger
-
-def buying_helper(driver):
-    """
-    Déclencheur qui orchestre le parcours d'achat d'un billet unitaire
-    """
-    logger(driver)
-    time.sleep(2)
-    
-    # Séquence d'actions orchestrée séquentiellement
-    click_on_unit_ticket_section(driver)    # Action 1
-    click_on_ticket(driver)                  # Action 2
-    click_on_ticket_support(driver)         # Action 3
-    click_on_order_button(driver)           # Action 4
-    click_on_cgu_checkbox(driver)           # Action 5
-    click_on_validate_cart(driver)          # Action 6
-    time.sleep(2)
-    click_on_validate_adress_billing(driver) # Action 7
-    is_card_display(driver)                 # Action 8
-    
-    input("cliquez sur entrée")</code></pre>
-                </div>
-
-                <h3 data-i18n="trigger.characteristics.title">Caractéristiques du déclencheur</h3>
-                <ul>
-                    <li data-i18n="trigger.characteristics.one"><strong>Une fonction = un scénario complet</strong> : Le déclencheur représente un parcours utilisateur entier</li>
-                    <li data-i18n="trigger.characteristics.two"><strong>Appels séquentiels</strong> : Les fonctions d'actions sont appelées dans l'ordre du scénario</li>
-                    <li data-i18n="trigger.characteristics.three"><strong>Pas de logique métier complexe</strong> : Le déclencheur se contente d'orchestrer, la logique est dans les actions</li>
-                    <li data-i18n="trigger.characteristics.four"><strong>Accepte le driver</strong> : Reçoit le WebDriver en paramètre depuis BaseTest</li>
-                </ul>
-
-                <div class="success" data-i18n="trigger.advantage">
-                    <strong>✅ Avantage :</strong> Le déclencheur offre une vue d'ensemble claire du scénario de test 
-                    en montrant la séquence complète des actions.
-                </div>
-            </section>
-
-            <section id="fonctions-actions">
-                <h2 data-i18n="actions.title">⚙️ Concepts de Fonctions d'Actions</h2>
-                <p data-i18n="actions.description">
-                    Les <strong>fonctions d'actions</strong> sont des fonctions que vous créez pour effectuer 
-                    une action spécifique sur la page web. Elles utilisent les utilitaires <strong>click_element</strong> 
-                    ou <strong>click_on</strong> fournis par la bibliothèque.
-                </p>
-
-                <h3 data-i18n="actions.role.title">Rôle des fonctions d'actions</h3>
-                <ul>
-                    <li data-i18n="actions.role.atomic"><strong>Atomiques</strong> : Chaque fonction effectue une seule action précise</li>
-                    <li data-i18n="actions.role.reusable"><strong>Réutilisables</strong> : Peuvent être utilisées dans plusieurs déclencheurs</li>
-                    <li data-i18n="actions.role.use-util"><strong>Utilisent l'utilitaire</strong> : Appellent <code>click_element</code> ou <code>click_on</code> pour effectuer l'action</li>
-                    <li data-i18n="actions.role.specific"><strong>Spécifiques au contexte</strong> : Adaptées à votre application</li>
-                </ul>
-
-                <div class="example-box">
-                    <h4 data-i18n="actions.example.title">Exemple : Fonction d'action click_on_unit_ticket_section</h4>
-                    <pre><code>from selenium_ui_test_tool import click_on
-from selenium.webdriver.common.by import By
-
-def click_on_unit_ticket_section(driver):
-    """
-    Fonction d'action : Clique sur la section "Billet unitaire"
-    """
-    return click_on(
-        driver,
-        By.CSS_SELECTOR,
-        ".unit-ticket-section",
-        success_message="✅ Section billet unitaire cliquée",
-        error_message="❌ Impossible de cliquer sur la section billet unitaire"
-    )</code></pre>
-                </div>
-
-                <h3 data-i18n="actions.structure.title">Structure d'une fonction d'action</h3>
-                <div class="code-block">
-                    <code>def ma_fonction_action(driver):
-    """
-    Fonction d'action qui utilise l'utilitaire click_on
-    """
-    return click_on(
-        driver,
-        By.ID,              # Stratégie de localisation
-        "mon-selector",      # Sélecteur de l'élément
-        success_message="✅ Action réussie",
-        error_message="❌ Action échouée"
-    )</code>
-                </div>
-
-                <h3 data-i18n="actions.examples.title">Exemples de fonctions d'actions (TC004)</h3>
-                <ul>
-                    <li data-i18n="actions.examples.item1"><code>click_on_unit_ticket_section(driver)</code> - Clique sur la section billet unitaire</li>
-                    <li data-i18n="actions.examples.item2"><code>click_on_ticket(driver)</code> - Clique sur un ticket</li>
-                    <li data-i18n="actions.examples.item3"><code>click_on_ticket_support(driver)</code> - Clique sur le support du ticket</li>
-                    <li data-i18n="actions.examples.item4"><code>click_on_order_button(driver)</code> - Clique sur le bouton commander</li>
-                    <li data-i18n="actions.examples.item5"><code>click_on_cgu_checkbox(driver)</code> - Clique sur la checkbox CGU</li>
-                    <li data-i18n="actions.examples.item6"><code>click_on_validate_cart(driver)</code> - Valide le panier</li>
-                </ul>
-
-                <h3 data-i18n="actions.store.title">Store d'actions avec <code>click_on</code></h3>
-                <div class="example-box">
-                    <pre><code>from selenium_ui_test_tool import click_on
-from selenium.webdriver.common.by import By
-
-TICKET_ACTIONS = [
-    (By.XPATH, "//span[contains(text(),'Mensuel')]", "Section Mensuel cliquée"),
-    (By.XPATH, "//span[contains(text(),'Le Pass Mensuel')]", "Pass mensuel sélectionné"),
-]
-
-def monthly_buying(driver):
-    for by, selector, success in TICKET_ACTIONS:
-        click_on(
-            driver,
-            by,
-            selector,
-            success_message=success,
-            error_message=f"Impossible de cliquer sur {selector}"
-        )</code></pre>
-                </div>
-
-                <div class="highlight" data-i18n="actions.store.highlight">
-                    <strong>💡 Important :</strong> <code>click_on</code> encapsule <code>click_element</code> pour accélérer 
-                    la création d'actions et permet de regrouper plusieurs clics dans un store réutilisable.
-                </div>
-            </section>
-
-            <section id="utilitaires">
-                <h2 data-i18n="utilities.title">🛠️ Utilitaires</h2>
-                <p data-i18n="utilities.description">
-                    Les <strong>utilitaires</strong> sont des fonctions fournies par la bibliothèque 
-                    <code>selenium_ui_test_tool</code>. Elles sont utilisées <strong>dans vos fonctions d'actions</strong> 
-                    pour effectuer les opérations sur la page web.
-                </p>
-
-                <h3 data-i18n="utilities.clickon.title">Nouveau : utilitaire <code>click_on</code></h3>
-                <p data-i18n="utilities.clickon.description">
-                    <code>click_on</code> enveloppe <code>click_element</code> avec des messages obligatoires. 
-                    Il est pensé pour créer des stores d'actions lisibles.
-                </p>
-
-                <div class="example-box">
-                    <pre><code>from selenium_ui_test_tool import click_on
-from selenium.webdriver.common.by import By
-
-def click_on_custom(driver):
-    return click_on(
-        driver,
-        By.CSS_SELECTOR,
-        ".my-selector",
-        success_message="✅ Élément cliqué",
-        error_message="❌ Élément introuvable"
-    )</code></pre>
-                </div>
-
-                <h3 data-i18n="utilities.clickelement.title">Utilitaire avancé : click_element</h3>
-                <p data-i18n="utilities.clickelement.description">
-                    <code>click_element</code> est l'utilitaire le plus utilisé dans les fonctions d'actions. 
-                    Il gère automatiquement l'attente, la vérification et le clic sur un élément.
-                </p>
-
-                <div class="example-box">
-                    <h4 data-i18n="utilities.clickelement.implementation">Implémentation de l'utilitaire click_element</h4>
-                    <pre><code>import time
-from selenium_ui_test_tool import configure_actions, wait_for_element
-
-def click_element(driver, by, selector, wait_before_click=0, 
-                 success_message=None, error_message=None, 
-                 verify_before_click=True):
-    """
-    Utilitaire pour cliquer sur un élément avec gestion avancée
-    """
-    try:
-        # Attente optionnelle avant le clic
-        if wait_before_click > 0:
-            time.sleep(wait_before_click)
-
-        # Vérification de l'existence de l'élément
-        if verify_before_click:
-            element = wait_for_element(driver, by, selector)
-            if not element:
-                if error_message:
-                    print(f"⚠️ {error_message}")
-                else:
-                    print(f"⚠️ Élément non trouvé: {selector}")
-                return False
-
-        # Exécution de l'action (scroll + click)
-        configure_actions(driver, by, selector)
-        
-        # Message de succès
-        if success_message:
-            print(f"✅ {success_message}")
-        
-        return True
-        
-    except Exception as e:
-        if error_message:
-            print(f"⚠️ {error_message}: {e}")
-        else:
-            print(f"⚠️ Erreur lors du clic sur l'élément {selector}: {e}")
-        return False</code></pre>
-                </div>
-
-                <h3 data-i18n="utilities.forms.title">Nouveaux utilitaires de formulaire</h3>
-                <p data-i18n="utilities.forms.description">
-                    La bibliothèque propose maintenant des utilitaires spécialisés pour remplir des formulaires, 
-                    simplifiant grandement les tests de connexion et d'inscription.
-                </p>
-
-                <h4 data-i18n="utilities.forms.fill_input.title">1. fill_input</h4>
-                <p data-i18n="utilities.forms.fill_input.description">Remplit un champ de formulaire avec scroll automatique vers l'élément.</p>
-                <div class="example-box">
-                    <pre><code>from selenium_ui_test_tool import fill_input
-from selenium.webdriver.common.by import By
-
-# Remplir un champ username
-fill_input(driver, By.ID, "username", "mon_utilisateur")
-
-# Remplir un champ email
-fill_input(driver, By.CSS_SELECTOR, "input[type='email']", "email@example.com")</code></pre>
-                </div>
-
-                <h4 data-i18n="utilities.forms.fill_login_form.title">2. fill_login_form</h4>
-                <p data-i18n="utilities.forms.fill_login_form.description">Remplit automatiquement un formulaire de connexion en utilisant les variables d'environnement.</p>
-                <div class="example-box">
-                    <pre><code>from selenium_ui_test_tool import fill_login_form
-from selenium.webdriver.common.by import By
-
-# Remplir et soumettre le formulaire de connexion
-fill_login_form(
-    driver,
-    username_env="LOGIN_USERNAME",
-    password_env="LOGIN_PASSWORD",
-    by=By.ID,
-    selector="login-form",
-    button="login-button"
-)</code></pre>
-                </div>
-
-                <h4 data-i18n="utilities.forms.fill_login_with_confirm.title">3. fill_login_form_with_confirm_password</h4>
-                <p data-i18n="utilities.forms.fill_login_with_confirm.description">Remplit automatiquement un formulaire avec confirmation de mot de passe.</p>
-                <div class="example-box">
-                    <pre><code>from selenium_ui_test_tool import fill_login_form_with_confirm_password
-from selenium.webdriver.common.by import By
-
-# Formulaire d'inscription avec confirmation de mot de passe
-fill_login_form_with_confirm_password(
-    driver,
-    username_env="LOGIN_USERNAME",
-    password_env="LOGIN_PASSWORD",
-    by=By.ID,
-    selector="register-form",
-    button="register-button"
-)</code></pre>
-                </div>
-
-                <div class="success" data-i18n="utilities.forms.success">
-                    <strong>✅ Avantage :</strong> Ces utilitaires simplifient considérablement les tests de formulaires 
-                    en gérant automatiquement l'attente, le scroll et le remplissage des champs.
-                </div>
-
-                <h3 data-i18n="utilities.upload.title">Utilitaire d'upload de fichier</h3>
-                <p data-i18n="utilities.upload.description">
-                    L'utilitaire <code>upload_file</code> permet d'uploader des fichiers via un champ input file 
-                    en utilisant le chemin du fichier stocké dans une variable d'environnement.
-                </p>
-
-                <h4 data-i18n="utilities.upload.heading">upload_file</h4>
-                <div class="example-box">
-                    <pre><code>from selenium_ui_test_tool import upload_file
-from selenium.webdriver.common.by import By
-
-# Dans votre fichier .env :
-# FILE_PATH=/chemin/vers/mon/fichier.pdf
-
-# Dans votre code :
-upload_file(
-    driver,
-    file_path="FILE_PATH",  # Nom de la variable d'environnement
-    input_selector="file-upload",
-    by=By.ID,
-    success_message="✅ Fichier uploadé avec succès",
-    error_message="❌ Erreur lors de l'upload"
-)</code></pre>
-                </div>
-
-                <div class="info" data-i18n="utilities.upload.note">
-                    <strong>💡 Note :</strong> Le chemin du fichier doit être stocké dans une variable d'environnement 
-                    (fichier .env ou secrets GitHub Actions). Le chemin doit être absolu.
-                </div>
-
-                <h3 data-i18n="utilities.assert.title">Nouvel utilitaire : assert_text_present</h3>
-                <p data-i18n="utilities.assert.description">
-                    <code>assert_text_present</code> attend l'apparition d'un élément puis vérifie que son texte contient la valeur attendue.
-                    Idéal pour valider des toasts, alertes ou messages de confirmation sans écrire d'assertions personnalisées.
-                </p>
-
-                <h4 data-i18n="utilities.assert.heading">assert_text_present</h4>
-                <div class="example-box">
-                    <pre><code>from selenium_ui_test_tool import assert_text_present
-from selenium.webdriver.common.by import By
-
-# Vérifier qu'un message de confirmation est affiché
-assert_text_present(
-    driver,
-    By.CSS_SELECTOR,
-    ".toast-message",
-    expected_text="Commande réussie",
-    timeout=5
-)</code></pre>
-                </div>
-
-                <div class="info" data-i18n="utilities.assert.note">
-                    <strong>💡 Astuce :</strong> L'utilitaire lève automatiquement une <code>AssertionError</code> si l'élément est introuvable
-                    ou si le texte ne correspond pas. Idéal pour vos pipelines CI/CD.
-                </div>
-
-                <h3 data-i18n="utilities.more.title">Autres utilitaires disponibles</h3>
-
-                <h4 data-i18n="utilities.more.wait.title">1. wait_for_element</h4>
-                <p data-i18n="utilities.more.wait.description">Attend qu'un élément soit présent dans le DOM.</p>
-                <div class="code-block">
-                    <code>from selenium_ui_test_tool import wait_for_element
-
-element = wait_for_element(driver, By.ID, "mon-element", timeout=10)</code>
-                </div>
-
-                <h4 data-i18n="utilities.more.configure.title">2. configure_actions</h4>
-                <p data-i18n="utilities.more.configure.description">Exécute une action simple (scroll + click). Utilisé par <code>click_element</code>.</p>
-                <div class="code-block">
-                    <code>from selenium_ui_test_tool import configure_actions
-
-configure_actions(driver, By.CSS_SELECTOR, ".my-button")</code>
-                </div>
-
-                <h4 data-i18n="utilities.more.create_driver.title">3. create_driver</h4>
-                <p data-i18n="utilities.more.create_driver.description">Crée et configure un WebDriver Chrome (utilisé par BaseTest).</p>
-
-                <h4 data-i18n="utilities.more.get_url.title">4. get_url</h4>
-                <p data-i18n="utilities.more.get_url.description">Navigue vers une URL (utilisé par BaseTest).</p>
-
-                <h4 data-i18n="utilities.more.get_env_var.title">5. get_env_var</h4>
-                <p data-i18n="utilities.more.get_env_var.description">Récupère une variable d'environnement depuis le fichier .env.</p>
-
-                <div class="info" data-i18n="utilities.more.hierarchy">
-                    <strong>💡 Hiérarchie :</strong> Les utilitaires sont utilisés <strong>dans</strong> les fonctions d'actions, 
-                    qui sont appelées <strong>par</strong> le déclencheur, qui est exécuté <strong>par</strong> BaseTest.
-                </div>
-            </section>
-
-            <section id="exemple-tc004">
-                <h2 data-i18n="example.title">📋 Exemple complet : TC004 - Test d'achat de billet unitaire</h2>
-                <p data-i18n="example.description">
-                    Voici l'exemple réel de TC004 montrant la structure complète avec BaseTest, déclencheur, 
-                    fonctions d'actions et utilitaires.
-                </p>
-
-                <h3 data-i18n="example.section1.title">1. BaseTest (Point d'entrée)</h3>
-                <div class="example-box">
-                    <pre><code>from selenium_ui_test_tool import BaseTest
-from utils.order_utils.buying_helper import buying_helper
-
-def test_buying_unit_ticket():
-    test = BaseTest(
-        test_function=buying_helper,  # ← Le déclencheur
-        url="https://develop.eshop.bordeaux.airweb.dev/",
-        success_message="✅ Commande créée avec succès",
-        failure_message="⚠️ Erreur lors du parcours de commande"
-    )
-    test.run()
-
-if __name__ == "__main__":
-    test_buying_unit_ticket()</code></pre>
-                </div>
-
-                <h3 data-i18n="example.section2.title">2. Déclencheur (buying_helper)</h3>
-                <div class="example-box">
-                    <pre><code>import time
-from utils.order_utils.click_on_accept_cgu import click_on_cgu_checkbox
-from utils.order_utils.click_on_order_button import click_on_order_button
-from utils.order_utils.click_on_ticket import click_on_ticket
-from utils.order_utils.click_on_ticket_support import click_on_ticket_support
-from utils.order_utils.click_on_unit_ticket import click_on_unit_ticket_section
-from utils.order_utils.click_on_validate_cart import click_on_validate_cart
-from utils.order_utils.is_card_display import is_card_display
-from utils.order_utils.validate_billing_adress import click_on_validate_adress_billing
-from utils.shared_utils.logger import logger
-
-def buying_helper(driver):
-    """
-    Déclencheur qui orchestre séquentiellement le parcours d'achat
-    """
-    logger(driver)
-    time.sleep(2)
-    
-    # Orchestration séquentielle des fonctions d'actions
-    click_on_unit_ticket_section(driver)      # Action 1
-    click_on_ticket(driver)                   # Action 2
-    click_on_ticket_support(driver)           # Action 3
-    click_on_order_button(driver)             # Action 4
-    click_on_cgu_checkbox(driver)             # Action 5
-    click_on_validate_cart(driver)           # Action 6
-    time.sleep(2)
-    click_on_validate_adress_billing(driver)  # Action 7
-    is_card_display(driver)                   # Action 8
-    
-    input("cliquez sur entrée")</code></pre>
-                </div>
-
-                <h3 data-i18n="example.section3.title">3. Fonction d'action (exemple : click_on_unit_ticket_section)</h3>
-                <div class="example-box">
-                    <pre><code>from selenium_ui_test_tool import click_element
-from selenium.webdriver.common.by import By
-
-def click_on_unit_ticket_section(driver):
-    """
-    Fonction d'action : Clique sur la section "Billet unitaire"
-    Utilise l'utilitaire click_element de la bibliothèque
-    """
-    return click_element(
-        driver,
-        By.CSS_SELECTOR,
-        ".unit-ticket-section",
-        success_message="✅ Section billet unitaire cliquée",
-        error_message="❌ Impossible de cliquer sur la section billet unitaire"
-    )</code></pre>
-                </div>
-
-                <h3 data-i18n="example.section4.title">4. Utilitaire (click_element - dans la bibliothèque)</h3>
-                <div class="example-box">
-                    <pre><code># Cet utilitaire est fourni par selenium_ui_test_tool
-# Il est utilisé dans vos fonctions d'actions
-
-from selenium_ui_test_tool import click_element
-
-# Utilisation dans une fonction d'action :
-click_element(
-    driver,
-    By.ID,
-    "mon-selector",
-    wait_before_click=0,
-    success_message="✅ Action réussie",
-    error_message="❌ Action échouée",
-    verify_before_click=True
-)</code></pre>
-                </div>
-
-                <h3 data-i18n="example.section5.title">5. Store d'actions (click_on)</h3>
-                <div class="example-box">
-                    <pre><code>from selenium_ui_test_tool import click_on
-from selenium.webdriver.common.by import By
-
-ACTIONS_MONTHLY = [
-    (By.XPATH, "//span[contains(text(),'Mensuel')]", "Section Mensuel ouverte"),
-    (By.XPATH, "//span[contains(text(),'Le Pass Mensuel')]", "Pass mensuel sélectionné"),
-]
-
-def monthly_buying(driver):
-    for by, selector, message in ACTIONS_MONTHLY:
-        click_on(
-            driver,
-            by,
-            selector,
-            success_message=message,
-            error_message=f"Impossible de cliquer sur {selector}"
-        )</code></pre>
-                </div>
-
-                <h3 data-i18n="example.flow.title">Flux d'exécution complet</h3>
-                <div class="info" data-i18n="example.flow.content">
-                    <strong>📊 Hiérarchie d'exécution :</strong>
-                    <ol>
-                        <li><strong>BaseTest.run()</strong> → Crée le driver, navigue vers l'URL</li>
-                        <li><strong>BaseTest</strong> appelle → <strong>buying_helper(driver)</strong> (déclencheur)</li>
-                        <li><strong>buying_helper</strong> appelle → <strong>click_on_unit_ticket_section(driver)</strong> (fonction d'action)</li>
-                        <li><strong>click_on_unit_ticket_section</strong> appelle → <strong>click_element(...)</strong> (utilitaire)</li>
-                        <li><strong>click_element</strong> utilise → <strong>configure_actions</strong> et <strong>wait_for_element</strong> (utilitaires de base)</li>
-                        <li>Le processus se répète pour chaque action dans le déclencheur</li>
-                        <li><strong>BaseTest</strong> ferme le driver</li>
-                    </ol>
-                </div>
-
-                <h3 data-i18n="example.advantages.title">Avantages de cette structure</h3>
-                <ul>
-                    <li data-i18n="example.advantages.item1"><strong>Séparation des responsabilités</strong> : Chaque niveau a un rôle clair</li>
-                    <li data-i18n="example.advantages.item2"><strong>Réutilisabilité</strong> : Les fonctions d'actions peuvent être réutilisées</li>
-                    <li data-i18n="example.advantages.item3"><strong>Maintenabilité</strong> : Facile de modifier une action sans affecter les autres</li>
-                    <li data-i18n="example.advantages.item4"><strong>Lisibilité</strong> : Le déclencheur montre clairement le scénario complet</li>
-                </ul>
-            </section>
-
-            <section id="architecture">
-                <h2 data-i18n="architecture.title">🏗️ Architecture du projet</h2>
-                <p data-i18n="architecture.description">
-                    Une architecture bien structurée facilite la maintenance et la réutilisabilité de vos tests. 
-                    Voici la structure recommandée basée sur l'exemple TC004.
-                </p>
-
-                <h3 data-i18n="architecture.structure.title">Structure recommandée (basée sur TC004)</h3>
-                <div class="code-block">
-                    <code>mon_projet/
-├── tests/                          # Package de tests
-│   ├── __init__.py
-│   ├── test_buying.py              # Test TC004 - Achat billet unitaire
-│   │   └── test_buying_unit_ticket()
-│   ├── test_login.py               # Autres tests
-│   └── test_navigation.py
-│
-├── utils/                          # Utilitaires et fonctions d'actions
-│   ├── __init__.py
-│   ├── order_utils/
-│   │   ├── __init__.py
-│   │   ├── action_store.py         # Store de clics regroupés (utilise click_on)
-│   │   ├── buying_helper.py        # Déclencheur qui consomme le store
-│   │   └── monthly_buying.py       # Autres déclencheurs / scénarios
-│   │
-│   └── shared_utils/               # Utilitaires partagés
-│       ├── __init__.py
-│       └── logger.py                # Fonction logger
-│
-├── config/                          # Configuration
-│   ├── .env                         # Variables d'environnement
-│   └── settings.py
-│
-└── main.py                          # Point d'entrée (optionnel)</code>
-                </div>
-
-                <h3 data-i18n="architecture.tests.title">Package de tests (tests/)</h3>
-                <p data-i18n="architecture.tests.description">
-                    Le package <code>tests/</code> contient vos fichiers de test. Chaque fichier crée un 
-                    <code>BaseTest</code> avec un déclencheur spécifique.
-                </p>
-
-                <div class="example-box">
-                    <h4 data-i18n="architecture.tests.example.title">Exemple : tests/test_buying.py</h4>
-                    <pre><code>from selenium_ui_test_tool import BaseTest
-from utils.order_utils.buying_helper import buying_helper
-
-def test_buying_unit_ticket():
-    """Test TC004 : Achat d'un billet unitaire"""
-    test = BaseTest(
-        test_function=buying_helper,  # Déclencheur
-        url="https://develop.eshop.bordeaux.airweb.dev/",
-        success_message="✅ Commande créée avec succès",
-        failure_message="⚠️ Erreur lors du parcours de commande"
-    )
-    test.run()
-
-if __name__ == "__main__":
-    test_buying_unit_ticket()</code></pre>
-                </div>
-
-                <h3 data-i18n="architecture.utils.title">Package utils (utils/)</h3>
-                <p data-i18n="architecture.utils.description">
-                    Le package <code>utils/</code> est organisé par domaine fonctionnel. Chaque sous-package 
-                    contient les déclencheurs et fonctions d'actions liés à un domaine spécifique.
-                </p>
-
-                <h4 data-i18n="architecture.utils.structure.title">Structure utils/order_utils/</h4>
-                <ul>
-                    <li data-i18n="architecture.utils.structure.item1"><strong>action_store.py</strong> : Liste/dictionnaire d'actions utilisant <code>click_on</code></li>
-                    <li data-i18n="architecture.utils.structure.item2"><strong>buying_helper.py</strong> : Déclencheur qui consomme le store</li>
-                    <li data-i18n="architecture.utils.structure.item3"><strong>monthly_buying.py</strong> : Autre déclencheur utilisant le store</li>
-                    <li data-i18n="architecture.utils.structure.item4"><strong>validate_*.py</strong> : Fonctions de validation</li>
-                    <li data-i18n="architecture.utils.structure.item5"><strong>is_*.py</strong> : Fonctions de vérification</li>
-                </ul>
-
-                <div class="example-box">
-                    <h4 data-i18n="architecture.utils.example.title">Exemple : utils/order_utils/action_store.py</h4>
-                    <pre><code>from selenium_ui_test_tool import click_on
-from selenium.webdriver.common.by import By
-
-TICKET_ACTIONS = [
-    (By.XPATH, "//span[contains(text(),'Mensuel')]", "Section Mensuel cliquée"),
-    (By.XPATH, "//span[contains(text(),'Le Pass Mensuel')]", "Pass mensuel sélectionné"),
-]
-
-def run_ticket_actions(driver):
-    for by, selector, message in TICKET_ACTIONS:
-        click_on(
-            driver,
-            by,
-            selector,
-            success_message=message,
-            error_message=f"Impossible de cliquer sur {selector}"
-        )</code></pre>
-                </div>
-
-                <h3 data-i18n="architecture.shared.title">Package shared_utils</h3>
-                <p data-i18n="architecture.shared.description">
-                    Le package <code>shared_utils/</code> contient les utilitaires partagés entre plusieurs 
-                    domaines (logger, helpers génériques, etc.).
-                </p>
-
-                <div class="example-box">
-                    <h4 data-i18n="architecture.shared.example.title">Exemple : utils/shared_utils/logger.py</h4>
-                    <pre><code>def logger(driver):
-    """Utilitaire partagé pour logger des informations"""
-    print(f"URL actuelle : {driver.current_url}")
-    print(f"Titre de la page : {driver.title}")</code></pre>
-                </div>
-
-                <h3 data-i18n="architecture.benefits.title">Avantages de cette architecture</h3>
-                <ul>
-                    <li data-i18n="architecture.benefits.item1"><strong>Organisation par domaine</strong> : Chaque sous-package (order_utils, etc.) regroupe les fonctions liées</li>
-                    <li data-i18n="architecture.benefits.item2"><strong>Réutilisabilité</strong> : Les fonctions d'actions peuvent être réutilisées dans plusieurs déclencheurs</li>
-                    <li data-i18n="architecture.benefits.item3"><strong>Maintenabilité</strong> : Facile de trouver et modifier une fonction d'action spécifique</li>
-                    <li data-i18n="architecture.benefits.item4"><strong>Lisibilité</strong> : Structure claire montrant la hiérarchie BaseTest → Déclencheur → Actions → Utilitaires</li>
-                    <li data-i18n="architecture.benefits.item5"><strong>Séparation des responsabilités</strong> : Chaque niveau a un rôle bien défini</li>
-                </ul>
-
-                <div class="success" data-i18n="architecture.benefits.success">
-                    <strong>✅ Bonne pratique :</strong> Organisez vos fonctions d'actions par domaine fonctionnel 
-                    (order_utils, login_utils, etc.) pour une meilleure maintenabilité.
-                </div>
-
-                <h3 data-i18n="architecture.summary.title">Résumé de la hiérarchie</h3>
-                <div class="info" data-i18n="architecture.summary.content">
-                    <strong>📊 Flux complet :</strong>
-                    <ol>
-                        <li><strong>tests/test_buying.py</strong> → Crée un BaseTest avec le déclencheur</li>
-                        <li><strong>utils/order_utils/buying_helper.py</strong> → Déclencheur qui orchestre les actions</li>
-                        <li><strong>utils/order_utils/action_store.py</strong> → Store d'actions basé sur <code>click_on</code></li>
-                        <li><strong>selenium_ui_test_tool.click_on / click_element</strong> → Utilitaires de la bibliothèque</li>
-                    </ol>
-                </div>
-            </section>
-
-            <section>
-                <h2 data-i18n="summary.title">🎓 Résumé</h2>
-                <p data-i18n="summary.description">
-                    Pour créer des tests UI robustes avec <strong>selenium_ui_test_tool</strong>, suivez cette hiérarchie :
-                </p>
-                <ol>
-                    <li data-i18n="summary.steps.item1"><strong>BaseTest</strong> : Créez un test avec <code>BaseTest</code> en passant votre déclencheur via <code>test_function</code></li>
-                    <li data-i18n="summary.steps.item2"><strong>Déclencheur</strong> : Créez une fonction qui orchestre séquentiellement vos fonctions d'actions</li>
-                    <li data-i18n="summary.steps.item3"><strong>Fonctions d'actions</strong> : Créez des fonctions atomiques ou des stores basés sur <code>click_on</code></li>
-                    <li data-i18n="summary.steps.item4"><strong>Utilitaires</strong> : Utilisez <code>click_on</code> ou <code>click_element</code> selon votre besoin</li>
-                    <li data-i18n="summary.steps.item5"><strong>Architecture</strong> : Organisez votre code avec <code>tests/</code> et <code>utils/</code> par domaine fonctionnel</li>
-                </ol>
-
-                <div class="highlight" data-i18n="summary.highlight">
-                    <strong>📊 Hiérarchie complète :</strong><br>
-                    <code>BaseTest</code> → <code>Déclencheur</code> → <code>Fonctions d'actions</code> → <code>Utilitaires (click_on / click_element)</code>
-                </div>
-
-                <div class="info" data-i18n="summary.info">
-                    <strong>📚 Documentation complète :</strong> 
-                    Consultez le <a href="https://github.com/kingcrud12/selenium_ui_test_tool/blob/main/README.md" target="_blank">README officiel</a> 
-                    pour plus de détails sur l'API.
-                </div>
-            </section>
-        </div>
-
-        <footer>
-            <p data-i18n="footer.copyright">© 2024 Selenium UI Test Tool - Créé par Yann Dipita</p>
-            <p>
-                <a href="https://pypi.org/project/selenium-ui-test-tool/" target="_blank">PyPI</a> | 
+    <!-- Navigation -->
+    <nav>
+        <div class="container nav-content">
+            <a href="index.html" class="logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                    <polyline points="2 17 12 22 22 17"></polyline>
+                    <polyline points="2 12 12 17 22 12"></polyline>
+                </svg>
+                Selenium UI Test Tool
+            </a>
+
+            <div class="main-nav-links">
+                <a href="#features" data-i18n="nav.features">Fonctionnalités</a>
+                <a href="docs.html" data-i18n="nav.docs">Docs</a>
+                <a href="#core-api" data-i18n="nav.api">Utilitaires Core</a>
+                <a href="#form-api" data-i18n="nav.forms">Formulaires & Upload</a>
                 <a href="https://github.com/kingcrud12/selenium_ui_test_tool" target="_blank">GitHub</a>
+            </div>
+
+            <div class="lang-switch">
+                <button class="lang-btn active" onclick="changeLanguage('fr')" id="lang-fr">FR</button>
+                <button class="lang-btn" onclick="changeLanguage('en')" id="lang-en">EN</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-content">
+            <div class="hero-text">
+                <h1 data-i18n="hero.title">Bibliothèque d'abstraction<br><span class="text-gradient">Selenium UI</span>
+                </h1>
+                <p data-i18n="hero.description">
+                    Une API de haut niveau conçue pour abstraire la complexité de Selenium WebDriver.
+                    Simplifiez la manipulation du DOM, les attentes explicites et l'interaction avec les formulaires
+                    grâce à des utilitaires prêts à l'emploi.
+                </p>
+                <div class="hero-actions">
+                    <a href="#core-api" class="btn-primary" data-i18n="hero.get_started">Découvrir l'API</a>
+                    <a href="https://pypi.org/project/selenium-ui-test-tool/" target="_blank" class="btn-secondary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <line x1="16" y1="18" x2="22" y2="12"></line>
+                            <line x1="8" y1="6" x2="2" y2="12"></line>
+                            <line x1="22" y1="12" x2="16" y2="6"></line>
+                            <line x1="2" y1="12" x2="8" y2="18"></line>
+                        </svg>
+                        pip install
+                    </a>
+                </div>
+            </div>
+
+            <!-- Hero Code Snippet -->
+            <div class="code-window">
+                <div class="code-header">
+                    <div class="mac-btn close"></div>
+                    <div class="mac-btn min"></div>
+                    <div class="mac-btn max"></div>
+                    <span class="code-title">example.py</span>
+                </div>
+                <pre><code id="hero-code-block"></code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Overview -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2 data-i18n="features.title">Pourquoi utiliser cette abstraction ?</h2>
+                <p data-i18n="features.subtitle">Oubliez la verbosité de `WebDriverWait` et des exceptions
+                    `ElementNotInteractable`. Focus sur la logique métier de vos tests.</p>
+            </div>
+
+            <div class="grid-features">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </div>
+                    <h3 data-i18n="feature1.title">Smart Waits Intégrés</h3>
+                    <p data-i18n="feature1.desc">Les utilitaires gèrent automatiquement les attentes explicites. Le code
+                        n'échoue plus parce que le DOM n'est pas encore prêt.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <polyline points="8 17 12 21 16 17"></polyline>
+                            <line x1="12" y1="12" x2="12" y2="21"></line>
+                            <path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"></path>
+                        </svg>
+                    </div>
+                    <h3 data-i18n="feature2.title">Auto-Scrolling</h3>
+                    <p data-i18n="feature2.desc">Avant chaque interaction (clic, saisie), la bibliothèque utilise
+                        JavaScript pour scroller vers l'élément afin d'éviter les interceptions.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                    </div>
+                    <h3 data-i18n="feature3.title">Formulaires Fluides</h3>
+                    <p data-i18n="feature3.desc">Des utilitaires spécialisés pour remplir massivement des formulaires,
+                        uploader des fichiers ou gérer des connexions .env en une seule ligne.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Detailed API Documentation -->
+    <section id="core-api" class="docs-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 data-i18n="api.title">Référence API : Utilitaires Core</h2>
+                <p data-i18n="api.subtitle">Les briques fondamentales pour interagir avec le DOM de manière sécurisée.
+                </p>
+            </div>
+
+            <!-- Topic 1: Click Abstractions -->
+            <div class="doc-topic">
+                <div class="doc-text">
+                    <h3 data-i18n="api.clicks.title">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)"
+                            stroke-width="2">
+                            <path d="M15.5 15.5L22 22"></path>
+                            <circle cx="10" cy="10" r="7"></circle>
+                        </svg>
+                        Interactions et Clics
+                    </h3>
+                    <p data-i18n="api.clicks.desc">Au lieu d'écrire manuellement des `WebDriverWait`, de vérifier
+                        l'interactabilité et d'ajouter des sélecteurs complexes, utilisez ces wrappers haut-niveau.</p>
+
+                    <ul class="method-list">
+                        <li class="method-item">
+                            <span class="method-name">click_on(driver, by, selector, success_message,
+                                error_message)</span>
+                            <span class="method-desc" data-i18n="api.clicks.m1">Le wrapper standard. Attend l'élément,
+                                scroll vers lui, clique, et affiche des messages explicites. Pensé pour être utilisé
+                                massivement.</span>
+                        </li>
+                        <li class="method-item">
+                            <span class="method-name">click_element(driver, by, selector, wait_before_click=0,
+                                ...)</span>
+                            <span class="method-desc" data-i18n="api.clicks.m2">L'utilitaire fondamental. Accepte des
+                                timeouts spécifiques et la possibilité de désactiver la vérification préalable
+                                (verify_before_click).</span>
+                        </li>
+                        <li class="method-item">
+                            <span class="method-name">wait_for_element(driver, by, selector, timeout=10)</span>
+                            <span class="method-desc" data-i18n="api.clicks.m3">Retourne le WebElement une fois qu'il
+                                est présent dans le DOM. Gère le driver explicite.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="code-window">
+                    <div class="code-header">
+                        <div class="mac-btn close"></div>
+                        <div class="mac-btn min"></div>
+                        <div class="mac-btn max"></div>
+                        <span class="code-title">clicks.py</span>
+                    </div>
+                    <pre><code id="clicks-code-block"></code></pre>
+                </div>
+            </div>
+
+            <div id="form-api" style="padding-top: 2rem;"></div>
+
+            <!-- Topic 2: Forms and Uploads -->
+            <div class="doc-topic">
+                <div class="doc-text">
+                    <h3 data-i18n="api.forms.title">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-secondary)"
+                            stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                        Formulaires & Uploads
+                    </h3>
+                    <p data-i18n="api.forms.desc">Remplir des inputs text, des formulaires de connexion entiers basés
+                        sur les variables d'environnement, et gérer les inputs de type `file` sans manipulation JS
+                        compliquée.</p>
+
+                    <ul class="method-list">
+                        <li class="method-item">
+                            <span class="method-name">fill_input(driver, by, selector, text)</span>
+                            <span class="method-desc" data-i18n="api.forms.m1">Localise l'input, scroll vers lui, le
+                                vide (clear) et simule la saisie (send_keys).</span>
+                        </li>
+                        <li class="method-item">
+                            <span class="method-name">fill_login_form(driver, username_env, password_env, by, selector,
+                                button)</span>
+                            <span class="method-desc" data-i18n="api.forms.m2">Spécifique à la connexion. Lit `.env`,
+                                remplit username/password et clique sur submit.</span>
+                        </li>
+                        <li class="method-item">
+                            <span class="method-name">upload_file(driver, file_path_env_var, input_selector, by)</span>
+                            <span class="method-desc" data-i18n="api.forms.m3">Gère `&lt;input type="file"&gt;`.
+                                Récupère le chemin absolu depuis le .env (ex: GITHUB_WORKSPACE) et l'injecte.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="code-window">
+                    <div class="code-header">
+                        <div class="mac-btn close"></div>
+                        <div class="mac-btn min"></div>
+                        <div class="mac-btn max"></div>
+                        <span class="code-title">forms_upload.py</span>
+                    </div>
+                    <pre><code id="forms-code-block"></code></pre>
+                </div>
+            </div>
+
+            <!-- Topic 3: Assertions -->
+            <div class="doc-topic">
+                <div class="doc-text">
+                    <h3 data-i18n="api.assert.title">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                        Assertions UI
+                    </h3>
+                    <p data-i18n="api.assert.desc">Validez l'état de l'interface rapidement sans ramener la complexité
+                        des `AssertionError` manuels.</p>
+
+                    <ul class="method-list">
+                        <li class="method-item">
+                            <span class="method-name">assert_text_present(driver, by, selector, expected_text,
+                                timeout)</span>
+                            <span class="method-desc" data-i18n="api.assert.m1">Attend l'apparition d'un élément (ex:
+                                Toast, Alerte de succès). Extrait son texte et vérifie la correspondance. Lève
+                                nativement AssertionError en cas d'échec (parfait pour Pytest).</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="code-window">
+                    <div class="code-header">
+                        <div class="mac-btn close"></div>
+                        <div class="mac-btn min"></div>
+                        <div class="mac-btn max"></div>
+                        <span class="code-title">validations.py</span>
+                    </div>
+                    <pre><code id="assert-code-block"></code></pre>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p data-i18n="footer.copyright">© 2024 Selenium UI Test Tool Abstracts. Créé par Yann Dipita.</p>
+            <p style="margin-top: 0.5rem; display: flex; justify-content: center; gap: 1.5rem;">
+                <a href="https://pypi.org/project/selenium-ui-test-tool/" target="_blank">PyPI Package</a>
+                <a href="https://github.com/kingcrud12/selenium_ui_test_tool" target="_blank">Repository Source</a>
             </p>
-        </footer>
-    </div>
+        </div>
+    </footer>
 
     <script>
-        // Translations object
         const translations = {
             fr: {
-                'header.title': 'Selenium UI Test Tool',
-                'header.subtitle': 'Guide complet d\'automatisation de tests UI',
-                'nav.introduction': 'Introduction',
-                'nav.base-test': 'BaseTest',
-                'nav.trigger': 'Déclencheur',
-                'nav.action-functions': 'Fonctions d\'actions',
-                'nav.utilities': 'Utilitaires',
-                'nav.example-tc004': 'Exemple TC004',
-                'nav.architecture': 'Architecture',
-                'intro.title': '📚 Introduction',
-                'intro.description': '<strong>selenium-ui-test-tool</strong> est une bibliothèque Python conçue pour simplifier l\'automatisation de tests UI avec Selenium WebDriver. Elle offre une approche structurée et modulaire pour créer des tests robustes et maintenables.',
-                'intro.objective.label': '💡 Objectif :',
-                'intro.objective.text': 'Réduire la complexité des tests Selenium en fournissant des abstractions simples et des utilitaires réutilisables.',
-                'intro.installation.title': 'Installation',
-                'basetest.title': '🎯 Concept de BaseTest',
-                'basetest.description': '<strong>BaseTest</strong> est la classe centrale qui crée un test complet. Elle prend en paramètre une fonction appelée <strong>déclencheur</strong> qui orchestre votre scénario de test.',
-                'basetest.hierarchy.title': 'Hiérarchie des concepts',
-                'basetest.hierarchy.label': '📊 Structure en 4 niveaux :',
-                'basetest.hierarchy.level1': '<strong>BaseTest</strong> : Classe qui gère le cycle de vie complet (setup → exécution → teardown)',
-                'basetest.hierarchy.level2': '<strong>Déclencheur</strong> : Fonction qui orchestre séquentiellement les fonctions d\'actions',
-                'basetest.hierarchy.level3': '<strong>Fonctions d\'actions</strong> : Fonctions qui effectuent une action spécifique sur la page',
-                'basetest.hierarchy.level4': '<strong>Utilitaires</strong> : Fonctions de la bibliothèque utilisées dans les fonctions d\'actions',
-                'basetest.structure.title': 'Structure d\'un BaseTest',
-                'basetest.role.title': 'Rôle de BaseTest',
-                'basetest.role.setup': '<strong>Setup</strong> : Crée le WebDriver et navigue vers l\'URL',
-                'basetest.role.execution': '<strong>Execution</strong> : Appelle votre fonction déclencheur avec le driver',
-                'basetest.role.teardown': '<strong>Teardown</strong> : Ferme le WebDriver proprement',
-                'basetest.role.results': '<strong>Gestion des résultats</strong> : Affiche les messages de succès/échec',
-                'basetest.important': '<strong>⚠️ Important :</strong> Le paramètre <code>test_function</code> doit être une fonction qui accepte un paramètre <code>driver</code> (WebDriver). Cette fonction est votre <strong>déclencheur</strong>.',
-                'trigger.title': '🎬 Concept de Déclencheur (Orchestrateur)',
-                'trigger.description': 'Le <strong>déclencheur</strong> est la fonction passée à <code>BaseTest</code> via le paramètre <code>test_function</code>. Son rôle est d\'<strong>orchestrer de façon séquentielle</strong> l\'exécution des fonctions d\'actions pour réaliser un scénario de test complet.',
-                'trigger.role.title': 'Rôle du déclencheur',
-                'trigger.role.orchestrate': '<strong>Orchestrer</strong> : Appeler les fonctions d\'actions dans le bon ordre',
-                'trigger.role.sequential': '<strong>Séquentiel</strong> : Exécuter les actions une par une, dans l\'ordre du scénario',
-                'trigger.role.coordinate': '<strong>Coordonner</strong> : Gérer le flux logique du parcours utilisateur',
-                'trigger.role.simplify': '<strong>Simplifier</strong> : Centraliser la logique de séquencement',
-                'trigger.example.title': 'Exemple réel : buying_helper (déclencheur de TC004)',
-                'trigger.characteristics.title': 'Caractéristiques du déclencheur',
-                'trigger.characteristics.one': '<strong>Une fonction = un scénario complet</strong> : Le déclencheur représente un parcours utilisateur entier',
-                'trigger.characteristics.two': '<strong>Appels séquentiels</strong> : Les fonctions d\'actions sont appelées dans l\'ordre du scénario',
-                'trigger.characteristics.three': '<strong>Pas de logique métier complexe</strong> : Le déclencheur se contente d\'orchestrer, la logique est dans les actions',
-                'trigger.characteristics.four': '<strong>Accepte le driver</strong> : Reçoit le WebDriver en paramètre depuis BaseTest',
-                'trigger.advantage': '<strong>✅ Avantage :</strong> Le déclencheur offre une vue d\'ensemble claire du scénario de test en montrant la séquence complète des actions.',
-                'actions.title': '⚙️ Concepts de Fonctions d\'Actions',
-                'actions.description': 'Les <strong>fonctions d\'actions</strong> sont des fonctions que vous créez pour effectuer une action spécifique sur la page web. Elles utilisent les utilitaires <strong>click_element</strong> ou <strong>click_on</strong> fournis par la bibliothèque.',
-                'actions.role.title': 'Rôle des fonctions d\'actions',
-                'actions.role.atomic': '<strong>Atomiques</strong> : Chaque fonction effectue une seule action précise',
-                'actions.role.reusable': '<strong>Réutilisables</strong> : Peuvent être utilisées dans plusieurs déclencheurs',
-                'actions.role.use-util': '<strong>Utilisent l\'utilitaire</strong> : Appellent <code>click_element</code> ou <code>click_on</code> pour effectuer l\'action',
-                'actions.role.specific': '<strong>Spécifiques au contexte</strong> : Adaptées à votre application',
-                'actions.example.title': 'Exemple : Fonction d\'action click_on_unit_ticket_section',
-                'actions.structure.title': 'Structure d\'une fonction d\'action',
-                'actions.examples.title': 'Exemples de fonctions d\'actions (TC004)',
-                'actions.examples.item1': '<code>click_on_unit_ticket_section(driver)</code> - Clique sur la section billet unitaire',
-                'actions.examples.item2': '<code>click_on_ticket(driver)</code> - Clique sur un ticket',
-                'actions.examples.item3': '<code>click_on_ticket_support(driver)</code> - Clique sur le support du ticket',
-                'actions.examples.item4': '<code>click_on_order_button(driver)</code> - Clique sur le bouton commander',
-                'actions.examples.item5': '<code>click_on_cgu_checkbox(driver)</code> - Clique sur la checkbox CGU',
-                'actions.examples.item6': '<code>click_on_validate_cart(driver)</code> - Valide le panier',
-                'actions.store.title': 'Store d\'actions avec <code>click_on</code>',
-                'actions.store.highlight': '<strong>💡 Important :</strong> <code>click_on</code> encapsule <code>click_element</code> pour accélérer la création d\'actions et permet de regrouper plusieurs clics dans un store réutilisable.',
-                'utilities.title': '🛠️ Utilitaires',
-                'utilities.description': 'Les <strong>utilitaires</strong> sont des fonctions fournies par la bibliothèque <code>selenium_ui_test_tool</code>. Elles sont utilisées <strong>dans vos fonctions d\'actions</strong> pour effectuer les opérations sur la page web.',
-                'utilities.clickon.title': 'Nouveau : utilitaire <code>click_on</code>',
-                'utilities.clickon.description': '<code>click_on</code> enveloppe <code>click_element</code> avec des messages obligatoires. Il est pensé pour créer des stores d\'actions lisibles.',
-                'utilities.clickelement.title': 'Utilitaire avancé : click_element',
-                'utilities.clickelement.description': '<code>click_element</code> est l\'utilitaire le plus utilisé dans les fonctions d\'actions. Il gère automatiquement l\'attente, la vérification et le clic sur un élément.',
-                'utilities.clickelement.implementation': 'Implémentation de l\'utilitaire click_element',
-                'utilities.forms.title': 'Nouveaux utilitaires de formulaire',
-                'utilities.forms.description': 'La bibliothèque propose maintenant des utilitaires spécialisés pour remplir des formulaires, simplifiant grandement les tests de connexion et d\'inscription.',
-                'utilities.forms.fill_input.title': '1. fill_input',
-                'utilities.forms.fill_input.description': 'Remplit un champ de formulaire avec scroll automatique vers l\'élément.',
-                'utilities.forms.fill_login_form.title': '2. fill_login_form',
-                'utilities.forms.fill_login_form.description': 'Remplit automatiquement un formulaire de connexion en utilisant les variables d\'environnement.',
-                'utilities.forms.fill_login_with_confirm.title': '3. fill_login_form_with_confirm_password',
-                'utilities.forms.fill_login_with_confirm.description': 'Remplit automatiquement un formulaire avec confirmation de mot de passe.',
-                'utilities.forms.success': '<strong>✅ Avantage :</strong> Ces utilitaires simplifient considérablement les tests de formulaires en gérant automatiquement l\'attente, le scroll et le remplissage des champs.',
-                'utilities.upload.title': 'Utilitaire d\'upload de fichier',
-                'utilities.upload.description': 'L\'utilitaire <code>upload_file</code> permet d\'uploader des fichiers via un champ input file en utilisant le chemin du fichier stocké dans une variable d\'environnement.',
-                'utilities.upload.heading': 'upload_file',
-                'utilities.upload.note': '<strong>💡 Note :</strong> Le chemin du fichier doit être stocké dans une variable d\'environnement (fichier .env ou secrets GitHub Actions). Le chemin doit être absolu.',
-                'utilities.assert.title': 'Nouvel utilitaire : assert_text_present',
-                'utilities.assert.description': '<code>assert_text_present</code> attend l\'apparition d\'un élément puis vérifie que son texte contient la valeur attendue. Idéal pour valider des toasts, alertes ou messages de confirmation sans écrire d\'assertions personnalisées.',
-                'utilities.assert.heading': 'assert_text_present',
-                'utilities.assert.note': '<strong>💡 Astuce :</strong> L\'utilitaire lève automatiquement une <code>AssertionError</code> si l\'élément est introuvable ou si le texte ne correspond pas. Parfait pour vos pipelines CI/CD.',
-                'utilities.more.title': 'Autres utilitaires disponibles',
-                'utilities.more.wait.title': '1. wait_for_element',
-                'utilities.more.wait.description': 'Attend qu\'un élément soit présent dans le DOM.',
-                'utilities.more.configure.title': '2. configure_actions',
-                'utilities.more.configure.description': 'Exécute une action simple (scroll + click). Utilisé par <code>click_element</code>.',
-                'utilities.more.create_driver.title': '3. create_driver',
-                'utilities.more.create_driver.description': 'Crée et configure un WebDriver Chrome (utilisé par BaseTest).',
-                'utilities.more.get_url.title': '4. get_url',
-                'utilities.more.get_url.description': 'Navigue vers une URL (utilisé par BaseTest).',
-                'utilities.more.get_env_var.title': '5. get_env_var',
-                'utilities.more.get_env_var.description': 'Récupère une variable d\'environnement depuis le fichier .env.',
-                'utilities.more.hierarchy': '<strong>💡 Hiérarchie :</strong> Les utilitaires sont utilisés <strong>dans</strong> les fonctions d\'actions, qui sont appelées <strong>par</strong> le déclencheur, qui est exécuté <strong>par</strong> BaseTest.',
-                'example.title': '📋 Exemple complet : TC004 - Test d\'achat de billet unitaire',
-                'example.description': 'Voici l\'exemple réel de TC004 montrant la structure complète avec BaseTest, déclencheur, fonctions d\'actions et utilitaires.',
-                'example.section1.title': '1. BaseTest (Point d\'entrée)',
-                'example.section2.title': '2. Déclencheur (buying_helper)',
-                'example.section3.title': '3. Fonction d\'action (exemple : click_on_unit_ticket_section)',
-                'example.section4.title': '4. Utilitaire (click_element - dans la bibliothèque)',
-                'example.section5.title': '5. Store d\'actions (click_on)',
-                'example.flow.title': 'Flux d\'exécution complet',
-                'example.flow.content': '<strong>📊 Hiérarchie d\'exécution :</strong><ol><li><strong>BaseTest.run()</strong> → Crée le driver, navigue vers l\'URL</li><li><strong>BaseTest</strong> appelle → <strong>buying_helper(driver)</strong> (déclencheur)</li><li><strong>buying_helper</strong> appelle → <strong>click_on_unit_ticket_section(driver)</strong> (fonction d\'action)</li><li><strong>click_on_unit_ticket_section</strong> appelle → <strong>click_element(...)</strong> (utilitaire)</li><li><strong>click_element</strong> utilise → <strong>configure_actions</strong> et <strong>wait_for_element</strong> (utilitaires de base)</li><li>Le processus se répète pour chaque action dans le déclencheur</li><li><strong>BaseTest</strong> ferme le driver</li></ol>',
-                'example.advantages.title': 'Avantages de cette structure',
-                'example.advantages.item1': '<strong>Séparation des responsabilités</strong> : Chaque niveau a un rôle clair',
-                'example.advantages.item2': '<strong>Réutilisabilité</strong> : Les fonctions d\'actions peuvent être réutilisées',
-                'example.advantages.item3': '<strong>Maintenabilité</strong> : Facile de modifier une action sans affecter les autres',
-                'example.advantages.item4': '<strong>Lisibilité</strong> : Le déclencheur montre clairement le scénario complet',
-                'architecture.title': '🏗️ Architecture du projet',
-                'architecture.description': 'Une architecture bien structurée facilite la maintenance et la réutilisabilité de vos tests. Voici la structure recommandée basée sur l\'exemple TC004.',
-                'architecture.structure.title': 'Structure recommandée (basée sur TC004)',
-                'architecture.tests.title': 'Package de tests (tests/)',
-                'architecture.tests.description': 'Le package <code>tests/</code> contient vos fichiers de test. Chaque fichier crée un <code>BaseTest</code> avec un déclencheur spécifique.',
-                'architecture.tests.example.title': 'Exemple : tests/test_buying.py',
-                'architecture.utils.title': 'Package utils (utils/)',
-                'architecture.utils.description': 'Le package <code>utils/</code> est organisé par domaine fonctionnel. Chaque sous-package contient les déclencheurs et fonctions d\'actions liés à un domaine spécifique.',
-                'architecture.utils.structure.title': 'Structure utils/order_utils/',
-                'architecture.utils.structure.item1': '<strong>action_store.py</strong> : Liste/dictionnaire d\'actions utilisant <code>click_on</code>',
-                'architecture.utils.structure.item2': '<strong>buying_helper.py</strong> : Déclencheur qui consomme le store',
-                'architecture.utils.structure.item3': '<strong>monthly_buying.py</strong> : Autre déclencheur utilisant le store',
-                'architecture.utils.structure.item4': '<strong>validate_*.py</strong> : Fonctions de validation',
-                'architecture.utils.structure.item5': '<strong>is_*.py</strong> : Fonctions de vérification',
-                'architecture.utils.example.title': 'Exemple : utils/order_utils/action_store.py',
-                'architecture.shared.title': 'Package shared_utils',
-                'architecture.shared.description': 'Le package <code>shared_utils/</code> contient les utilitaires partagés entre plusieurs domaines (logger, helpers génériques, etc.).',
-                'architecture.shared.example.title': 'Exemple : utils/shared_utils/logger.py',
-                'architecture.benefits.title': 'Avantages de cette architecture',
-                'architecture.benefits.item1': '<strong>Organisation par domaine</strong> : Chaque sous-package (order_utils, etc.) regroupe les fonctions liées',
-                'architecture.benefits.item2': '<strong>Réutilisabilité</strong> : Les fonctions d\'actions peuvent être réutilisées dans plusieurs déclencheurs',
-                'architecture.benefits.item3': '<strong>Maintenabilité</strong> : Facile de trouver et modifier une fonction d\'action spécifique',
-                'architecture.benefits.item4': '<strong>Lisibilité</strong> : Structure claire montrant la hiérarchie BaseTest → Déclencheur → Actions → Utilitaires',
-                'architecture.benefits.item5': '<strong>Séparation des responsabilités</strong> : Chaque niveau a un rôle bien défini',
-                'architecture.benefits.success': '<strong>✅ Bonne pratique :</strong> Organisez vos fonctions d\'actions par domaine fonctionnel (order_utils, login_utils, etc.) pour une meilleure maintenabilité.',
-                'architecture.summary.title': 'Résumé de la hiérarchie',
-                'architecture.summary.content': '<strong>📊 Flux complet :</strong><ol><li><strong>tests/test_buying.py</strong> → Crée un BaseTest avec le déclencheur</li><li><strong>utils/order_utils/buying_helper.py</strong> → Déclencheur qui orchestre les actions</li><li><strong>utils/order_utils/action_store.py</strong> → Store d\'actions basé sur <code>click_on</code></li><li><strong>selenium_ui_test_tool.click_on / click_element</strong> → Utilitaires de la bibliothèque</li></ol>',
-                'summary.title': '🎓 Résumé',
-                'summary.description': 'Pour créer des tests UI robustes avec <strong>selenium_ui_test_tool</strong>, suivez cette hiérarchie :',
-                'summary.steps.item1': '<strong>BaseTest</strong> : Créez un test avec <code>BaseTest</code> en passant votre déclencheur via <code>test_function</code>',
-                'summary.steps.item2': '<strong>Déclencheur</strong> : Créez une fonction qui orchestre séquentiellement vos fonctions d\'actions',
-                'summary.steps.item3': '<strong>Fonctions d\'actions</strong> : Créez des fonctions atomiques ou des stores basés sur <code>click_on</code>',
-                'summary.steps.item4': '<strong>Utilitaires</strong> : Utilisez <code>click_on</code> ou <code>click_element</code> selon votre besoin',
-                'summary.steps.item5': '<strong>Architecture</strong> : Organisez votre code avec <code>tests/</code> et <code>utils/</code> par domaine fonctionnel',
-                'summary.highlight': '<strong>📊 Hiérarchie complète :</strong><br><code>BaseTest</code> → <code>Déclencheur</code> → <code>Fonctions d\'actions</code> → <code>Utilitaires (click_on / click_element)</code>',
-                'summary.info': '<strong>📚 Documentation complète :</strong> Consultez le <a href="https://github.com/kingcrud12/selenium_ui_test_tool/blob/main/README.md" target="_blank">README officiel</a> pour plus de détails sur l\'API.',
-                'footer.copyright': '© 2024 Selenium UI Test Tool - Créé par Yann Dipita'
+                'nav.features': 'Fonctionnalités',
+                'nav.docs': 'Docs',
+                'nav.api': 'Utilitaires Core',
+                'nav.forms': 'Formulaires & Upload',
+                'hero.title': 'Bibliothèque d\'abstraction<br><span class="text-gradient">Selenium UI</span>',
+                'hero.description': 'Une API de haut niveau conçue pour abstraire la complexité de Selenium WebDriver. Simplifiez la manipulation du DOM, les attentes explicites et l\'interaction avec les formulaires grâce à des utilitaires prêts à l\'emploi.',
+                'hero.get_started': 'Découvrir l\'API',
+                'features.title': 'Pourquoi utiliser cette abstraction ?',
+                'features.subtitle': 'Oubliez la verbosité de `WebDriverWait` et des exceptions `ElementNotInteractable`. Focus sur la logique métier de vos tests.',
+                'feature1.title': 'Smart Waits Intégrés',
+                'feature1.desc': 'Les utilitaires gèrent automatiquement les attentes explicites. Le code n\'échoue plus parce que le DOM n\'est pas encore prêt.',
+                'feature2.title': 'Auto-Scrolling',
+                'feature2.desc': 'Avant chaque interaction (clic, saisie), la bibliothèque utilise JavaScript pour scroller vers l\'élément afin d\'éviter les interceptions.',
+                'feature3.title': 'Formulaires Fluides',
+                'feature3.desc': 'Des utilitaires spécialisés pour remplir massivement des formulaires, uploader des fichiers ou gérer des connexions .env en une seule ligne.',
+                'api.title': 'Référence API : Utilitaires Core',
+                'api.subtitle': 'Les briques fondamentales pour interagir avec le DOM de manière sécurisée.',
+                'api.clicks.title': '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2" style="margin-right:0.5rem;"><path d="M15.5 15.5L22 22"></path><circle cx="10" cy="10" r="7"></circle></svg> Interactions et Clics',
+                'api.clicks.desc': 'Au lieu d\'écrire manuellement des `WebDriverWait`, de vérifier l\'interactabilité et d\'ajouter des sélecteurs complexes, utilisez ces wrappers haut-niveau.',
+                'api.clicks.m1': 'Le wrapper standard. Attend l\'élément, scroll vers lui, clique, et affiche des messages explicites. Pensé pour être utilisé massivement.',
+                'api.clicks.m2': 'L\'utilitaire fondamental. Accepte des timeouts spécifiques et la possibilité de désactiver la vérification préalable (verify_before_click).',
+                'api.clicks.m3': 'Retourne le WebElement une fois qu\'il est présent dans le DOM. Gère le driver explicite.',
+                'api.forms.title': '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-secondary)" stroke-width="2" style="margin-right:0.5rem;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> Formulaires & Uploads',
+                'api.forms.desc': 'Remplir des inputs text, des formulaires de connexion entiers basés sur les variables d\'environnement, et gérer les inputs de type `file` sans manipulation JS compliquée.',
+                'api.forms.m1': 'Localise l\'input, scroll vers lui, le vide (clear) et simule la saisie (send_keys).',
+                'api.forms.m2': 'Spécifique à la connexion. Lit `.env`, remplit username/password et clique sur submit.',
+                'api.forms.m3': 'Gère `<input type="file">`. Récupère le chemin absolu depuis le .env (ex: GITHUB_WORKSPACE) et l\'injecte.',
+                'api.assert.title': '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" style="margin-right:0.5rem;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> Assertions UI',
+                'api.assert.desc': 'Validez l\'état de l\'interface rapidement sans ramener la complexité des `AssertionError` manuels.',
+                'api.assert.m1': 'Attend l\'apparition d\'un élément (ex: Toast, Alerte de succès). Extrait son texte et vérifie la correspondance. Lève nativement AssertionError en cas d\'échec (parfait pour Pytest).',
+                'footer.copyright': '© 2024 Selenium UI Test Tool Abstracts. Créé par Yann Dipita.',
+                'code.hero': `<span class="kw">from</span> selenium_ui_test_tool <span class="kw">import</span> click_on, fill_input\n<span class="kw">from</span> selenium.webdriver.common.by <span class="kw">import</span> By\n\n<span class="cm"># Abstraction propre, gère le wait, le scroll et le log</span>\n<span class="fn">fill_input</span>(\n    driver,\n    By.ID,\n    <span class="st">"search-bar"</span>,\n    <span class="st">"Selenium abstraction"</span>\n)\n\n<span class="cm"># Clic sécurisé avec vérification préalable</span>\n<span class="fn">click_on</span>(\n    driver,\n    By.CSS_SELECTOR,\n    <span class="st">".submit-btn"</span>,\n    success_message=<span class="st">"✅ Recherche validée"</span>,\n    error_message=<span class="st">"❌ Bouton introuvable"</span>\n)`,
+                'code.clicks': `<span class="kw">from</span> selenium_ui_test_tool <span class="kw">import</span> click_on, click_element\n<span class="kw">from</span> selenium.webdriver.common.by <span class="kw">import</span> By\n\n<span class="cm"># 1. Utilisation simple et verbeuse</span>\n<span class="fn">click_on</span>(\n    driver,\n    By.XPATH,\n    <span class="st">"//button[text()='Accepter']"</span>,\n    success_message=<span class="st">"✅ CGU Acceptées"</span>,\n    error_message=<span class="st">"❌ Case CGU introuvable"</span>\n)\n\n<span class="cm"># 2. Utilisation avancée pour des cas poilus</span>\n<span class="fn">click_element</span>(\n    driver,\n    By.ID,\n    <span class="st">"flaky-dropdown"</span>,\n    wait_before_click=<span class="st">2</span>, <span class="cm"># force un hard sleep (cas rares)</span>\n    verify_before_click=<span class="st">False</span> <span class="cm"># force le clic JS</span>\n)`,
+                'code.forms': `<span class="kw">from</span> selenium_ui_test_tool <span class="kw">import</span> fill_input, upload_file\n\n<span class="cm"># Remplissage basique</span>\n<span class="fn">fill_input</span>(driver, By.NAME, <span class="st">"address"</span>, <span class="st">"123 Rue de la Paix"</span>)\n\n<span class="cm"># Gestion automatique d'upload sécurisé</span>\n<span class="cm"># .env -> PDF_PATH=/absolute/path/to/doc.pdf</span>\n<span class="fn">upload_file</span>(\n    driver,\n    file_path=<span class="st">"PDF_PATH"</span>, <span class="cm"># Nom de la variable d'environnement</span>\n    input_selector=<span class="st">"#upload-input"</span>,\n    by=By.CSS_SELECTOR,\n    success_message=<span class="st">"✅ Upload réussi"</span>\n)`,
+                'code.assert': `<span class="kw">from</span> selenium_ui_test_tool <span class="kw">import</span> assert_text_present\n\n<span class="cm"># Idéal pour vérifier la fin d'un parcours Achat/Inscription</span>\n<span class="fn">assert_text_present</span>(\n    driver,\n    By.CSS_SELECTOR,\n    <span class="st">".toast-success-message"</span>,\n    expected_text=<span class="st">"Commande validée"</span>,\n    timeout=<span class="st">5</span>\n)\n<span class="cm"># -> Si faux: lève AssertionError("Element non trouvé ou texte différent")</span>`
             },
             en: {
-                'header.title': 'Selenium UI Test Tool',
-                'header.subtitle': 'Complete Guide to UI Test Automation',
-                'nav.introduction': 'Introduction',
-                'nav.base-test': 'BaseTest',
-                'nav.trigger': 'Trigger',
-                'nav.action-functions': 'Action Functions',
-                'nav.utilities': 'Utilities',
-                'nav.example-tc004': 'Example TC004',
-                'nav.architecture': 'Architecture',
-                'intro.title': '📚 Introduction',
-                'intro.description': '<strong>selenium-ui-test-tool</strong> is a Python library designed to simplify UI test automation with Selenium WebDriver. It provides a structured and modular approach to creating robust and maintainable tests.',
-                'intro.objective.label': '💡 Objective:',
-                'intro.objective.text': 'Reduce the complexity of Selenium tests by providing simple abstractions and reusable utilities.',
-                'intro.installation.title': 'Installation',
-                'basetest.title': '🎯 BaseTest Concept',
-                'basetest.description': '<strong>BaseTest</strong> is the central class that creates a complete test. It takes as a parameter a function called <strong>trigger</strong> that orchestrates your test scenario.',
-                'basetest.hierarchy.title': 'Concept Hierarchy',
-                'basetest.hierarchy.label': '📊 4-Level Structure:',
-                'basetest.hierarchy.level1': '<strong>BaseTest</strong>: Class that manages the complete lifecycle (setup → execution → teardown)',
-                'basetest.hierarchy.level2': '<strong>Trigger</strong>: Function that sequentially orchestrates action functions',
-                'basetest.hierarchy.level3': '<strong>Action Functions</strong>: Functions that perform a specific action on the page',
-                'basetest.hierarchy.level4': '<strong>Utilities</strong>: Library functions used in action functions',
-                'basetest.structure.title': 'BaseTest Structure',
-                'basetest.role.title': 'BaseTest Role',
-                'basetest.role.setup': '<strong>Setup</strong>: Creates the WebDriver and navigates to the URL',
-                'basetest.role.execution': '<strong>Execution</strong>: Calls your trigger function with the driver',
-                'basetest.role.teardown': '<strong>Teardown</strong>: Closes the WebDriver properly',
-                'basetest.role.results': '<strong>Result Management</strong>: Displays success/failure messages',
-                'basetest.important': '<strong>⚠️ Important:</strong> The <code>test_function</code> parameter must be a function that accepts a <code>driver</code> parameter (WebDriver). This function is your <strong>trigger</strong>.',
-                'trigger.title': '🎬 Trigger Concept (Orchestrator)',
-                'trigger.description': 'The <strong>trigger</strong> is the function passed to <code>BaseTest</code> via the <code>test_function</code> parameter. Its role is to <strong>sequentially orchestrate</strong> the execution of action functions to complete a test scenario.',
-                'trigger.role.title': 'Trigger Role',
-                'trigger.role.orchestrate': '<strong>Orchestrate</strong>: Call action functions in the correct order',
-                'trigger.role.sequential': '<strong>Sequential</strong>: Execute actions one by one, in scenario order',
-                'trigger.role.coordinate': '<strong>Coordinate</strong>: Manage the logical flow of the user journey',
-                'trigger.role.simplify': '<strong>Simplify</strong>: Centralize sequencing logic',
-                'trigger.example.title': 'Real Example: buying_helper (TC004 trigger)',
-                'trigger.characteristics.title': 'Trigger Characteristics',
-                'trigger.characteristics.one': '<strong>One function = one complete scenario</strong>: The trigger represents a complete user journey',
-                'trigger.characteristics.two': '<strong>Sequential calls</strong>: Action functions are called in scenario order',
-                'trigger.characteristics.three': '<strong>No complex business logic</strong>: The trigger only orchestrates, logic is in actions',
-                'trigger.characteristics.four': '<strong>Accepts driver</strong>: Receives the WebDriver as a parameter from BaseTest',
-                'trigger.advantage': '<strong>✅ Advantage:</strong> The trigger provides a clear overview of the test scenario by showing the complete sequence of actions.',
-                'actions.title': '⚙️ Action Functions Concepts',
-                'actions.description': '<strong>Action functions</strong> are functions you create to perform a specific action on the web page. They use the <strong>click_element</strong> or <strong>click_on</strong> utilities provided by the library.',
-                'actions.role.title': 'Action Functions Role',
-                'actions.role.atomic': '<strong>Atomic</strong>: Each function performs a single precise action',
-                'actions.role.reusable': '<strong>Reusable</strong>: Can be used in multiple triggers',
-                'actions.role.use-util': '<strong>Use utility</strong>: Call <code>click_element</code> or <code>click_on</code> to perform the action',
-                'actions.role.specific': '<strong>Context-specific</strong>: Adapted to your application',
-                'actions.example.title': 'Example: click_on_unit_ticket_section action function',
-                'actions.structure.title': 'Action Function Structure',
-                'actions.examples.title': 'Action Function Examples (TC004)',
-                'actions.examples.item1': '<code>click_on_unit_ticket_section(driver)</code> - Click the unit ticket section',
-                'actions.examples.item2': '<code>click_on_ticket(driver)</code> - Click a ticket',
-                'actions.examples.item3': '<code>click_on_ticket_support(driver)</code> - Click the ticket support',
-                'actions.examples.item4': '<code>click_on_order_button(driver)</code> - Click the order button',
-                'actions.examples.item5': '<code>click_on_cgu_checkbox(driver)</code> - Click the CGU checkbox',
-                'actions.examples.item6': '<code>click_on_validate_cart(driver)</code> - Validate the cart',
-                'actions.store.title': 'Action store with <code>click_on</code>',
-                'actions.store.highlight': '<strong>💡 Important:</strong> <code>click_on</code> wraps <code>click_element</code> to speed up action creation and lets you group multiple clicks into a reusable store.',
-                'utilities.title': '🛠️ Utilities',
-                'utilities.description': '<strong>Utilities</strong> are functions provided by the <code>selenium_ui_test_tool</code> library. They are used <strong>in your action functions</strong> to perform operations on the web page.',
-                'utilities.clickon.title': 'New: <code>click_on</code> utility',
-                'utilities.clickon.description': '<code>click_on</code> wraps <code>click_element</code> with mandatory messages. It is designed to create readable action stores.',
-                'utilities.clickelement.title': 'Advanced utility: click_element',
-                'utilities.clickelement.description': '<code>click_element</code> is the most used utility in action functions. It automatically handles waiting, verification, and clicking on an element.',
-                'utilities.clickelement.implementation': 'click_element utility implementation',
-                'utilities.forms.title': 'New Form Utilities',
-                'utilities.forms.description': 'The library now offers specialized utilities for filling forms, greatly simplifying login and registration tests.',
-                'utilities.forms.fill_input.title': '1. fill_input',
-                'utilities.forms.fill_input.description': 'Fills a form field and automatically scrolls to the element.',
-                'utilities.forms.fill_login_form.title': '2. fill_login_form',
-                'utilities.forms.fill_login_form.description': 'Automatically fills a login form using environment variables.',
-                'utilities.forms.fill_login_with_confirm.title': '3. fill_login_form_with_confirm_password',
-                'utilities.forms.fill_login_with_confirm.description': 'Automatically fills a form that includes password confirmation.',
-                'utilities.forms.success': '<strong>✅ Benefit:</strong> These utilities greatly simplify form tests by handling wait, scroll, and field filling for you.',
-                'utilities.upload.title': 'File Upload Utility',
-                'utilities.upload.description': 'The <code>upload_file</code> utility allows uploading files via an input file field using the file path stored in an environment variable.',
-                'utilities.upload.heading': 'upload_file',
-                'utilities.upload.note': '<strong>💡 Note:</strong> The file path must be stored in an environment variable (.env file or GitHub Actions secrets). The path must be absolute.',
-                'utilities.assert.title': 'New Utility: assert_text_present',
-                'utilities.assert.description': '<code>assert_text_present</code> waits for an element and ensures its text contains the expected value. Perfect for validating toasts, alerts, or confirmation messages without custom assertions.',
-                'utilities.assert.heading': 'assert_text_present',
-                'utilities.assert.note': '<strong>💡 Tip:</strong> The helper automatically raises an <code>AssertionError</code> when the element is missing or the text does not match, which keeps CI pipelines strict.',
-                'utilities.more.title': 'Other Available Utilities',
-                'utilities.more.wait.title': '1. wait_for_element',
-                'utilities.more.wait.description': 'Waits until an element is present in the DOM.',
-                'utilities.more.configure.title': '2. configure_actions',
-                'utilities.more.configure.description': 'Performs a simple scroll + click action. Used by <code>click_element</code>.',
-                'utilities.more.create_driver.title': '3. create_driver',
-                'utilities.more.create_driver.description': 'Creates and configures a Chrome WebDriver (used by BaseTest).',
-                'utilities.more.get_url.title': '4. get_url',
-                'utilities.more.get_url.description': 'Navigates to a URL (used by BaseTest).',
-                'utilities.more.get_env_var.title': '5. get_env_var',
-                'utilities.more.get_env_var.description': 'Retrieves an environment variable from the .env file.',
-                'utilities.more.hierarchy': '<strong>💡 Hierarchy:</strong> Utilities are used <strong>inside</strong> action functions, which are called <strong>by</strong> the trigger, which is executed <strong>by</strong> BaseTest.',
-                'example.title': '📋 Complete Example: TC004 - Unit Ticket Purchase Test',
-                'example.description': 'Here is the real TC004 example showing the complete structure with BaseTest, trigger, action functions, and utilities.',
-                'example.section1.title': '1. BaseTest (Entry Point)',
-                'example.section2.title': '2. Trigger (buying_helper)',
-                'example.section3.title': '3. Action Function (example: click_on_unit_ticket_section)',
-                'example.section4.title': '4. Utility (click_element - inside the library)',
-                'example.section5.title': '5. Action Store (click_on)',
-                'example.flow.title': 'Full Execution Flow',
-                'example.flow.content': '<strong>📊 Execution hierarchy:</strong><ol><li><strong>BaseTest.run()</strong> → Creates the driver, navigates to the URL</li><li><strong>BaseTest</strong> calls → <strong>buying_helper(driver)</strong> (trigger)</li><li><strong>buying_helper</strong> calls → <strong>click_on_unit_ticket_section(driver)</strong> (action function)</li><li><strong>click_on_unit_ticket_section</strong> calls → <strong>click_element(...)</strong> (utility)</li><li><strong>click_element</strong> uses → <strong>configure_actions</strong> and <strong>wait_for_element</strong> (base utilities)</li><li>The process repeats for each action in the trigger</li><li><strong>BaseTest</strong> closes the driver</li></ol>',
-                'example.advantages.title': 'Benefits of this structure',
-                'example.advantages.item1': '<strong>Separation of concerns</strong>: Each layer has a clear role',
-                'example.advantages.item2': '<strong>Reusability</strong>: Action functions can be reused',
-                'example.advantages.item3': '<strong>Maintainability</strong>: Easy to modify one action without impacting others',
-                'example.advantages.item4': '<strong>Readability</strong>: The trigger clearly shows the full scenario',
-                'architecture.title': '🏗️ Project Architecture',
-                'architecture.description': 'A well-structured architecture facilitates maintenance and reusability of your tests. Here is the recommended structure based on the TC004 example.',
-                'architecture.structure.title': 'Recommended structure (based on TC004)',
-                'architecture.tests.title': 'tests/ package',
-                'architecture.tests.description': 'The <code>tests/</code> package contains your test files. Each file creates a <code>BaseTest</code> with a specific trigger.',
-                'architecture.tests.example.title': 'Example: tests/test_buying.py',
-                'architecture.utils.title': 'utils/ package',
-                'architecture.utils.description': 'The <code>utils/</code> package is organized by functional domain. Each subpackage groups triggers and action functions for that domain.',
-                'architecture.utils.structure.title': 'Structure of utils/order_utils/',
-                'architecture.utils.structure.item1': '<strong>action_store.py</strong>: List/dict of actions using <code>click_on</code>',
-                'architecture.utils.structure.item2': '<strong>buying_helper.py</strong>: Trigger that consumes the store',
-                'architecture.utils.structure.item3': '<strong>monthly_buying.py</strong>: Another trigger using the store',
-                'architecture.utils.structure.item4': '<strong>validate_*.py</strong>: Validation functions',
-                'architecture.utils.structure.item5': '<strong>is_*.py</strong>: Verification functions',
-                'architecture.utils.example.title': 'Example: utils/order_utils/action_store.py',
-                'architecture.shared.title': 'shared_utils package',
-                'architecture.shared.description': 'The <code>shared_utils/</code> package contains utilities shared by multiple domains (logger, generic helpers, etc.).',
-                'architecture.shared.example.title': 'Example: utils/shared_utils/logger.py',
-                'architecture.benefits.title': 'Benefits of this architecture',
-                'architecture.benefits.item1': '<strong>Domain organization</strong>: Each subpackage (order_utils, etc.) groups related functions',
-                'architecture.benefits.item2': '<strong>Reusability</strong>: Action functions can be reused across triggers',
-                'architecture.benefits.item3': '<strong>Maintainability</strong>: Easy to find and update a specific action function',
-                'architecture.benefits.item4': '<strong>Readability</strong>: Clear structure showing BaseTest → Trigger → Actions → Utilities',
-                'architecture.benefits.item5': '<strong>Separation of concerns</strong>: Each layer has a defined responsibility',
-                'architecture.benefits.success': '<strong>✅ Best practice:</strong> Organize your action functions by functional domain (order_utils, login_utils, etc.) for better maintainability.',
-                'architecture.summary.title': 'Hierarchy summary',
-                'architecture.summary.content': '<strong>📊 Full flow:</strong><ol><li><strong>tests/test_buying.py</strong> → Creates a BaseTest with the trigger</li><li><strong>utils/order_utils/buying_helper.py</strong> → Trigger orchestrating the actions</li><li><strong>utils/order_utils/action_store.py</strong> → Action store powered by <code>click_on</code></li><li><strong>selenium_ui_test_tool.click_on / click_element</strong> → Library utilities</li></ol>',
-                'summary.title': '🎓 Summary',
-                'summary.description': 'To create robust UI tests with <strong>selenium_ui_test_tool</strong>, follow this hierarchy:',
-                'summary.steps.item1': '<strong>BaseTest</strong>: Build a test with <code>BaseTest</code> and pass your trigger via <code>test_function</code>',
-                'summary.steps.item2': '<strong>Trigger</strong>: Create a function that sequentially orchestrates your action functions',
-                'summary.steps.item3': '<strong>Action functions</strong>: Build atomic functions or action stores based on <code>click_on</code>',
-                'summary.steps.item4': '<strong>Utilities</strong>: Use <code>click_on</code> or <code>click_element</code> as needed',
-                'summary.steps.item5': '<strong>Architecture</strong>: Organize your code with <code>tests/</code> and <code>utils/</code> by functional domain',
-                'summary.highlight': '<strong>📊 Complete hierarchy:</strong><br><code>BaseTest</code> → <code>Trigger</code> → <code>Action functions</code> → <code>Utilities (click_on / click_element)</code>',
-                'summary.info': '<strong>📚 Full documentation:</strong> See the <a href="https://github.com/kingcrud12/selenium_ui_test_tool/blob/main/README.md" target="_blank">official README</a> for more API details.',
-                'footer.copyright': '© 2024 Selenium UI Test Tool - Created by Yann Dipita'
+                'nav.features': 'Features',
+                'nav.docs': 'Docs',
+                'nav.api': 'Core API',
+                'nav.forms': 'Forms & Upload',
+                'hero.title': 'Selenium UI<br><span class="text-gradient">Abstraction Library</span>',
+                'hero.description': 'A high-level API designed to abstract away the complexity of Selenium WebDriver. Simplify DOM manipulation, explicit waits, and form interactions with ready-to-use utilities.',
+                'hero.get_started': 'Discover API',
+                'features.title': 'Why use this abstraction?',
+                'features.subtitle': 'Forget verbose `WebDriverWait` and `ElementNotInteractable` exceptions. Focus on the business logic of your tests.',
+                'feature1.title': 'Built-in Smart Waits',
+                'feature1.desc': 'Utilities automatically handle explicit waits. Your code won\'t fail just because the DOM isn\'t fully ready.',
+                'feature2.title': 'Auto-Scrolling',
+                'feature2.desc': 'Before every interaction (click, input), the library injects JS to scroll to the element to avoid interception issues.',
+                'feature3.title': 'Fluid Forms',
+                'feature3.desc': 'Specialized helpers to massively fill forms, handle file uploads, or inject .env secure credentials in a single line.',
+                'api.title': 'API Reference: Core Utilities',
+                'api.subtitle': 'The fundamental building blocks to safely interact with the DOM.',
+                'api.clicks.title': '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2" style="margin-right:0.5rem;"><path d="M15.5 15.5L22 22"></path><circle cx="10" cy="10" r="7"></circle></svg> Interactions & Clicks',
+                'api.clicks.desc': 'Instead of manually scripting explicit waits, checking interactability, and finding complex selectors, use these high-level wrappers.',
+                'api.clicks.m1': 'The standard wrapper. Waits for element, scrolls to it, clicks, and prints explicit messages. Designed for bulk usage.',
+                'api.clicks.m2': 'The fundamental helper. Supports custom timeouts and the ability to disable pre-verification (verify_before_click).',
+                'api.clicks.m3': 'Returns the WebElement once it becomes present in the DOM. Handles the explicit driver wrapper.',
+                'api.forms.title': '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-secondary)" stroke-width="2" style="margin-right:0.5rem;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> Forms & Uploads',
+                'api.forms.desc': 'Fill text inputs, entirely inject login credentials from env vars, and handle `file` inputs without nasty JS workarounds.',
+                'api.forms.m1': 'Locates the input, scrolls to it, clears it, and simulates keystrokes (send_keys).',
+                'api.forms.m2': 'Specific for logins. Reads `.env`, fills username/password, and hits submit.',
+                'api.forms.m3': 'Handles `<input type="file">`. Grabs absolute path from env (e.g. GITHUB_WORKSPACE) and securely injects it.',
+                'api.assert.title': '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" style="margin-right:0.5rem;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> UI Assertions',
+                'api.assert.desc': 'Validate interface state quickly without bringing back manual `AssertionError` complexity.',
+                'api.assert.m1': 'Waits for element arrival (e.g. Toast, Success Alert). Extracts text and checks for a match. Natively raises AssertionError if it fails (great for Pytest).',
+                'footer.copyright': '© 2024 Selenium UI Test Tool Abstracts. Created by Yann Dipita.',
+                'code.hero': `<span class="kw">from</span> selenium_ui_test_tool <span class="kw">import</span> click_on, fill_input\n<span class="kw">from</span> selenium.webdriver.common.by <span class="kw">import</span> By\n\n<span class="cm"># Clean abstraction, handles waits, auto-scroll and logs</span>\n<span class="fn">fill_input</span>(\n    driver,\n    By.ID,\n    <span class="st">"search-bar"</span>,\n    <span class="st">"Selenium abstraction"</span>\n)\n\n<span class="cm"># Secure click with pre-validation</span>\n<span class="fn">click_on</span>(\n    driver,\n    By.CSS_SELECTOR,\n    <span class="st">".submit-btn"</span>,\n    success_message=<span class="st">"✅ Search triggered"</span>,\n    error_message=<span class="st">"❌ Button not found"</span>\n)`,
+                'code.clicks': `<span class="kw">from</span> selenium_ui_test_tool <span class="kw">import</span> click_on, click_element\n<span class="kw">from</span> selenium.webdriver.common.by <span class="kw">import</span> By\n\n<span class="cm"># 1. Simple and verbose proper usage</span>\n<span class="fn">click_on</span>(\n    driver,\n    By.XPATH,\n    <span class="st">"//button[text()='Accepter']"</span>,\n    success_message=<span class="st">"✅ Terms accepted"</span>,\n    error_message=<span class="st">"❌ Terms checkbox missing"</span>\n)\n\n<span class="cm"># 2. Advanced usage for flaky scenarios</span>\n<span class="fn">click_element</span>(\n    driver,\n    By.ID,\n    <span class="st">"flaky-dropdown"</span>,\n    wait_before_click=<span class="st">2</span>, <span class="cm"># forces hard sleep (rare cases)</span>\n    verify_before_click=<span class="st">False</span> <span class="cm"># forces raw JS click</span>\n)`,
+                'code.forms': `<span class="kw">from</span> selenium_ui_test_tool <span class="kw">import</span> fill_input, upload_file\n\n<span class="cm"># Basic input fill</span>\n<span class="fn">fill_input</span>(driver, By.NAME, <span class="st">"address"</span>, <span class="st">"123 Peace Street"</span>)\n\n<span class="cm"># Secure and automated file upload handling</span>\n<span class="cm"># .env -> PDF_PATH=/absolute/path/to/doc.pdf</span>\n<span class="fn">upload_file</span>(\n    driver,\n    file_path=<span class="st">"PDF_PATH"</span>, <span class="cm"># Environment variable name</span>\n    input_selector=<span class="st">"#upload-input"</span>,\n    by=By.CSS_SELECTOR,\n    success_message=<span class="st">"✅ File uploaded successfully"</span>\n)`,
+                'code.assert': `<span class="kw">from</span> selenium_ui_test_tool <span class="kw">import</span> assert_text_present\n\n<span class="cm"># Perfect for asserting the end of a transaction</span>\n<span class="fn">assert_text_present</span>(\n    driver,\n    By.CSS_SELECTOR,\n    <span class="st">".toast-success-message"</span>,\n    expected_text=<span class="st">"Order confirmed"</span>,\n    timeout=<span class="st">5</span>\n)\n<span class="cm"># -> If false: raises AssertionError("Element not found or text mismatch")</span>`
             }
         };
 
-        // Get saved language or default to French
         let currentLang = localStorage.getItem('preferredLanguage') || 'fr';
 
-        // Function to change language
         function changeLanguage(lang) {
             currentLang = lang;
             localStorage.setItem('preferredLanguage', lang);
-            
-            // Update active button
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
+
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById(`lang-${lang}`).classList.add('active');
-            
-            // Update HTML lang attribute
             document.documentElement.lang = lang;
-            
-            // Translate all elements with data-i18n
+
             document.querySelectorAll('[data-i18n]').forEach(element => {
                 const key = element.getAttribute('data-i18n');
                 if (translations[lang] && translations[lang][key]) {
-                    if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
-                        element.value = translations[lang][key];
-                    } else {
-                        element.innerHTML = translations[lang][key];
-                    }
+                    element.innerHTML = translations[lang][key];
                 }
             });
+
+            // Update code blocks manually
+            if (document.getElementById('hero-code-block')) document.getElementById('hero-code-block').innerHTML = translations[lang]['code.hero'];
+            if (document.getElementById('clicks-code-block')) document.getElementById('clicks-code-block').innerHTML = translations[lang]['code.clicks'];
+            if (document.getElementById('forms-code-block')) document.getElementById('forms-code-block').innerHTML = translations[lang]['code.forms'];
+            if (document.getElementById('assert-code-block')) document.getElementById('assert-code-block').innerHTML = translations[lang]['code.assert'];
         }
 
-        // Initialize language on page load
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', () => {
             changeLanguage(currentLang);
-        });
-
-        // Smooth scroll pour la navigation
-        document.querySelectorAll('nav a').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
         });
     </script>
 </body>
-</html>
 
+</html>

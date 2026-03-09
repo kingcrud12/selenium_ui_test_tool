@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation - Selenium UI Test Tool</title>
+    <!-- Use Inter font like Tailwind does -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Tailwind-inspired dark mode palette */
+            --bg-body: #0f172a;
+            /* slate-900 */
+            --bg-surface: #1e293b;
+            /* slate-800 */
+            --bg-surface-hover: #334155;
+            /* slate-700 */
+            --text-primary: #f8fafc;
+            /* slate-50 */
+            --text-secondary: #94a3b8;
+            /* slate-400 */
+            --border-color: #334155;
+            /* slate-700 */
+
+            /* Accents */
+            --accent-primary: #38bdf8;
+            /* light blue 400 */
+            --accent-secondary: #818cf8;
+            /* indigo 400 */
+            --accent-success: #22c55e;
+
+            /* Syntax highlighting (dark) */
+            --code-bg: #0b1120;
+            /* darker than slate-900 */
+            --code-border: #1e293b;
+            --keyword: #c678dd;
+            --function: #61afef;
+            --string: #98c379;
+            --comment: #5c6370;
+            --punctuation: #abb2bf;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(to right, var(--accent-primary), var(--accent-secondary));
+        }
+
+        /* Layout */
+        .page-container {
+            flex: 1;
+            display: flex;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Navigation */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(12px);
+            background-color: rgba(15, 23, 42, 0.75);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+            width: 100%;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            width: 100%;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .logo svg {
+            color: var(--accent-primary);
+            width: 24px;
+            height: 24px;
+        }
+
+        .main-nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .main-nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .main-nav-links a:hover,
+        .main-nav-links a.active {
+            color: var(--text-primary);
+        }
+
+        /* Language Switcher */
+        .lang-switch {
+            display: flex;
+            background: var(--bg-surface);
+            border-radius: 9999px;
+            padding: 0.25rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .lang-btn.active {
+            background: var(--bg-body);
+            color: var(--text-primary);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Sidebar container */
+        .sidebar-container {
+            width: 18rem;
+            flex-shrink: 0;
+            padding: 2rem 1.5rem;
+            border-right: 1px solid var(--border-color);
+            display: block;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 6rem;
+            /* below navbar */
+            max-height: calc(100vh - 6rem);
+            overflow-y: auto;
+        }
+
+        /* Sidebar styles */
+        .sidebar {
+            /* Custom scrollbar for sidebar */
+            scrollbar-width: thin;
+            scrollbar-color: var(--border-color) transparent;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background-color: var(--border-color);
+            border-radius: 4px;
+        }
+
+        .sidebar-nav-group {
+            margin-bottom: 2rem;
+        }
+
+        .sidebar-nav-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .sidebar-nav-list {
+            list-style: none;
+        }
+
+        .sidebar-nav-list li {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-nav-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            border-left: 1px solid var(--border-color);
+            padding-left: 1rem;
+            margin-left: 0.25rem;
+        }
+
+        .sidebar-nav-link:hover,
+        .sidebar-nav-link.active {
+            color: var(--accent-primary);
+            border-left-color: var(--accent-primary);
+        }
+
+        /* Main Content Container */
+        .main-content {
+            flex: 1;
+            padding: 3rem 4rem 6rem;
+            min-width: 0;
+            position: relative;
+        }
+
+        /* Header gradient blob for the main content */
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 600px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(56, 189, 248, 0.08) 0%, rgba(15, 23, 42, 0) 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .page-header {
+            margin-bottom: 4rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            margin-bottom: 1rem;
+        }
+
+        .page-description {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+        }
+
+        /* Markdown Content Styles */
+        .prose h2 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            margin-top: 3.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .prose h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .prose h4 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .prose p {
+            margin-bottom: 1.25rem;
+            color: var(--text-secondary);
+        }
+
+        .prose ul {
+            margin-bottom: 1.25rem;
+            padding-left: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .prose li {
+            margin-bottom: 0.5rem;
+        }
+
+        .prose strong {
+            color: var(--text-primary);
+        }
+
+        .prose code:not(pre code) {
+            background-color: var(--bg-surface);
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.25rem;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Menlo', monospace;
+            font-size: 0.85em;
+            color: var(--accent-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        /* Callouts / Alerts */
+        .alert {
+            display: flex;
+            gap: 1rem;
+            padding: 1.25rem;
+            border-radius: 0.75rem;
+            margin: 2rem 0;
+            background: rgba(56, 189, 248, 0.1);
+            border-left: 4px solid var(--accent-primary);
+        }
+
+        .alert.alert-success {
+            background: rgba(34, 197, 94, 0.1);
+            border-left-color: var(--accent-success);
+        }
+
+        .alert-icon {
+            flex-shrink: 0;
+            margin-top: 0.125rem;
+        }
+
+        .alert-success .alert-icon {
+            color: var(--accent-success);
+        }
+
+        .alert-info .alert-icon {
+            color: var(--accent-primary);
+        }
+
+        .alert-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .alert-content {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .alert-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Code Blocks */
+        .code-window {
+            background: var(--code-bg);
+            border-radius: 0.75rem;
+            border: 1px solid var(--code-border);
+            overflow: hidden;
+            margin: 2rem 0;
+        }
+
+        .code-header {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--code-border);
+            background: rgba(255, 255, 255, 0.02);
+            gap: 0.5rem;
+        }
+
+        .mac-btn {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .mac-btn.close {
+            background: #ff5f56;
+        }
+
+        .mac-btn.min {
+            background: #ffbd2e;
+        }
+
+        .mac-btn.max {
+            background: #27c93f;
+        }
+
+        .code-title {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            font-family: monospace;
+            margin-left: 0.5rem;
+            flex: 1;
+        }
+
+        .copy-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.25rem;
+            padding: 0.25rem;
+            transition: color 0.2s, background 0.2s;
+        }
+
+        .copy-btn:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .prose pre {
+            padding: 1.5rem;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Menlo', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--punctuation);
+            margin: 0;
+            /* overridden since it's inside code-window */
+        }
+
+        /* Syntax Highlighting */
+        .kw {
+            color: var(--keyword);
+        }
+
+        .fn {
+            color: var(--function);
+        }
+
+        .st {
+            color: var(--string);
+        }
+
+        .cm {
+            color: var(--comment);
+            font-style: italic;
+        }
+
+        /* Mobile specific styles */
+        .mobile-menu-btn {
+            display: none;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border-color);
+            padding: 2rem 0;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            background: var(--bg-body);
+        }
+
+        footer a {
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        footer a:hover {
+            color: var(--accent-primary);
+        }
+
+        @media (max-width: 1024px) {
+            .sidebar-container {
+                display: none;
+                /* simple hidden sidebar on mobile */
+            }
+
+            .main-content {
+                padding: 2rem 1.5rem 4rem;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .main-nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-content">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <button class="mobile-menu-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <a href="index.html" class="logo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                        <polyline points="2 17 12 22 22 17"></polyline>
+                        <polyline points="2 12 17 22 12"></polyline>
+                    </svg>
+                    Selenium UI
+                </a>
+            </div>
+
+            <div class="main-nav-links">
+                <a href="index.html#features" data-i18n="nav.features">Fonctionnalités</a>
+                <a href="docs.html" class="active" data-i18n="nav.docs">Docs</a>
+                <a href="https://github.com/Kingcrud12/selenium_ui_test_tool" target="_blank">GitHub</a>
+            </div>
+
+            <div class="lang-switch">
+                <button class="lang-btn active" onclick="changeLanguage('fr')" id="lang-fr">FR</button>
+                <button class="lang-btn" onclick="changeLanguage('en')" id="lang-en">EN</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="page-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar-container">
+            <div class="sidebar">
+                <div class="sidebar-nav-group">
+                    <div class="sidebar-nav-title" data-i18n="sidebar.started">Mise en route</div>
+                    <ul class="sidebar-nav-list">
+                        <li><a href="#installation" class="sidebar-nav-link active"
+                                data-i18n="sidebar.installation">Installation</a></li>
+                        <li><a href="#principles" class="sidebar-nav-link" data-i18n="sidebar.principles">Principes
+                                Fondamentaux</a></li>
+                    </ul>
+                </div>
+
+                <div class="sidebar-nav-group">
+                    <div class="sidebar-nav-title" data-i18n="sidebar.api">Référence Globale</div>
+                    <ul class="sidebar-nav-list">
+                        <li><a href="#clicks" class="sidebar-nav-link" data-i18n="sidebar.clicks">Interactions et
+                                Clics</a></li>
+                        <li><a href="#forms" class="sidebar-nav-link" data-i18n="sidebar.forms">Formulaires et
+                                Inputs</a></li>
+                        <li><a href="#uploads" class="sidebar-nav-link" data-i18n="sidebar.uploads">Gestion des
+                                Fichiers</a></li>
+                        <li><a href="#assertions" class="sidebar-nav-link" data-i18n="sidebar.assertions">Assertions
+                                UI</a></li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <div class="page-header">
+                <h1 class="page-title" data-i18n="docs.title">Documentation Officielle</h1>
+                <p class="page-description" data-i18n="docs.description">
+                    Apprenez à utiliser la bibliothèque d'abstraction Selenium pour rendre vos tests e2e stables et lisibles, résilient et facile à maintenir.
+                </p>
+            </div>
+
+            <div class="prose">
+                <!-- Getting Started -->
+                <section id="installation">
+                    <h2 data-i18n="doc.install.title">Installation</h2>
+                    <p data-i18n="doc.install.p1">
+                        Installez la bibliothèque via <code>pip</code> ou ajoutez-la à votre
+                        <code>requirements.txt</code>.
+                        Elle nécessite que <code>selenium</code> soit déjà installé dans votre environnement.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-header">
+                            <div class="mac-btn close"></div>
+                            <div class="mac-btn min"></div>
+                            <div class="mac-btn max"></div>
+                            <span class="code-title">terminal</span>
+                        </div>
+                        <pre><code>pip install selenium-ui-test-tool</code></pre>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <div class="alert-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="16" x2="12" y2="12"></line>
+                                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                            </svg>
+                        </div>
+                        <div class="alert-content">
+                            <div class="alert-title" data-i18n="doc.install.alert.title">Environnement Local</div>
+                            <p data-i18n="doc.install.alert.desc">
+                                Si vous utilisez les fonctions d'upload <code>upload_file</code> ou de connexion
+                                <code>fill_login_form</code>,
+                                vous aurez besoin de configurer vos variables d'environnement via un fichier
+                                <code>.env</code> racine.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="principles">
+                    <h2 data-i18n="doc.principles.title">Principes Fondamentaux</h2>
+                    <p data-i18n="doc.principles.p1">
+                        La philosophie de cette bibliothèque est d'absorber toute l'instabilité liée au comportement
+                        inattendu des navigateurs lors de tests automatisés.
+                    </p>
+                    <ul data-i18n="doc.principles.list">
+                        <li><strong>Safe by default:</strong> Chaque interaction (clic ou input) vérifie au préalable
+                            que l'élément est non seulement présent dans le DOM, mais aussi interactable.</li>
+                        <li><strong>Pas de "ElementNotInteractableException":</strong> L'abstraction utilise une
+                            injection JavaScript standardisée pour scroller la fenêtre jusqu'à l'élément ciblé AVANT
+                            d'interagir avec lui, évitant ainsi que les sticky headers ou popups bloquent le clic natif
+                            de Selenium.</li>
+                        <li><strong>Verbosité sur demande:</strong> Les outils natifs permettent une personnalisation
+                            complète des logs de succès et d'échec, facilitant le débogage sur les plateformes de CI
+                            (GitHub Actions, GitLab CI).</li>
+                    </ul>
+                </section>
+
+                <section id="clicks">
+                    <h2 data-i18n="doc.clicks.title">Interactions et Clics</h2>
+                    <p data-i18n="doc.clicks.desc">
+                        L'API fournit deux méthodes principales pour remplacer le sempiternel
+                        <code>driver.find_element(...).click()</code>.
+                        Ces méthodes encadrent le clic avec une attente explicite intelligente.
+                    </p>
+
+                    <h3 data-i18n="api.clicks.m1">click_on()</h3>
+                    <p data-i18n="doc.clicks.on.desc">
+                        La méthode privilégiée. Oblige le développeur à fournir des messages de logging clairs, ce qui
+                        rend le terminal lisible lors des run de tests.
+                    </p>
+
+                    <div class="code-window">
+                        <div class="code-header">
+                            <div class="mac-btn close"></div>
+                            <div class="mac-btn min"></div>
+                            <div class="mac-btn max"></div>
+                            <span class="code-title">clicks_example.py</span>
+                        </div>
+                        <pre><code id="code-docs-clicks"></code></pre>
+                    </div>
+
+                    <h3 data-i18n="api.clicks.m2">click_element()</h3>
+                    <p data-i18n="doc.clicks.element.desc">
+                        Méthode parent, exposant tous les paramètres sous-jacents, utile pour les edge-cases où l'on
+                        veut un clic "aveugle" via JS sans valider l'interactabilité préalable.
+                    </p>
+                </section>
+
+                <section id="forms">
+                    <h2 data-i18n="doc.forms.title">Formulaires</h2>
+
+                    <h3 data-i18n="doc.forms.h3.1">Remplissage Simple (fill_input)</h3>
+                    <p data-i18n="doc.forms.p1">Gère le <code>wait</code>, le scroll, le <code>clear()</code> et le
+                        <code>send_keys()</code> en une seule ligne.</p>
+
+                    <div class="code-window">
+                        <div class="code-header">
+                            <div class="mac-btn close"></div>
+                            <div class="mac-btn min"></div>
+                            <div class="mac-btn max"></div>
+                            <span class="code-title">form_example.py</span>
+                        </div>
+                        <pre><code id="code-docs-form"></code></pre>
+                    </div>
+                </section>
+
+                <section id="uploads">
+                    <h2 data-i18n="doc.uploads.title">Gestion des Fichiers</h2>
+                    <p data-i18n="doc.uploads.p1">
+                        Tester les champs d'upload est souvent instable, particulièrement sur les CI (Linux/Docker) par
+                        rapport à un développement local sur Mac/Windows en raison des chemins de fichiers.
+                    </p>
+
+                    <div class="alert alert-success">
+                        <div class="alert-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </div>
+                        <div class="alert-content">
+                            <div class="alert-title" data-i18n="doc.uploads.alert.title">Abstraction d'Upload</div>
+                            <p data-i18n="doc.uploads.alert.desc">
+                                L'utilitaire <code>upload_file</code> résout cela en prenant non pas le chemin en dur du
+                                fichier, mais le <strong>nom de la variable d'environnement</strong> qui stocke le
+                                chemin absolu.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-header">
+                            <div class="mac-btn close"></div>
+                            <div class="mac-btn min"></div>
+                            <div class="mac-btn max"></div>
+                            <span class="code-title">upload_example.py</span>
+                        </div>
+                        <pre><code id="code-docs-upload"></code></pre>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p data-i18n="footer.copyright">© 2024 Selenium UI Test Tool Abstracts. Créé par Yann Dipita.</p>
+        </div>
+    </footer>
+
+    <script>
+        const translations = {
+            fr: {
+                // Nav
+                'nav.features': 'Fonctionnalités',
+                'nav.docs': 'Docs',
+                'footer.copyright': '© 2024 Selenium UI Test Tool Abstracts. Créé par Yann Dipita.',
+
+                // Sidebar
+                'sidebar.started': 'Mise en route',
+                'sidebar.installation': 'Installation',
+                'sidebar.principles': 'Principes Fondamentaux',
+                'sidebar.api': 'Référence Globale',
+                'sidebar.clicks': 'Interactions et Clics',
+                'sidebar.forms': 'Formulaires et Inputs',
+                'sidebar.uploads': 'Gestion des Fichiers',
+                'sidebar.assertions': 'Assertions UI',
+
+                // Main Content
+                'docs.title': 'Documentation Officielle',
+                'docs.description': 'Apprenez à utiliser la bibliothèque d\'abstraction Selenium UI pour rendre vos tests e2e stables et lisibles, résilient et facile à maintenir.',
+
+                'doc.install.title': 'Installation',
+                'doc.install.p1': 'Installez la bibliothèque via <code>pip</code> ou ajoutez-la à votre <code>requirements.txt</code>. Elle nécessite que <code>selenium</code> soit déjà installé dans votre environnement.',
+                'doc.install.alert.title': 'Environnement Local',
+                'doc.install.alert.desc': 'Si vous utilisez les fonctions d\'upload <code>upload_file</code> ou de connexion <code>fill_login_form</code>, vous aurez besoin de configurer vos variables d\'environnement via un fichier <code>.env</code> racine.',
+
+                'doc.principles.title': 'Principes Fondamentaux',
+                'doc.principles.p1': 'La philosophie de cette bibliothèque est d\'absorber toute l\'instabilité liée au comportement inattendu des navigateurs lors de tests automatisés.',
+                'doc.principles.list': '<li><strong>Safe by default:</strong> Chaque interaction (clic ou input) vérifie au préalable que l\'élément est non seulement présent dans le DOM, mais aussi interactable.</li><li><strong>Pas de "ElementNotInteractableException":</strong> L\'abstraction utilise une injection JavaScript standardisée pour scroller la fenêtre jusqu\'à l\'élément ciblé AVANT d\'interagir avec lui, évitant ainsi que les sticky headers ou popups bloquent le clic natif de Selenium.</li><li><strong>Verbosité sur demande:</strong> Les outils natifs permettent une personnalisation complète des logs de succès et d\'échec, facilitant le débogage sur les plateformes de CI (GitHub Actions, GitLab CI).</li>',
+
+                'doc.clicks.title': 'Interactions et Clics',
+                'doc.clicks.desc': 'L\'API fournit deux méthodes principales pour remplacer le sempiternel <code>driver.find_element(...).click()</code>. Ces méthodes encadrent le clic avec une attente explicite intelligente.',
+                'api.clicks.m1': 'click_on()',
+                'doc.clicks.on.desc': 'La méthode privilégiée. Oblige le développeur à fournir des messages de logging clairs, ce qui rend le terminal lisible lors des run de tests.',
+                'api.clicks.m2': 'click_element()',
+                'doc.clicks.element.desc': 'Méthode parent, exposant tous les paramètres sous-jacents, utile pour les edge-cases où l\'on veut un clic "aveugle" via JS sans valider l\'interactabilité préalable.',
+
+                'doc.forms.title': 'Formulaires',
+                'doc.forms.h3.1': 'Remplissage Simple (fill_input)',
+                'doc.forms.p1': 'Gère le <code>wait</code>, le scroll, le <code>clear()</code> et le <code>send_keys()</code> en une seule ligne.',
+
+                'doc.uploads.title': 'Gestion des Fichiers',
+                'doc.uploads.p1': 'Tester les champs d\'upload est souvent instable, particulièrement sur les CI (Linux/Docker) par rapport à un développement local sur Mac/Windows en raison des chemins de fichiers.',
+                'doc.uploads.alert.title': 'Abstraction d\'Upload',
+                'doc.uploads.alert.desc': 'L\'utilitaire <code>upload_file</code> résout cela en prenant non pas le chemin en dur du fichier, mais le <strong>nom de la variable d\'environnement</strong> qui stocke le chemin absolu.',
+
+                // Codes
+                'code.docs.clicks': `<span class="kw">from</span> selenium_ui_test_tool <span class="kw">import</span> click_on\n<span class="kw">from</span> selenium.webdriver.common.by <span class="kw">import</span> By\n\n<span class="cm"># Remplacer ceci :</span>\n<span class="cm"># elem = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "mon-btn")))</span>\n<span class="cm"># driver.execute_script("arguments[0].scrollIntoView();", elem)</span>\n<span class="cm"># elem.click()</span>\n\n<span class="cm"># Par ceci :</span>\n<span class="fn">click_on</span>(\n    driver,\n    By.ID,\n    <span class="st">"mon-btn"</span>,\n    success_message=<span class="st">"✅ Bouton cliqué"</span>,\n    error_message=<span class="st">"❌ Introuvable"</span>\n)`,
+                'code.docs.form': `<span class="kw">from</span> selenium_ui_test_tool <span class="kw">import</span> fill_input\n\n<span class="fn">fill_input</span>(\n    driver,\n    By.CSS_SELECTOR,\n    <span class="st">"input[type='email']"</span>,\n    <span class="st">"admin@test.com"</span>\n)`,
+                'code.docs.upload': `<span class="cm"># Dans votre pipeline CI ou .env :</span>\n<span class="cm"># export TEST_IMAGE=/home/runner/work/repo/assets/test.jpg</span>\n\n<span class="kw">from</span> selenium_ui_test_tool <span class="kw">import</span> upload_file\n\n<span class="fn">upload_file</span>(\n    driver,\n    file_path=<span class="st">"TEST_IMAGE"</span>, <span class="cm"># String pointant vers la variable ENV</span>\n    input_selector=<span class="st">"input[type='file']"</span>,\n    by=By.CSS_SELECTOR,\n    success_message=<span class="st">"✅ Image attachée"</span>\n)`
+            },
+            en: {
+                // Nav
+                'nav.features': 'Features',
+                'nav.docs': 'Docs',
+                'footer.copyright': '© 2024 Selenium UI Test Tool Abstracts. Created by Yann Dipita.',
+
+                // Sidebar
+                'sidebar.started': 'Getting Started',
+                'sidebar.installation': 'Installation',
+                'sidebar.principles': 'Core Principles',
+                'sidebar.api': 'Global Reference',
+                'sidebar.clicks': 'Interactions & Clicks',
+                'sidebar.forms': 'Forms & Inputs',
+                'sidebar.uploads': 'File Management',
+                'sidebar.assertions': 'UI Assertions',
+
+                // Main Content
+                'docs.title': 'Official Documentation',
+                'docs.description': 'Learn how to use the Selenium UI abstraction library to turn flaky, verbose, and fragile e2e tests into readable, resilient, and easy-to-maintain code.',
+
+                'doc.install.title': 'Installation',
+                'doc.install.p1': 'Install the library via <code>pip</code> or add it to your <code>requirements.txt</code>. It requires <code>selenium</code> to be installed in your environment.',
+                'doc.install.alert.title': 'Local Environment',
+                'doc.install.alert.desc': 'If you use the upload utilities (<code>upload_file</code>) or login utilities (<code>fill_login_form</code>), you will need a <code>.env</code> file configured at your project root.',
+
+                'doc.principles.title': 'Core Principles',
+                'doc.principles.p1': 'The philosophy of this library is to absorb all browser instability that causes random automated test failures.',
+                'doc.principles.list': '<li><strong>Safe by default:</strong> Every interaction (click or input) first verifies that the element is not only present in the DOM but also interactable.</li><li><strong>No "ElementNotInteractableException":</strong> The abstraction injects JS to scroll to the targeted element BEFORE interacting, avoiding sticky headers or popups blocking the native Selenium click.</li><li><strong>Verbosity on demand:</strong> Native tools enforce custom success/error logs, making CI terminal outputs (GitHub Actions, GitLab CI) vastly easier to debug.</li>',
+
+                'doc.clicks.title': 'Interactions and Clicks',
+                'doc.clicks.desc': 'The API supplies two main methods designed to replace the eternal <code>driver.find_element(...).click()</code> pattern, wrapping the click with intelligent explicit waits.',
+                'api.clicks.m1': 'click_on()',
+                'doc.clicks.on.desc': 'The primary method. It forces the developer to provide clear log strings resulting in clean test run terminals.',
+                'api.clicks.m2': 'click_element()',
+                'doc.clicks.element.desc': 'The base method exposing all underlying params. Great for edge-cases where you need a blind JS click by bypassing the interactability checks.',
+
+                'doc.forms.title': 'Forms',
+                'doc.forms.h3.1': 'Simple Fill (fill_input)',
+                'doc.forms.p1': 'Handles the <code>wait</code>, scrolling, <code>clear()</code>, and <code>send_keys()</code> within one single line of code.',
+
+                'doc.uploads.title': 'File Management',
+                'doc.uploads.p1': 'Testing file uploads is notoriously flaky across local vs CI environments due to differing absolute file paths.',
+                'doc.uploads.alert.title': 'Upload Abstraction',
+                'doc.uploads.alert.desc': 'The <code>upload_file</code> utility resolves this by fetching the actual absolute path dynamically via the <strong>name of the environment variable</strong> holding the data.',
+
+                // Codes
+                'code.docs.clicks': `<span class="kw">from</span> selenium_ui_test_tool <span class="kw">import</span> click_on\n<span class="kw">from</span> selenium.webdriver.common.by <span class="kw">import</span> By\n\n<span class="cm"># Replace this:</span>\n<span class="cm"># elem = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "mon-btn")))</span>\n<span class="cm"># driver.execute_script("arguments[0].scrollIntoView();", elem)</span>\n<span class="cm"># elem.click()</span>\n\n<span class="cm"># With this:</span>\n<span class="fn">click_on</span>(\n    driver,\n    By.ID,\n    <span class="st">"mon-btn"</span>,\n    success_message=<span class="st">"✅ Button clicked"</span>,\n    error_message=<span class="st">"❌ Not found"</span>\n)`,
+                'code.docs.form': `<span class="kw">from</span> selenium_ui_test_tool <span class="kw">import</span> fill_input\n\n<span class="fn">fill_input</span>(\n    driver,\n    By.CSS_SELECTOR,\n    <span class="st">"input[type='email']"</span>,\n    <span class="st">"admin@test.com"</span>\n)`,
+                'code.docs.upload': `<span class="cm"># In your CI pipeline or .env:</span>\n<span class="cm"># export TEST_IMAGE=/home/runner/work/repo/assets/test.jpg</span>\n\n<span class="kw">from</span> selenium_ui_test_tool <span class="kw">import</span> upload_file\n\n<span class="fn">upload_file</span>(\n    driver,\n    file_path=<span class="st">"TEST_IMAGE"</span>, <span class="cm"># String pointing to the ENV var</span>\n    input_selector=<span class="st">"input[type='file']"</span>,\n    by=By.CSS_SELECTOR,\n    success_message=<span class="st">"✅ Image attached"</span>\n)`
+            }
+        };
+
+        let currentLang = localStorage.getItem('preferredLanguage') || 'fr';
+
+        function changeLanguage(lang) {
+            currentLang = lang;
+            localStorage.setItem('preferredLanguage', lang);
+
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`lang-${lang}`).classList.add('active');
+            document.documentElement.lang = lang;
+
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    element.innerHTML = translations[lang][key];
+                }
+            });
+
+            // Update code blocks
+            if (document.getElementById('code-docs-clicks')) {
+                document.getElementById('code-docs-clicks').innerHTML = translations[lang]['code.docs.clicks'];
+            }
+            if (document.getElementById('code-docs-form')) {
+                document.getElementById('code-docs-form').innerHTML = translations[lang]['code.docs.form'];
+            }
+            if (document.getElementById('code-docs-upload')) {
+                document.getElementById('code-docs-upload').innerHTML = translations[lang]['code.docs.upload'];
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            changeLanguage(currentLang);
+
+            // Active State logic for sidebar
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.getAttribute('id');
+                        document.querySelectorAll('.sidebar-nav-link').forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === `#${id}`) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, { rootMargin: '-10% 0px -80% 0px' });
+
+            document.querySelectorAll('section').forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+
+</html>
