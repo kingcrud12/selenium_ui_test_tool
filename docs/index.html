@@ -477,6 +477,14 @@
         }
 
         /* Responsive */
+        .mobile-menu-btn {
+            display: none;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+
         @media (max-width: 1024px) {
 
             .hero-content,
@@ -489,17 +497,43 @@
                 text-align: center;
             }
 
+            .hero-text h1 {
+                font-size: 2.25rem;
+            }
+
             .hero-actions {
                 justify-content: center;
+                flex-direction: column;
+                gap: 1rem;
             }
 
             .hero-text p {
                 margin: 0 auto 2rem;
+                font-size: 1rem;
+            }
+
+            .mobile-menu-btn {
+                display: block;
             }
 
             .main-nav-links {
                 display: none;
-                /* simple mobile view */
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: var(--bg-surface);
+                flex-direction: column;
+                padding: 1rem 1.5rem;
+                border-top: 1px solid var(--border-color);
+                border-bottom: 1px solid var(--border-color);
+                gap: 1rem;
+                align-items: flex-start;
+                z-index: 41;
+            }
+
+            .main-nav-links.active {
+                display: flex;
             }
         }
     </style>
@@ -510,15 +544,24 @@
     <!-- Navigation -->
     <nav>
         <div class="container nav-content">
-            <a href="index.html" class="logo">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round">
-                    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-                    <polyline points="2 17 12 22 22 17"></polyline>
-                    <polyline points="2 12 12 17 22 12"></polyline>
-                </svg>
-                Selenium UI Test Tool
-            </a>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <button class="mobile-menu-btn" id="mobile-menu-btn">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+                <a href="index.html" class="logo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                        <polyline points="2 17 12 22 22 17"></polyline>
+                        <polyline points="2 12 12 17 22 12"></polyline>
+                    </svg>
+                    Selenium UI Test Tool
+                </a>
+            </div>
 
             <div class="main-nav-links">
                 <a href="#features" data-i18n="nav.features">Fonctionnalités</a>
@@ -912,6 +955,25 @@
                         title.style.color = "var(--text-secondary)";
                     }
                 }, 4000);
+            }
+
+            // Mobile menu toggle
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const mainNav = document.querySelector('.main-nav-links');
+
+            if (mobileBtn) {
+                mobileBtn.addEventListener('click', () => {
+                    if (mainNav) mainNav.classList.toggle('active');
+                });
+
+                // Close menu when clicking a link
+                if (mainNav) {
+                    mainNav.querySelectorAll('a').forEach(link => {
+                        link.addEventListener('click', () => {
+                            mainNav.classList.remove('active');
+                        });
+                    });
+                }
             }
         });
     </script>

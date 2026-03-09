@@ -491,9 +491,31 @@
         }
 
         @media (max-width: 1024px) {
+            .page-title {
+                font-size: 2rem;
+            }
+
             .sidebar-container {
-                display: none;
-                /* simple hidden sidebar on mobile */
+                position: fixed;
+                top: 73px;
+                left: -100%;
+                height: calc(100vh - 73px);
+                background: var(--bg-body);
+                border-right: none;
+                z-index: 40;
+                transition: left 0.3s ease;
+                width: 80%;
+                padding: 1.5rem;
+                display: block !important;
+                box-shadow: 4px 0 15px rgba(0, 0, 0, 0.5);
+            }
+
+            .sidebar-container.active {
+                left: 0;
+            }
+
+            .sidebar {
+                top: 0;
             }
 
             .main-content {
@@ -506,6 +528,26 @@
 
             .main-nav-links {
                 display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: var(--bg-surface);
+                flex-direction: column;
+                padding: 1rem 1.5rem;
+                border-top: 1px solid var(--border-color);
+                border-bottom: 1px solid var(--border-color);
+                gap: 1rem;
+                align-items: flex-start;
+                z-index: 41;
+            }
+
+            .main-nav-links.active {
+                display: flex;
+            }
+
+            .doc-topic {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -517,7 +559,7 @@
     <nav>
         <div class="nav-content">
             <div style="display: flex; align-items: center; gap: 1rem;">
-                <button class="mobile-menu-btn">
+                <button class="mobile-menu-btn" id="mobile-menu-btn">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="3" y1="12" x2="21" y2="12"></line>
                         <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -898,6 +940,36 @@
             document.querySelectorAll('section').forEach(section => {
                 observer.observe(section);
             });
+
+            // Mobile menu toggle
+            const mobileBtn = document.getElementById('mobile-menu-btn');
+            const mainNav = document.querySelector('.main-nav-links');
+            const sidebarContainer = document.querySelector('.sidebar-container');
+
+            if (mobileBtn) {
+                mobileBtn.addEventListener('click', () => {
+                    if (mainNav) mainNav.classList.toggle('active');
+                    if (sidebarContainer) sidebarContainer.classList.toggle('active');
+                });
+
+                // Close sidebar when clicking a link
+                if (mainNav) {
+                    mainNav.querySelectorAll('a').forEach(link => {
+                        link.addEventListener('click', () => {
+                            mainNav.classList.remove('active');
+                            if (sidebarContainer) sidebarContainer.classList.remove('active');
+                        });
+                    });
+                }
+                if (sidebarContainer) {
+                    sidebarContainer.querySelectorAll('a').forEach(link => {
+                        link.addEventListener('click', () => {
+                            if (mainNav) mainNav.classList.remove('active');
+                            sidebarContainer.classList.remove('active');
+                        });
+                    });
+                }
+            }
         });
     </script>
 </body>
