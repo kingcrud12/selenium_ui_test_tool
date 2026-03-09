@@ -501,25 +501,22 @@
                 left: -100%;
                 height: calc(100vh - 73px);
                 background: var(--bg-body);
-                border-right: none;
-                z-index: 40;
+                border-right: 1px solid var(--border-color);
+                z-index: 1000;
                 transition: left 0.3s ease;
-                width: 80%;
-                padding: 1.5rem;
-                display: block !important;
+                width: 280px;
+                display: block;
                 box-shadow: 4px 0 15px rgba(0, 0, 0, 0.5);
+                overflow-y: auto;
             }
 
             .sidebar-container.active {
                 left: 0;
             }
 
-            .sidebar {
-                top: 0;
-            }
-
             .main-content {
-                padding: 2rem 1.5rem 4rem;
+                padding: 2rem 1rem 4rem;
+                width: 100vw;
             }
 
             .mobile-menu-btn {
@@ -571,7 +568,7 @@
                         stroke-linejoin="round">
                         <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
                         <polyline points="2 17 12 22 22 17"></polyline>
-                        <polyline points="2 12 17 22 12"></polyline>
+                        <polyline points="2 12 12 17 22 12"></polyline>
                     </svg>
                     Selenium UI
                 </a>
@@ -775,6 +772,42 @@
                     </div>
                 </section>
 
+                <section id="assertions">
+                    <h2 data-i18n="doc.assert.title">Assertions UI</h2>
+                    <p data-i18n="doc.assert.p1">
+                        Validez l'état final de votre interface de façon sécurisée (apparition d'un message flash,
+                        disparition d'un loader) sans vous soucier des timeouts aléatoires.
+                    </p>
+
+                    <div class="alert alert-info">
+                        <div class="alert-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="16" x2="12" y2="12"></line>
+                                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                            </svg>
+                        </div>
+                        <div class="alert-content">
+                            <div class="alert-title" data-i18n="doc.assert.alert.title">Compatibilité Pytest</div>
+                            <p data-i18n="doc.assert.alert.desc">
+                                En cas d'échec (le texte n'apparaît pas ou ne correspond pas), la méthode soulève
+                                nativement une <code>AssertionError</code>, qui est interceptée proprement par Pytest.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="code-window">
+                        <div class="code-header">
+                            <div class="mac-btn close"></div>
+                            <div class="mac-btn min"></div>
+                            <div class="mac-btn max"></div>
+                            <span class="code-title">assert_example.py</span>
+                        </div>
+                        <pre><code id="code-docs-assert"></code></pre>
+                    </div>
+                </section>
+
             </div>
         </main>
     </div>
@@ -832,10 +865,16 @@
                 'doc.uploads.alert.title': 'Abstraction d\'Upload',
                 'doc.uploads.alert.desc': 'L\'utilitaire <code>upload_file</code> résout cela en prenant non pas le chemin en dur du fichier, mais le <strong>nom de la variable d\'environnement</strong> qui stocke le chemin absolu.',
 
+                'doc.assert.title': 'Assertions UI',
+                'doc.assert.p1': 'Validez l\'état final de votre interface de façon sécurisée (apparition d\'un message flash, disparition d\'un loader) sans vous soucier des timeouts aléatoires.',
+                'doc.assert.alert.title': 'Compatibilité Pytest',
+                'doc.assert.alert.desc': 'En cas d\'échec (le texte n\'apparaît pas ou ne correspond pas), la méthode soulève nativement une <code>AssertionError</code>, qui est interceptée proprement par Pytest.',
+
                 // Codes
                 'code.docs.clicks': `<span class="kw">from</span> selenium.webdriver.support.ui <span class="kw">import</span> WebDriverWait\n<span class="kw">from</span> selenium.webdriver.support <span class="kw">import</span> expected_conditions <span class="kw">as</span> EC\n<span class="kw">from</span> selenium.webdriver.common.by <span class="kw">import</span> By\n<span class="kw">from</span> selenium_ui_test_tool <span class="kw">import</span> click_on\n\n<span class="cm"># --- Selenium natif ---</span>\nelem = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, <span class="st">"mon-btn"</span>)))\ndriver.execute_script(<span class="st">"arguments[0].scrollIntoView();"</span>, elem)\nWebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, <span class="st">"mon-btn"</span>))).click()\n\n<span class="cm"># --- Selenium UI Test Tool ---</span>\n<span class="fn">click_on</span>(driver, By.ID, <span class="st">"mon-btn"</span>, success_message=<span class="st">"✅ Bouton cliqué"</span>)`,
                 'code.docs.form': `<span class="kw">from</span> selenium.webdriver.support.ui <span class="kw">import</span> WebDriverWait\n<span class="kw">from</span> selenium.webdriver.support <span class="kw">import</span> expected_conditions <span class="kw">as</span> EC\n<span class="kw">from</span> selenium.webdriver.common.by <span class="kw">import</span> By\n<span class="kw">from</span> selenium_ui_test_tool <span class="kw">import</span> fill_input\n\n<span class="cm"># --- Selenium natif ---</span>\nelem = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, <span class="st">"input"</span>)))\ndriver.execute_script(<span class="st">"arguments[0].scrollIntoView();"</span>, elem)\nelem.clear()\nelem.send_keys(<span class="st">"admin@test.com"</span>)\n\n<span class="cm"># --- Selenium UI Test Tool ---</span>\n<span class="fn">fill_input</span>(driver, By.CSS_SELECTOR, <span class="st">"input"</span>, <span class="st">"admin@test.com"</span>)`,
-                'code.docs.upload': `<span class="kw">from</span> selenium_ui_test_tool <span class="kw">import</span> upload_file\n<span class="kw">from</span> selenium.webdriver.common.by <span class="kw">import</span> By\n<span class="kw">import</span> os\n\n<span class="cm"># --- Selenium natif ---</span>\nabsolute_path = os.path.abspath(os.environ.get(<span class="st">"TEST_IMAGE"</span>))\ndriver.find_element(By.CSS_SELECTOR, <span class="st">"input[type='file']"</span>).send_keys(absolute_path)\n\n<span class="cm"># --- Selenium UI Test Tool ---</span>\n<span class="fn">upload_file</span>(driver, file_path=<span class="st">"TEST_IMAGE"</span>, input_selector=<span class="st">"input[type='file']"</span>, by=By.CSS_SELECTOR)`
+                'code.docs.upload': `<span class="kw">from</span> selenium_ui_test_tool <span class="kw">import</span> upload_file\n<span class="kw">from</span> selenium.webdriver.common.by <span class="kw">import</span> By\n<span class="kw">import</span> os\n\n<span class="cm"># --- Selenium natif ---</span>\nabsolute_path = os.path.abspath(os.environ.get(<span class="st">"TEST_IMAGE"</span>))\ndriver.find_element(By.CSS_SELECTOR, <span class="st">"input[type='file']"</span>).send_keys(absolute_path)\n\n<span class="cm"># --- Selenium UI Test Tool ---</span>\n<span class="fn">upload_file</span>(driver, file_path=<span class="st">"TEST_IMAGE"</span>, input_selector=<span class="st">"input[type='file']"</span>, by=By.CSS_SELECTOR)`,
+                'code.docs.assert': `<span class="kw">from</span> selenium.webdriver.support.ui <span class="kw">import</span> WebDriverWait\n<span class="kw">from</span> selenium.webdriver.support <span class="kw">import</span> expected_conditions <span class="kw">as</span> EC\n<span class="kw">from</span> selenium.webdriver.common.by <span class="kw">import</span> By\n<span class="kw">from</span> selenium_ui_test_tool <span class="kw">import</span> assert_text_present\n\n<span class="cm"># --- Selenium natif ---</span>\nelem = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, <span class="st">".toast"</span>)))\n<span class="kw">assert</span> <span class="st">"Validé"</span> <span class="kw">in</span> elem.text, <span class="st">"Différent"</span>\n\n<span class="cm"># --- Selenium UI Test Tool ---</span>\n<span class="fn">assert_text_present</span>(driver, By.CSS_SELECTOR, <span class="st">".toast"</span>, expected_text=<span class="st">"Validé"</span>, timeout=5)`
             },
             en: {
                 // Nav
@@ -882,10 +921,16 @@
                 'doc.uploads.alert.title': 'Upload Abstraction',
                 'doc.uploads.alert.desc': 'The <code>upload_file</code> utility resolves this by fetching the actual absolute path dynamically via the <strong>name of the environment variable</strong> holding the data.',
 
+                'doc.assert.title': 'UI Assertions',
+                'doc.assert.p1': 'Safely validate the final state of your interface (flash message appearance, loader disappearance) without worrying about random execution timeouts.',
+                'doc.assert.alert.title': 'Pytest Compatibility',
+                'doc.assert.alert.desc': 'Upon failure (text missing or incorrect), the method natively raises an <code>AssertionError</code>, which is cleanly intercepted by Pytest.',
+
                 // Codes
                 'code.docs.clicks': `<span class="kw">from</span> selenium.webdriver.support.ui <span class="kw">import</span> WebDriverWait\n<span class="kw">from</span> selenium.webdriver.support <span class="kw">import</span> expected_conditions <span class="kw">as</span> EC\n<span class="kw">from</span> selenium.webdriver.common.by <span class="kw">import</span> By\n<span class="kw">from</span> selenium_ui_test_tool <span class="kw">import</span> click_on\n\n<span class="cm"># --- Native Selenium ---</span>\nelem = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, <span class="st">"mon-btn"</span>)))\ndriver.execute_script(<span class="st">"arguments[0].scrollIntoView();"</span>, elem)\nWebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, <span class="st">"mon-btn"</span>))).click()\n\n<span class="cm"># --- Selenium UI Test Tool ---</span>\n<span class="fn">click_on</span>(driver, By.ID, <span class="st">"mon-btn"</span>, success_message=<span class="st">"✅ Button clicked"</span>)`,
                 'code.docs.form': `<span class="kw">from</span> selenium.webdriver.support.ui <span class="kw">import</span> WebDriverWait\n<span class="kw">from</span> selenium.webdriver.support <span class="kw">import</span> expected_conditions <span class="kw">as</span> EC\n<span class="kw">from</span> selenium.webdriver.common.by <span class="kw">import</span> By\n<span class="kw">from</span> selenium_ui_test_tool <span class="kw">import</span> fill_input\n\n<span class="cm"># --- Native Selenium ---</span>\nelem = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, <span class="st">"input"</span>)))\ndriver.execute_script(<span class="st">"arguments[0].scrollIntoView();"</span>, elem)\nelem.clear()\nelem.send_keys(<span class="st">"admin@test.com"</span>)\n\n<span class="cm"># --- Selenium UI Test Tool ---</span>\n<span class="fn">fill_input</span>(driver, By.CSS_SELECTOR, <span class="st">"input"</span>, <span class="st">"admin@test.com"</span>)`,
-                'code.docs.upload': `<span class="kw">from</span> selenium_ui_test_tool <span class="kw">import</span> upload_file\n<span class="kw">from</span> selenium.webdriver.common.by <span class="kw">import</span> By\n<span class="kw">import</span> os\n\n<span class="cm"># --- Native Selenium ---</span>\nabsolute_path = os.path.abspath(os.environ.get(<span class="st">"TEST_IMAGE"</span>))\ndriver.find_element(By.CSS_SELECTOR, <span class="st">"input[type='file']"</span>).send_keys(absolute_path)\n\n<span class="cm"># --- Selenium UI Test Tool ---</span>\n<span class="fn">upload_file</span>(driver, file_path=<span class="st">"TEST_IMAGE"</span>, input_selector=<span class="st">"input[type='file']"</span>, by=By.CSS_SELECTOR)`
+                'code.docs.upload': `<span class="kw">from</span> selenium_ui_test_tool <span class="kw">import</span> upload_file\n<span class="kw">from</span> selenium.webdriver.common.by <span class="kw">import</span> By\n<span class="kw">import</span> os\n\n<span class="cm"># --- Native Selenium ---</span>\nabsolute_path = os.path.abspath(os.environ.get(<span class="st">"TEST_IMAGE"</span>))\ndriver.find_element(By.CSS_SELECTOR, <span class="st">"input[type='file']"</span>).send_keys(absolute_path)\n\n<span class="cm"># --- Selenium UI Test Tool ---</span>\n<span class="fn">upload_file</span>(driver, file_path=<span class="st">"TEST_IMAGE"</span>, input_selector=<span class="st">"input[type='file']"</span>, by=By.CSS_SELECTOR)`,
+                'code.docs.assert': `<span class="kw">from</span> selenium.webdriver.support.ui <span class="kw">import</span> WebDriverWait\n<span class="kw">from</span> selenium.webdriver.support <span class="kw">import</span> expected_conditions <span class="kw">as</span> EC\n<span class="kw">from</span> selenium.webdriver.common.by <span class="kw">import</span> By\n<span class="kw">from</span> selenium_ui_test_tool <span class="kw">import</span> assert_text_present\n\n<span class="cm"># --- Selenium natif ---</span>\nelem = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, <span class="st">".toast"</span>)))\n<span class="kw">assert</span> <span class="st">"Validé"</span> <span class="kw">in</span> elem.text, <span class="st">"Différent"</span>\n\n<span class="cm"># --- Selenium UI Test Tool ---</span>\n<span class="fn">assert_text_present</span>(driver, By.CSS_SELECTOR, <span class="st">".toast"</span>, expected_text=<span class="st">"Validé"</span>, timeout=5)`
             }
         };
 
@@ -915,6 +960,9 @@
             }
             if (document.getElementById('code-docs-upload')) {
                 document.getElementById('code-docs-upload').innerHTML = translations[lang]['code.docs.upload'];
+            }
+            if (document.getElementById('code-docs-assert')) {
+                document.getElementById('code-docs-assert').innerHTML = translations[lang]['code.docs.assert'];
             }
         }
 
