@@ -916,6 +916,21 @@
 
         @media (max-width: 1024px) {
 
+            h1,
+            h2,
+            h3,
+            .section-title {
+                text-align: center;
+            }
+
+            p,
+            .feature-card p,
+            .getting-started-step p {
+                text-align: justify;
+                text-align-last: center;
+                hyphens: auto;
+            }
+
             .hero-content,
             .doc-topic {
                 grid-template-columns: 1fr;
@@ -939,18 +954,24 @@
             .hero-text p {
                 margin: 0 auto 2rem;
                 font-size: 1rem;
+                text-align: justify;
+                text-align-last: center;
             }
 
             .mobile-menu-btn {
                 display: block;
             }
 
+            .nav-content {
+                position: relative;
+            }
+
             .main-nav-links {
                 display: none;
                 position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
+                top: 73px;
+                left: -1rem;
+                width: 100vw;
                 background: var(--bg-surface);
                 flex-direction: column;
                 padding: 1rem 1.5rem;
@@ -958,11 +979,18 @@
                 border-bottom: 1px solid var(--border-color);
                 gap: 1rem;
                 align-items: flex-start;
-                z-index: 41;
+                z-index: 1000;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
             }
 
             .main-nav-links.active {
                 display: flex;
+            }
+
+            .features-grid,
+            .getting-started-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
             }
 
             /* Responsive Animation Window */
